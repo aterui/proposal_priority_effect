@@ -2,7 +2,7 @@
 # set model ---------------------------------------------------------------
 
 library(TMB)
-compile("code/ricker_tmb.cpp")
+TMB::compile("code/ricker_tmb.cpp")
 dyn.load(dynlib("code/ricker_tmb"))
 
 
