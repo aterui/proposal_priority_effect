@@ -10,6 +10,8 @@ pacman::p_load(## gg
   foreach,
   doParallel,
   doSNOW,
+  TMB,
+  tictoc,
   ## bayes
   runjags,
   loo,
