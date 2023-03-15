@@ -27,9 +27,7 @@ df_para <- expand.grid(alpha = seq(0, 1, by = 0.25),
 
 # generate simulated data -------------------------------------------------
 
-n_rep <- 5
-df_para <- df_para[1:2, ]
-
+n_rep <- 30
 tic()
 df_simdata <- foreach(x = iterators::iter(df_para, by = "row"),
                       .combine = bind_rows) %do% {
