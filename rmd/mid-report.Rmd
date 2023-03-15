@@ -1,0 +1,172 @@
+---
+title: "Untitled"
+author: "Akira Terui"
+date: "2023-01-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+## Aim
+
+Develop a statistical tool to identify communities that are sensitive to priority effects. Some ideal features we want in this approach - (1) does not require a huge sample size; (2) robust to species richness in the community.
+
+## Approach
+
+#### Full community modeling
+
+The first approach I tried is the development of time-series community models -- If the community is truly neutral, the model with neutral assumption should be selected. Specifically, I developed the following state-space model:
+
+$$
+N_{i,t+1} = N_{i,t} \exp(r - \sum\alpha_{ij}N_j)
+$$
+
+When the community is neutral, $\alpha_{ij} = \alpha$. This approach might work when the time series is very long in comparison to the number of species $S$. This is because, although a neutral model requires only one parameter for competition coefficients ($\alpha_{ij}$), full model requires $S$ parameters. As a result, the comparison between the two models work only when time series is insanely long (\> 100?). This is not a feasible approach.
+
+#### Community-level density dependence
+
+A novel approach is required to reduce the number of parameters. One potential approach I could think of was the community-level density dependence. When the community is neutral, the above model can be reduced to:
+
+$$
+N_{i,t+1} = N_{i,t} \exp(r - \alpha \sum N_j) = N_{i,t} \exp(r - \alpha N_T)
+$$
+
+where $N_T$ is the community density. Theoretically, if the community is neutral, the intraspecific competition must equate the community-level density dependence. Specifically, we can compare the coefficient of the following statistical models:
+
+$$
+\begin{aligned}
+\log r_{i,t} &= r_i - \alpha_i N_i\\
+\log r_{i,t} &= r_0 - \alpha N_T
+\end{aligned}
+$$
+
+If neutral, the ratio $\alpha_i / \alpha$ should approach a value of one. However, this approach did not work because of the nature of time-series analysis. When evaluating the intraspecific density-dependence, the effect of interspecific interactions was absorbed into the estimate of $\alpha_i$, resulting in a serious bias in the ratio of $\alpha_i / \alpha$.
+
+#### Scaling law in density dependence
+
+The last approach is derived analytically and most promising so far. This approach will use "frequency dependence" rather than density dependence. Consider a generalized LV model:
+
+$$
+\frac{1}{N_i}\frac{dN_i}{dt} = r - \beta N_i - \sum_{j \ne i} \alpha_jN_j + \frac{m}{N_i}
+$$
+
+where $m$ is the number of immigrants. This equation can be re-written as (assuming $\alpha = \alpha_j$):
+
+$$
+\frac{1}{N_i}\frac{dN_i}{dt} = r - \beta p_i N_T - \alpha (1 - p_i) N_T + \frac{m}{N_T}p_i^{-1}
+$$
+
+where $p_i$ is the proportion of species $i$ in the community ($N_i / N_T$). Partial derivative with respect to $p_i$:
+
+$$
+\frac{d}{dp_i}(\frac{1}{N_i} \frac{dN_i}{dt}) = (\alpha - \beta) N_T - \frac{m}{N_T} p_i^{-2}
+$$
+
+In an empirical analysis, the above equation is the slope between population growth $\log \frac{N_{t+1}}{N_t}$ and frequency $p_i$. For example, $\gamma$ in the following formula: $\log \frac{N_{t+1}}{N_t} \sim \delta + \gamma p_i$.
+
+When the community is neutral ($\alpha = \beta$), an interesting expectation will emerge:
+
+$$
+\frac{d}{dp_i}(\frac{1}{N_i} \frac{dN_i}{dt}) = \gamma = -\frac{m}{N_T} p_i^{-2}
+$$
+
+Thus, $-\gamma$ will follow a power law of $p_i$ with the scaling exponent of $-2$.
+
+## Simulation
+
+See if scaling law holds true in simulated dataset:
+
+```{r, include = F}
+rm(list = ls())
+source(here::here("code/library.R"))
+
+df_b <- readRDS(here::here("output/sim_re.rds"))
+```
+
+1\. No variation in alpha, r, k
+
+```{r, echo = F}
+
+df_b %>%
+  pivot_longer(cols = z) %>%
+  filter(sigma == 0,
+         min_r == max_r,
+         min_k == max_k) %>% 
+  ggplot(aes(x = factor(a),
+             y = abs(value + 2))) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.2) +
+  facet_grid(rows = vars(min_r, min_k),
+             cols = vars(nsp),
+             scales = "free",
+             labeller = label_both) +
+  labs(x = "alpha",
+       y = "deviation from -2")
+
+```
+
+2\. No variation in alpha; Variation in r, k
+
+```{r}
+
+df_b %>%
+  pivot_longer(cols = z) %>%
+  filter(sigma == 0,
+         min_r == 0.5, max_r == 1.5,
+         min_k < max_k) %>%
+  ggplot(aes(x = factor(a),
+             y = abs(value + 2))) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.2) +
+  facet_grid(rows = vars(min_r, min_k, max_r, max_k),
+             cols = vars(nsp),
+             scales = "free",
+             labeller = label_both) +
+  labs(x = "alpha",
+       y = "deviation from -2")
+```
+
+3\. Variation in alpha; No variation in r, k
+
+```{r}
+df_b %>%
+  pivot_longer(cols = z) %>%
+  filter(sigma != 0,
+         min_r == max_r,
+         min_k == max_k) %>%
+  ggplot(aes(x = factor(a),
+             y = abs(value + 2))) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.2) +
+  facet_grid(rows = vars(min_r, min_k, sigma),
+             cols = vars(nsp),
+             scales = "free",
+             labeller = label_both) +
+  labs(x = "alpha",
+       y = "deviation from -2")
+```
+
+4\. Variation in alpha, r, k; SD alpha = 0.1
+
+```{r}
+df_b %>%
+  pivot_longer(cols = z) %>%
+  filter(min_r == 0.5, max_r == 1.5,
+         min_k == 500, max_k == 1000) %>%
+  ggplot(aes(x = factor(a),
+             y = abs(value + 2))) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.2) +
+  facet_grid(rows = vars(sigma,
+                         min_r, max_r,
+                         min_k, max_k),
+             cols = vars(nsp),
+             scales = "free",
+             labeller = label_both) +
+  labs(x = "alpha",
+       y = "deviation from -2")
+```
