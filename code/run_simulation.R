@@ -14,8 +14,8 @@ df_para <- expand.grid(alpha = seq(0, 1, by = 0.25),
                        nsp = c(5, 10, 20),
                        nt = c(20, 50),
                        sigma_alpha = c(0, 0.1, 0.25),
-                       min_k = 1000,
-                       max_k = 1000,
+                       min_k = c(500, 1000),
+                       max_k = c(500, 1000),
                        min_r = c(0.5, 1.5, 2.5),
                        max_r = c(0.5, 1.5, 2.5)) %>% 
   as_tibble() %>% 
@@ -80,7 +80,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        mutate(x = rpois(nrow(.), lambda = density))
                                      
                                      ## calc frequency dependence
-                                     df_b <- df0 %>% 
+                                     df_coef <- df0 %>% 
                                        group_by(timestep) %>% 
                                        mutate(total = sum(x),
                                               p = x / total) %>% 
@@ -89,16 +89,21 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        mutate(x0 = lag(x),
                                               p0 = lag(p)) %>% 
                                        drop_na(x0, p0) %>% 
+                                       ungroup() %>% 
                                        mutate(log_x0 = log(x0),
                                               log_x0 = ifelse(is.infinite(log_x0),
                                                               NA, # remove 0 counts from log_r estimate
-                                                              log_x0)) %>% 
-                                       do(b0 = coef(glm(x ~ p0 + offset(log_x0),
-                                                        data = ., family = "poisson"))[1],
-                                          b1 = coef(glm(x ~ p0 + offset(log_x0),
-                                                        data = ., family = "poisson"))[2]) %>% 
-                                       ungroup() %>% 
-                                       mutate(across(.cols = where(is.list), .fns = unlist))
+                                                              log_x0),
+                                              species = factor(species)) %>% 
+                                       lme4::glmer(x ~ p0 + (1 + p0 | species) + offset(log_x0),
+                                                   family = "poisson",
+                                                   data = .) %>% 
+                                       coef()
+                                     
+                                     df_b <- as_tibble(df_coef$species) %>% 
+                                       mutate(species = row_number()) %>% 
+                                       rename(b0 = `(Intercept)`,
+                                              b1 = p0)
                                      
                                      ## mean frequency
                                      df_p <- df0 %>% 
