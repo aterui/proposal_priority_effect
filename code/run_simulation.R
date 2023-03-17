@@ -89,11 +89,13 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        mutate(x0 = lag(x),
                                               p0 = lag(p)) %>% 
                                        drop_na(x0, p0) %>% 
-                                       mutate(log_r = log(x) - log(x0),
-                                              log_r = ifelse(is.infinite(log_r), NA, log_r)) %>% 
-                                       do(b0 = coef(glm(x ~ p0 + offset(log(x0)),
+                                       mutate(log_x0 = log(x0),
+                                              log_x0 = ifelse(is.infinite(log_x0),
+                                                              NA, # remove 0 counts from log_r estimate
+                                                              log_x0)) %>% 
+                                       do(b0 = coef(glm(x ~ p0 + offset(log_x0),
                                                         data = ., family = "poisson"))[1],
-                                          b1 = coef(glm(x ~ p0 + offset(log(x0)),
+                                          b1 = coef(glm(x ~ p0 + offset(log_x0),
                                                         data = ., family = "poisson"))[2]) %>% 
                                        ungroup() %>% 
                                        mutate(across(.cols = where(is.list), .fns = unlist))
