@@ -3,7 +3,7 @@
 rm(list = ls())
 source(here::here("code/library.R"))
 
-df_b <- readRDS(here::here("output/sim_re.rds"))
+df_b <- readRDS(here::here("output/data_exponent.rds"))
 
 
 # plot --------------------------------------------------------------------
@@ -12,16 +12,13 @@ df_b <- readRDS(here::here("output/sim_re.rds"))
 #+ echo = F, message = F, warning = F
 
 df_b %>%
-  pivot_longer(cols = z) %>%
-  filter(sigma == 0,
-         min_r == max_r,
-         min_k == max_k) %>% 
-  ggplot(aes(x = factor(a),
-             y = abs(value + 2))) +
+  filter(sigma_alpha == 0,
+         min_r == max_r) %>% 
+  ggplot(aes(x = factor(alpha),
+             y = z_dev)) +
   geom_boxplot() +
   geom_jitter(alpha = 0.2) +
-  facet_grid(rows = vars(min_r, min_k),
-             cols = vars(nsp),
+  facet_wrap(facets = ~ min_r + nsp,
              scales = "free",
              labeller = label_both)
 
@@ -29,16 +26,14 @@ df_b %>%
 #+ echo = F, message = F, warning = F
 
 df_b %>%
-  pivot_longer(cols = z) %>%
-  filter(sigma == 0,
-         min_r == 0.5, max_r == 1.5,
-         min_k < max_k) %>%
-  ggplot(aes(x = factor(a),
-             y = abs(value + 2))) +
+  filter(sigma_alpha == 0,
+         min_r == 0.5,
+         max_r == 2.5) %>% 
+  ggplot(aes(x = factor(alpha),
+             y = z_dev)) +
   geom_boxplot() +
-  geom_jitter(alpha = 0.2) +
-  facet_grid(rows = vars(min_r, min_k, max_r, max_k),
-             cols = vars(nsp),
+  #geom_jitter(alpha = 0.2) +
+  facet_wrap(facets = ~ min_r + nsp,
              scales = "free",
              labeller = label_both)
 
@@ -46,16 +41,13 @@ df_b %>%
 #+ echo = F, message = F, warning = F, fig.height = 8
 
 df_b %>%
-  pivot_longer(cols = z) %>%
-  filter(sigma != 0,
-         min_r == max_r,
-         min_k == max_k) %>%
-  ggplot(aes(x = factor(a),
-             y = abs(value + 2))) +
+  filter(sigma_alpha != 0,
+         min_r == max_r) %>% 
+  ggplot(aes(x = factor(alpha),
+             y = z_dev)) +
   geom_boxplot() +
   geom_jitter(alpha = 0.2) +
-  facet_grid(rows = vars(min_r, min_k, sigma),
-             cols = vars(nsp),
+  facet_wrap(facets = ~ min_r + nsp,
              scales = "free",
              labeller = label_both)
 
@@ -64,7 +56,6 @@ df_b %>%
 #+ echo = F, message = F, warning = F
 
 df_b %>%
-  pivot_longer(cols = z) %>%
   filter(min_r == 0.5, max_r == 1.5,
          min_k == 500, max_k == 1000) %>%
   ggplot(aes(x = factor(a),
