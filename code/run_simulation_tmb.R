@@ -98,6 +98,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                              log_r)) %>% 
                                        drop_na(log_r)
                                      
+                                     ## TMB fitting
                                      dyn.load(TMB::dynlib("code/lm"))
                                      parameters <- list(b0 = 1,
                                                         log_b1 = log(0.5),
