@@ -3,6 +3,7 @@
 
 rm(list = ls())
 source(here::here("code/library.R"))
+#compile("code/lm.cpp")
 
 cl <- makeCluster(detectCores() - 4)
 registerDoSNOW(cl)
@@ -15,8 +16,8 @@ df_para <- expand.grid(alpha = seq(0, 1, by = 0.25),
                        nt = c(20, 50),
                        sigma_alpha = c(0, 0.1, 0.25),
                        sigma_proc = 0.05,
-                       min_k = c(500, 1000),
-                       max_k = c(500, 1000),
+                       min_k = c(250, 500),
+                       max_k = c(250, 500),
                        min_r = c(0.5, 1.5, 2.5),
                        max_r = c(0.5, 1.5, 2.5)) %>% 
   as_tibble() %>% 
@@ -31,7 +32,7 @@ pb <- txtProgressBar(max = nrow(df_para), style = 3)
 fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
-n_rep <- 100
+n_rep <- 50
 n_maxit <- 1000
 
 tic()
@@ -49,7 +50,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      nt <- x$nt
                                      
                                      v_r <- runif(nsp, x$min_r, x$max_r)
-                                     k <- runif(nsp, x$min_k, x$min_k)
+                                     v_k <- runif(nsp, x$min_k, x$min_k)
                                      
                                      A <- matrix(runif(nsp^2,
                                                        min = max(x$alpha - x$sigma_alpha, 0),
@@ -61,7 +62,8 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      
                                      if(x$alpha == 1) {
                                        A[,] <- 1
-                                       k <- mean(k)
+                                       v_r <- mean(c(x$min_r, x$max_r))
+                                       v_k <- mean(c(x$min_k, x$max_k))
                                      }
                                      
                                      ## run simulation; output df_b
@@ -71,7 +73,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                                 r = v_r,
                                                                 int_type = "manual",
                                                                 alpha = A,
-                                                                k = k,
+                                                                k = v_k,
                                                                 seed = 100,
                                                                 sd_env = x$sigma_proc,
                                                                 model = "ricker",
@@ -80,6 +82,14 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      ## add observation error
                                      df0 <- list_dyn$df_dyn %>%
                                        mutate(x = rpois(nrow(.), lambda = density))
+                                     
+                                     ## total community abundance
+                                     df_n <- df0 %>% 
+                                       group_by(timestep) %>% 
+                                       summarize(n0 = sum(x)) %>% 
+                                       ungroup() %>% 
+                                       filter(timestep != max(timestep)) %>% 
+                                       mutate(timestep = timestep + 1)
                                      
                                      ## calc frequency dependence
                                      df_r <- df0 %>% 
@@ -96,18 +106,22 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               log_r = ifelse(is.infinite(log_r),
                                                              NA, # remove 0 counts from log_r estimate
                                                              log_r)) %>% 
-                                       drop_na(log_r)
+                                       drop_na(log_r) %>% 
+                                       left_join(df_n, by = "timestep")
                                      
                                      ## TMB fitting
                                      dyn.load(TMB::dynlib("code/lm"))
                                      parameters <- list(b0 = 1,
                                                         log_b1 = log(0.5),
+                                                        log_b2 = log(0.5),
                                                         log_sigma = -1)
                                      
                                      df_coef <- lapply(1:n_distinct(df_r$species),
                                             function(i) {
                                               df_i <- filter(df_r, species == i)
-                                              data <- list(y = df_i$log_r, x = df_i$p0)
+                                              data <- list(y = df_i$log_r,
+                                                           x1 = df_i$p0,
+                                                           x2 = df_i$n0)
                                               
                                               obj <- TMB::MakeADFun(data, parameters, DLL = "lm")
                                               obj$hessian <- FALSE
@@ -117,7 +131,9 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               
                                               return(list(species = i,
                                                           b0 = opt$par[1],
-                                                          b1 = exp(opt$par[2])))
+                                                          log_b1 = opt$par[2],
+                                                          log_b2 = opt$par[3])
+                                                     )
                                             }) %>% 
                                        bind_rows()
                                      
@@ -150,12 +166,10 @@ stopCluster(cl)
 
 df_z <- df_sim %>% 
   group_by(group, replicate) %>% 
-  do(const = coef(MASS::rlm(log(b1) ~ log(p),
-                            data = .,
-                            maxit = n_maxit))[1],
-     z = coef(MASS::rlm(log(b1) ~ log(p),
-                        data = .,
-                        maxit = n_maxit))[2]) %>% 
+  do(const = coef(lm(log_b1 ~ log(p), data = .))[1],
+     z = coef(lm(log_b1 ~ log(p), data = .))[2],
+     q25 = confint(lm(log_b1 ~ log(p), data = .), level = 0.95)[2, 1],
+     q975 = confint(lm(log_b1 ~ log(p), data = .), level = 0.95)[2, 2]) %>% 
   ungroup() %>% 
   mutate(across(.cols = where(is.list), .fns = unlist),
          z_dev = abs(z - (-2))) %>% # deviation from -2
