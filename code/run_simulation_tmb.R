@@ -107,15 +107,13 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      dyn.load(TMB::dynlib("code/lm"))
                                      parameters <- list(b0 = 1,
                                                         log_b1 = log(0.5),
-                                                        log_b2 = log(0.5),
                                                         log_sigma = -1)
                                      
                                      df_coef <- lapply(1:n_distinct(df_r$species),
                                             function(i) {
                                               df_i <- filter(df_r, species == i)
                                               data <- list(y = df_i$log_r,
-                                                           x1 = df_i$p0,
-                                                           x2 = df_i$n0)
+                                                           x1 = df_i$p0)
                                               
                                               obj <- TMB::MakeADFun(data, parameters, DLL = "lm")
                                               obj$hessian <- FALSE
@@ -125,8 +123,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               
                                               return(list(species = i,
                                                           b0 = opt$par[1],
-                                                          log_b1 = opt$par[2],
-                                                          log_b2 = opt$par[3])
+                                                          log_b1 = opt$par[2])
                                                      )
                                             }) %>% 
                                        bind_rows()

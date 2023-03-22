@@ -13,13 +13,13 @@ df_z <- readRDS(here::here("output/data_exponent.rds")) %>%
 # plot --------------------------------------------------------------------
 
 df_z %>%
-  filter(sigma_alpha == 0.25,
-         nt == 50,
-         nsp == 20,
-         min_k == 1000,
+  filter(sigma_alpha == 0,
+         nt == 20,
+         nsp == 10,
+         min_k == 100,
          max_k == min_k) %>% 
   ggplot(aes(x = alpha,
-             y = z_dev)) +
+             y = abs(z + 2))) +
   geom_jitter(alpha = 0.1) +
   facet_grid(rows = vars(max_r),
              cols = vars(min_r),
