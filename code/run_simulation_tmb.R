@@ -11,17 +11,16 @@ registerDoSNOW(cl)
 
 # sim data ----------------------------------------------------------------
 
-df_para <- expand.grid(alpha = seq(0, 1, by = 0.25),
-                       nsp = c(5, 10, 20),
+df_para <- expand.grid(nsp = c(5, 10, 20),
                        nt = c(20, 50),
                        sigma_alpha = c(0, 0.1, 0.25),
                        sigma_proc = 0.05,
-                       min_k = c(250, 500),
-                       max_k = c(250, 500),
+                       min_k = c(100, 1000),
+                       max_k = c(100, 1000),
                        min_r = c(0.5, 1.5, 2.5),
                        max_r = c(0.5, 1.5, 2.5)) %>% 
   as_tibble() %>% 
-  filter(max_k >= min_k,
+  filter(max_k == min_k,
          max_r >= min_r) %>% 
   mutate(group = row_number())
 
@@ -32,8 +31,8 @@ pb <- txtProgressBar(max = nrow(df_para), style = 3)
 fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
-n_rep <- 50
-n_maxit <- 1000
+n_rep <- 300
+v_alpha <- runif(n_rep, 0, 1)
 
 tic()
 df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
@@ -48,23 +47,18 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      ## set parameter values
                                      nsp <- x$nsp
                                      nt <- x$nt
+                                     alpha <- v_alpha[j]
                                      
                                      v_r <- runif(nsp, x$min_r, x$max_r)
                                      v_k <- runif(nsp, x$min_k, x$min_k)
                                      
                                      A <- matrix(runif(nsp^2,
-                                                       min = max(x$alpha - x$sigma_alpha, 0),
-                                                       max = x$alpha + x$sigma_alpha),
+                                                       min = max(alpha - x$sigma_alpha, 0),
+                                                       max = alpha + x$sigma_alpha),
                                                  nrow = nsp,
                                                  ncol = nsp)
                                      
                                      diag(A) <- 1
-                                     
-                                     if(x$alpha == 1) {
-                                       A[,] <- 1
-                                       v_r <- mean(c(x$min_r, x$max_r))
-                                       v_k <- mean(c(x$min_k, x$max_k))
-                                     }
                                      
                                      ## run simulation; output df_b
                                      list_dyn <- cdyns::cdynsim(n_species = nsp,
@@ -154,7 +148,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                  by = "species")
                                      
                                      ## return
-                                     return(tibble(df_b, x, replicate = j))
+                                     return(tibble(df_b, alpha, x, replicate = j))
                                      
                                    }
                     
