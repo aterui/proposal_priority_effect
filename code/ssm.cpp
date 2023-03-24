@@ -24,7 +24,7 @@ Type objective_function<Type>::operator() () {
   
   // process model:
   for(int i = 1; i < n; i++){
-    Type m = u[i - 1] + b0 - b1 * p[i - 1]; // Ricker
+    Type m = u[i - 1] + b0 + b1 * p[i - 1]; // Ricker
     nll -= dnorm(u[i], m, sigma_proc, true);
   }
   

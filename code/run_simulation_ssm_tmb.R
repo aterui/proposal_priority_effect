@@ -3,7 +3,7 @@
 
 rm(list = ls())
 source(here::here("code/library.R"))
-#compile("code/ssm.cpp")
+compile("code/ssm.cpp")
 
 cl <- makeCluster(detectCores() - 6)
 registerDoSNOW(cl)
@@ -120,9 +120,10 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                                     parameters,
                                                                     DLL = "ssm")
                                               obj$hessian <- FALSE
-                                              opt <- nlminb(start = obj$par,
-                                                            obj = obj$fn,
-                                                            gr = obj$gr)
+                                              
+                                              try(opt <- nlminb(start = obj$par,
+                                                                obj = obj$fn,
+                                                                gr = obj$gr))
                                               
                                               return(list(species = i,
                                                           b0 = opt$par[1],
