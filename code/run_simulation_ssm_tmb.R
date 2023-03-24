@@ -5,7 +5,7 @@ rm(list = ls())
 source(here::here("code/library.R"))
 #compile("code/ssm.cpp")
 
-cl <- makeCluster(detectCores() - 4)
+cl <- makeCluster(detectCores() - 6)
 registerDoSNOW(cl)
 
 
@@ -13,15 +13,19 @@ registerDoSNOW(cl)
 
 df_para <- expand.grid(nsp = c(5, 10, 20),
                        nt = c(20, 50),
-                       sigma_alpha = c(0, 0.1, 0.25),
-                       sigma_proc = 0.05,
-                       min_k = c(100, 1000),
-                       max_k = c(100, 1000),
+                       sigma_alpha = c(0, 0.0001, 0.1, 0.25),
+                       sigma_proc = 0.1,
+                       min_k = c(500, 1000),
+                       max_k = c(500, 1000),
                        min_r = c(0.5, 1.5, 2.5),
-                       max_r = c(0.5, 1.5, 2.5)) %>% 
+                       max_r = c(0.5, 1.5, 2.5),
+                       m = 1,
+                       neutral = c(0, 1)) %>% 
   as_tibble() %>% 
   filter(max_k == min_k,
-         max_r >= min_r) %>% 
+         max_r >= min_r,
+         !(neutral == 1 & sigma_alpha != 0),
+         !(neutral == 0 & sigma_alpha == 0)) %>% 
   mutate(group = row_number())
 
 
@@ -31,7 +35,7 @@ pb <- txtProgressBar(max = nrow(df_para), style = 3)
 fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
-n_rep <- 300
+n_rep <- 100
 v_alpha <- seq(0, 1, length = n_rep)
 
 tic()
@@ -52,13 +56,19 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      v_r <- runif(nsp, x$min_r, x$max_r)
                                      v_k <- runif(nsp, x$min_k, x$min_k)
                                      
-                                     A <- matrix(runif(nsp^2,
-                                                       min = max(alpha - x$sigma_alpha, 0),
-                                                       max = alpha + x$sigma_alpha),
-                                                 nrow = nsp,
-                                                 ncol = nsp)
-                                     
-                                     diag(A) <- 1
+                                     if (x$neutral == 1) {
+                                       
+                                       A <- matrix(1, nrow = nsp, ncol = nsp)
+                                       
+                                     } else {
+                                       A <- matrix(rbeta(nsp^2,
+                                                         shape1 = alpha / x$sigma_alpha,
+                                                         shape2 = (1 - alpha) / x$sigma_alpha),
+                                                   nrow = nsp,
+                                                   ncol = nsp)
+                                       
+                                       diag(A) <- 1
+                                     }
                                      
                                      ## run simulation; output df_b
                                      list_dyn <- cdyns::cdynsim(n_species = nsp,
@@ -68,22 +78,14 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                                 int_type = "manual",
                                                                 alpha = A,
                                                                 k = v_k,
-                                                                seed = 100,
+                                                                seed = 10,
                                                                 sd_env = x$sigma_proc,
                                                                 model = "ricker",
-                                                                immigration = 10)
+                                                                immigration = x$m)
                                      
                                      ## add observation error
                                      df0 <- list_dyn$df_dyn %>%
                                        mutate(x = rpois(nrow(.), lambda = density))
-                                     
-                                     ## total community abundance
-                                     df_n <- df0 %>% 
-                                       group_by(timestep) %>% 
-                                       summarize(n0 = sum(x)) %>% 
-                                       ungroup() %>% 
-                                       filter(timestep != max(timestep)) %>% 
-                                       mutate(timestep = timestep + 1)
                                      
                                      ## calc frequency dependence
                                      df_r <- df0 %>% 
@@ -95,13 +97,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        mutate(x0 = lag(x),
                                               p0 = lag(p)) %>% 
                                        drop_na(x0, p0) %>% 
-                                       ungroup() %>% 
-                                       mutate(log_r = log(x) - log(x0),
-                                              log_r = ifelse(is.infinite(log_r),
-                                                             NA, # remove 0 counts from log_r estimate
-                                                             log_r)) %>% 
-                                       drop_na(log_r) %>% 
-                                       left_join(df_n, by = "timestep")
+                                       ungroup()
                                      
                                      ## TMB fitting
                                      dyn.load(TMB::dynlib("code/ssm"))
@@ -113,11 +109,10 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               data <- list(y = df_i$x,
                                                            p = df_i$p0)
 
-                                              parameters <- list(b0 = 1,
-                                                                 log_b1 = log(0.5),
-                                                                 log_sigma_proc = -1,
-                                                                 u = rep(mean(log(df_i$x)),
-                                                                         nrow(df_i)))
+                                              parameters <- list(b0 = 0.1,
+                                                                 log_b1 = log(1),
+                                                                 log_sigma_proc = log(x$sigma_proc),
+                                                                 u = log(df_i$density))
                                               
                                               obj <- TMB::MakeADFun(data,
                                                                     random = "u",
@@ -131,7 +126,8 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               return(list(species = i,
                                                           b0 = opt$par[1],
                                                           log_b1 = opt$par[2],
-                                                          sigma_proc_hat = exp(opt$par[3]))
+                                                          sigma_proc_hat = exp(opt$par[3]),
+                                                          convergence = opt$convergence)
                                                      )
                                             }) %>% 
                                        bind_rows()
