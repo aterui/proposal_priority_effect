@@ -19,8 +19,8 @@ df_para <- expand.grid(nsp = c(5, 10, 20),
                        max_k = c(500, 1000),
                        min_r = c(0.5, 1.5, 2.5),
                        max_r = c(0.5, 1.5, 2.5),
-                       m = 1,
                        neutral = c(0, 1)) %>% 
+  mutate(m = min_k * 0.25/100) %>% # immigration: 2.5% carrying cap
   as_tibble() %>% 
   filter(max_k == min_k,
          max_r >= min_r,
@@ -35,7 +35,7 @@ pb <- txtProgressBar(max = nrow(df_para), style = 3)
 fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
-n_rep <- 100
+n_rep <- 250
 v_alpha <- seq(0, 1, length = n_rep)
 
 tic()
@@ -110,8 +110,8 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               data <- list(y = df_i$x,
                                                            p = df_i$p0)
 
-                                              parameters <- list(b0 = 0.1,
-                                                                 log_b1 = log(1),
+                                              parameters <- list(b0 = mean(v_r),
+                                                                 b1 = 0,
                                                                  log_sigma_proc = log(x$sigma_proc),
                                                                  u = log(df_i$density))
                                               
@@ -126,7 +126,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                               
                                               return(list(species = i,
                                                           b0 = opt$par[1],
-                                                          log_b1 = opt$par[2],
+                                                          b1 = opt$par[2],
                                                           sigma_proc_hat = exp(opt$par[3]),
                                                           convergence = opt$convergence)
                                                      )
@@ -162,10 +162,10 @@ stopCluster(cl)
 
 df_z <- df_sim %>% 
   group_by(group, replicate) %>% 
-  do(const = coef(MASS::rlm(log_b1 ~ log(p),
+  do(const = coef(MASS::rlm(abs(log(b1)) ~ log(p),
                             data = .,
                             maxit = 1000))[1],
-     z = coef(MASS::rlm(log_b1 ~ log(p),
+     z = coef(MASS::rlm(abs(log(b1)) ~ log(p),
                         data = .,
                         maxit = 1000))[2]) %>% 
   ungroup() %>% 

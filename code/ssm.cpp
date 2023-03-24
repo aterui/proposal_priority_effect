@@ -11,14 +11,13 @@ Type objective_function<Type>::operator() () {
   
   // parameters:
   PARAMETER(b0); // population growth rate parameter
-  PARAMETER(log_b1); // log(frequency dependence parameter)
+  PARAMETER(b1); // log(frequency dependence parameter)
   PARAMETER(log_sigma_proc); // log(process SD)
   PARAMETER_VECTOR(u); // unobserved state vector
   Type nll = 0.0; // initialize negative log likelihood
   
   // procedures: (transformed parameters)
   Type sigma_proc = exp(log_sigma_proc);
-  Type b1 = exp(log_b1);
   
   // reports on transformed parameters:
   ADREPORT(sigma_proc);
