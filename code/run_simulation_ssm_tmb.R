@@ -58,6 +58,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                      
                                      if (x$neutral == 1) {
                                        
+                                       alpha <- 1
                                        A <- matrix(1, nrow = nsp, ncol = nsp)
                                        
                                      } else {
