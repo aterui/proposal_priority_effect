@@ -15,18 +15,18 @@ df_z <- readRDS(here::here("output/data_exponent_ssm.rds")) %>%
 df_z %>%
   filter(nt == 20,
          nsp == 20,
-         min_k == 1000,
+         min_k == 500,
          max_k == min_k,
-         sigma_alpha == 0) %>% 
+         sigma_alpha != 0) %>% 
   ggplot(aes(x = alpha,
              y = z_dev,
              color = factor(sigma_alpha))) +
-  geom_point(alpha = 0.1) +
+  geom_point(alpha = 0.2) +
   facet_grid(rows = vars(max_r),
              cols = vars(min_r),
              scales = "free") +
   geom_smooth(method = "lm") +
-  #geom_hline(yintercept = 1) +
+  geom_hline(yintercept = 0.5) +
   scale_y_continuous(trans = "log10") +
   theme_bw() +
   theme(panel.grid = element_blank())
