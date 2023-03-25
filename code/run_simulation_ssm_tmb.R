@@ -163,12 +163,10 @@ stopCluster(cl)
 
 df_z <- df_sim %>% 
   group_by(group, replicate) %>% 
-  do(const = coef(MASS::rlm(abs(log(b1)) ~ log(p),
-                            data = .,
-                            maxit = 1000))[1],
-     z = coef(MASS::rlm(abs(log(b1)) ~ log(p),
-                        data = .,
-                        maxit = 1000))[2]) %>% 
+  do(c = coef(lm(abs(log(b1)) ~ log(p),
+                 data = .))[1],
+     z = coef(lm(abs(log(b1)) ~ log(p),
+                 data = .))[2]) %>% 
   ungroup() %>% 
   mutate(across(.cols = where(is.list), .fns = unlist),
          z_dev = abs(z - (-2))) %>% # deviation from -2
