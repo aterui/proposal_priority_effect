@@ -5,14 +5,15 @@ rm(list = ls())
 source(here::here("code/library.R"))
 #compile("code/ssm.cpp")
 
-cl <- makeCluster(detectCores() - 6)
+cl <- makeCluster(detectCores() - 2)
 registerDoSNOW(cl)
 
 
 # sim data ----------------------------------------------------------------
 
 df_para <- expand.grid(nsp = c(5, 10, 20),
-                       nt = c(20, 50),
+                       nt = c(20, 40),
+                       alpha = seq(0, 1, by = 0.2),
                        sigma_alpha = c(0, 0.0001, 0.1, 0.25),
                        sigma_proc = 0.1,
                        min_k = c(500, 1000),
@@ -20,10 +21,12 @@ df_para <- expand.grid(nsp = c(5, 10, 20),
                        min_r = c(0.5, 1.5, 2.5),
                        max_r = c(0.5, 1.5, 2.5),
                        neutral = c(0, 1)) %>% 
-  mutate(m = min_k * 0.25/100) %>% # immigration: 2.5% carrying cap
+  mutate(m = min_k * 0.1/100) %>% # immigration: 0.1% carrying cap
   as_tibble() %>% 
   filter(max_k == min_k,
          max_r >= min_r,
+         !(neutral == 1 & alpha != 1),
+         !(neutral == 0 & alpha == 1),
          !(neutral == 1 & sigma_alpha != 0),
          !(neutral == 0 & sigma_alpha == 0)) %>% 
   mutate(group = row_number())
@@ -35,11 +38,10 @@ pb <- txtProgressBar(max = nrow(df_para), style = 3)
 fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
-n_rep <- 250
-v_alpha <- seq(0, 1, length = n_rep)
+n_rep <- 100
 
 tic()
-df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
+df_sim <- foreach(x = iterators::iter(df_para %>% filter(neutral == 1) %>% slice(1), by = "row"),
                   .combine = bind_rows, 
                   .packages = c("tidyverse",
                                 "foreach"),
@@ -51,7 +53,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        ## set parameter values
                                        nsp <- x$nsp
                                        nt <- x$nt
-                                       alpha <- v_alpha[j]
+                                       alpha <- x$alpha
                                        
                                        v_r <- runif(nsp, x$min_r, x$max_r)
                                        v_k <- runif(nsp, x$min_k, x$min_k)
@@ -60,6 +62,8 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                          
                                          alpha <- 1
                                          A <- matrix(1, nrow = nsp, ncol = nsp)
+                                         v_r <- mean(c(x$min_r, x$max_r))
+                                         v_k <- mean(c(x$min_k, x$max_k))
                                          
                                        } else {
                                          A <- matrix(rbeta(nsp^2,
@@ -93,11 +97,6 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                          group_by(timestep) %>% 
                                          mutate(total = sum(x),
                                                 p = x / total) %>% 
-                                         ungroup() %>% 
-                                         group_by(species) %>% 
-                                         mutate(x0 = lag(x),
-                                                p0 = lag(p)) %>% 
-                                         drop_na(x0, p0) %>% 
                                          ungroup()
                                        
                                        ## TMB fitting
@@ -109,12 +108,12 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                            df_i <- filter(df_r, species == i)
                                                            
                                                            data <- list(y = df_i$x,
-                                                                        p = df_i$p0)
+                                                                        phi = mean(df_i$total))
                                                            
                                                            parameters <- list(b0 = mean(v_r),
                                                                               b1 = -1,
                                                                               log_sigma_proc = log(x$sigma_proc),
-                                                                              u = log(df_i$x))
+                                                                              u = log(df_i$p))
                                                            
                                                            obj <- TMB::MakeADFun(data,
                                                                                  random = "u",
@@ -162,7 +161,7 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                    by = "species")
                                        
                                        ## return
-                                       return(tibble(df_b, alpha, x, replicate = j))
+                                       return(tibble(df_b, x, replicate = j))
                                        
                                      }, error = function(x) cat("ERROR :",conditionMessage(x), "\n"))
                                      
@@ -174,8 +173,14 @@ toc()
 
 stopCluster(cl)
 
+## export
+saveRDS(df_sim, file = "output/data_sim_ssm.rds")
+
+
+# exponent ----------------------------------------------------------------
+
 df_z <- df_sim %>% 
-  filter(convergence == 0) %>% 
+  drop_na(b1) %>% 
   group_by(group, replicate) %>% 
   mutate(n_sample = n()) %>% 
   do(c = coef(lm(log(abs(b1)) ~ log(p),
@@ -188,7 +193,5 @@ df_z <- df_sim %>%
          z_dev = abs(z - (-2))) %>% # deviation from -2
   left_join(df_para, by = "group")
 
-# export ------------------------------------------------------------------
-
-saveRDS(df_sim, file = "output/data_sim_ssm.rds")
+## export
 saveRDS(df_z, file = "output/data_exponent_ssm.rds")
