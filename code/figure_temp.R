@@ -37,7 +37,7 @@ lab_max <- c(`0.5` = "r[max]==0.5",
              `1.5` = "r[max]==1.5",
              `2.5` = "r[max]==2.5")
 
-lab_sigma <- c(`0.0001` = "sigma[alpha]==10^{-4}",
+lab_sigma <- c(`1e-04` = "sigma[alpha]==10^{-4}",
                `0.1` = "sigma[alpha]==0.10",
                `0.25` = "sigma[alpha]==0.25")
 
@@ -84,7 +84,7 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
             scale_y_continuous(trans = "log10") +
             facet_grid(rows = vars(sigma_alpha),
                        cols = vars(min_r, max_r),
-                       scales = "free",
+                       #scales = "free",
                        labeller = labeller(min_r = as_labeller(lab_min,
                                                                label_parsed),
                                            max_r = as_labeller(lab_max,
