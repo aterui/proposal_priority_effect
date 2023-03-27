@@ -41,7 +41,7 @@ opts <- list(progress = fun_progress)
 n_rep <- 100
 
 tic()
-df_sim <- foreach(x = iterators::iter(df_para %>% filter(neutral == 1) %>% slice(1), by = "row"),
+df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                   .combine = bind_rows, 
                   .packages = c("tidyverse",
                                 "foreach"),
