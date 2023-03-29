@@ -76,8 +76,8 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
                        aes(yintercept = low),
                        linetype = "dotted",
                        color = grey(0.5)) +
-            geom_jitter(alpha = 0.25,
-                        size = 0.5) +
+            # geom_jitter(alpha = 0.25,
+            #             size = 0.5) +
             geom_boxplot(alpha = 0.1,
                          linewidth = 0.1,
                          outlier.color = NA) +

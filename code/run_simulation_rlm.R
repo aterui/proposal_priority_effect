@@ -104,14 +104,14 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                 p0 = lag(p)) %>% 
                                          drop_na(x0, p0) %>% 
                                          ungroup() %>% 
-                                         mutate(log_r = log(x) - log(x0),
-                                                log_r = ifelse(is.infinite(log_r),
-                                                               NA, # remove 0 counts from log_r estimate
-                                                               log_r)) %>% 
+                                         mutate(lambda = x/x0,
+                                                lambda = ifelse(is.infinite(lambda),
+                                                                NA, # remove 0 counts from lambda estimate
+                                                                lambda)) %>% 
                                          group_by(species) %>% 
-                                         do(b0 = coef(lm(log_r ~ p0,
+                                         do(b0 = coef(lm(lambda ~ p0,
                                                          data = .))[1],
-                                            b1 = coef(lm(log_r ~ p0,
+                                            b1 = coef(lm(lambda ~ p0,
                                                          data = .))[2]) %>% 
                                          mutate(across(.cols = where(is.list)))
                                        
@@ -163,4 +163,3 @@ df_z <- df_sim %>%
 
 ## export
 saveRDS(df_z, file = "output/data_exponent.rds")
-              
