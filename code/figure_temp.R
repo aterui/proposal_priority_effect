@@ -15,14 +15,16 @@ df_null <- df_z %>%
   filter(neutral == 1) %>% 
   drop_na(z_dev) %>% 
   group_by(nsp, nt, min_r, max_r, min_k, max_k) %>% 
-  summarize(high = quantile(z_dev, 0.75),
-            med = quantile(z_dev, 0.5),
-            low = quantile(z_dev, 0.25)) %>% 
+  summarize(high_dev = quantile(z_dev, 0.75),
+            med_dev = quantile(z_dev, 0.5),
+            low_dev = quantile(z_dev, 0.25),
+            high_z = quantile(z, 0.75),
+            med_z = quantile(z, 0.5),
+            low_z = quantile(z, 0.25)) %>% 
   ungroup() %>% 
   left_join(df_frame,
             by = c("nsp", "nt", "min_r", "max_r", "min_k", "max_k"),
             multiple = "all")
-  
 
 # plot --------------------------------------------------------------------
 
@@ -58,33 +60,33 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
                    min_k == x$min_k)
           
           ## plot
-          g <- df_z_plot %>% 
+          g1 <- df_z_plot %>% 
             filter(neutral == 0) %>% 
             ggplot(aes(x = factor(alpha),
                        y = z_dev,
                        color = sigma_alpha,
                        fill = sigma_alpha)) +
             geom_hline(data = df_null_plot,
-                       aes(yintercept = med),
+                       aes(yintercept = med_dev),
                        linetype = "dashed",
                        color = grey(0.5)) +
             geom_hline(data = df_null_plot,
-                       aes(yintercept = high),
+                       aes(yintercept = high_dev),
                        linetype = "dotted",
                        color = grey(0.5)) +
             geom_hline(data = df_null_plot,
-                       aes(yintercept = low),
+                       aes(yintercept = low_dev),
                        linetype = "dotted",
                        color = grey(0.5)) +
-            # geom_jitter(alpha = 0.25,
-            #             size = 0.5) +
+            geom_jitter(alpha = 0.25,
+                        size = 0.5) +
             geom_boxplot(alpha = 0.1,
                          linewidth = 0.1,
                          outlier.color = NA) +
             scale_y_continuous(trans = "log10") +
             facet_grid(rows = vars(sigma_alpha),
                        cols = vars(min_r, max_r),
-                       #scales = "free",
+                       scales = "free",
                        labeller = labeller(min_r = as_labeller(lab_min,
                                                                label_parsed),
                                            max_r = as_labeller(lab_max,
@@ -99,8 +101,53 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
             theme(panel.grid = element_blank(),
                   strip.background = element_blank())
           
-          ggsave(g,
+          ggsave(g1,
                  filename = paste0("output/figure_lm_t_", x$nt, "_s_", x$nsp, "_k_", x$min_k, ".pdf"),
+                 width = 12,
+                 height = 8)
+          
+          ## plot 2
+          g2 <- df_z_plot %>% 
+            filter(neutral == 0,
+                   alpha != 0) %>% 
+            ggplot(aes(x = factor(alpha),
+                       y = z,
+                       color = sigma_alpha,
+                       fill = sigma_alpha)) +
+            geom_hline(data = df_null_plot,
+                       aes(yintercept = med_z),
+                       linetype = "dashed",
+                       color = grey(0.5)) +
+            geom_hline(data = df_null_plot,
+                       aes(yintercept = high_z),
+                       linetype = "dotted",
+                       color = grey(0.5)) +
+            geom_hline(data = df_null_plot,
+                       aes(yintercept = low_z),
+                       linetype = "dotted",
+                       color = grey(0.5)) +
+            geom_violin(alpha = 0.1,
+                        linewidth = 0.1,
+                        draw_quantiles = 0.5) +
+            facet_grid(rows = vars(sigma_alpha),
+                       cols = vars(min_r, max_r),
+                       scales = "free",
+                       labeller = labeller(min_r = as_labeller(lab_min,
+                                                               label_parsed),
+                                           max_r = as_labeller(lab_max,
+                                                               label_parsed),
+                                           sigma_alpha = as_labeller(lab_sigma,
+                                                                     label_parsed))) +
+            labs(x = expression(mu[alpha]),
+                 y = expression(z[dev]),
+                 color = expression(sigma[alpha]),
+                 fill = expression(sigma[alpha])) +
+            theme_bw() +
+            theme(panel.grid = element_blank(),
+                  strip.background = element_blank())
+          
+          ggsave(g2,
+                 filename = paste0("output/figure_lm_vio_t_", x$nt, "_s_", x$nsp, "_k_", x$min_k, ".pdf"),
                  width = 12,
                  height = 8)
         }

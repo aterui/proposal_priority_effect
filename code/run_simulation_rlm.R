@@ -10,8 +10,8 @@ registerDoSNOW(cl)
 
 # sim data ----------------------------------------------------------------
 
-df_para <- expand.grid(nsp = c(5, 10, 20, 40),
-                       nt = c(20, 40),
+df_para <- expand.grid(nsp = c(5, 10, 20),
+                       nt = c(20, 40, 80),
                        alpha = seq(0, 1, by = 0.2),
                        sigma_alpha = c(0, 0.0001, 0.1, 0.25),
                        sigma_proc = 0.1,
