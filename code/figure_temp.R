@@ -4,8 +4,9 @@ rm(list = ls())
 source(here::here("code/library.R"))
 
 #df_z <- readRDS(here::here("output/data_exponent_ssm.rds"))
-df_z <- readRDS(here::here("output/data_exponent.rds")) %>% 
-  mutate(sigma_alpha = factor(sigma_alpha))
+df_z <- readRDS(here::here("output/data_exponent_bh.rds")) %>% 
+  mutate(sigma_alpha = factor(sigma_alpha),
+         nt != 80)
 
 df_frame <- df_z %>% 
   expand(distinct(., nsp, nt, min_r, max_r, min_k, max_k),
@@ -44,7 +45,7 @@ lab_sigma <- c(`1e-04` = "sigma[alpha]==10^{-4}",
                `0.25` = "sigma[alpha]==0.25")
 
 
-## plot export
+## z deviation
 df_set <- distinct(df_z, nt, nsp, min_k)
 
 foreach(x = iterators::iter(df_set, by = "row")) %do% {
@@ -80,9 +81,9 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
                        color = grey(0.5)) +
             geom_jitter(alpha = 0.25,
                         size = 0.5) +
-            geom_boxplot(alpha = 0.1,
-                         linewidth = 0.1,
-                         outlier.color = NA) +
+            geom_violin(alpha = 0.1,
+                        linewidth = 0.1,
+                        draw_quantiles = 0.5) +
             scale_y_continuous(trans = "log10") +
             facet_grid(rows = vars(sigma_alpha),
                        cols = vars(min_r, max_r),
@@ -105,49 +106,17 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
                  filename = paste0("output/figure_lm_t_", x$nt, "_s_", x$nsp, "_k_", x$min_k, ".pdf"),
                  width = 12,
                  height = 8)
-          
-          ## plot 2
-          g2 <- df_z_plot %>% 
-            filter(neutral == 0,
-                   alpha != 0) %>% 
-            ggplot(aes(x = factor(alpha),
-                       y = z,
-                       color = sigma_alpha,
-                       fill = sigma_alpha)) +
-            geom_hline(data = df_null_plot,
-                       aes(yintercept = med_z),
-                       linetype = "dashed",
-                       color = grey(0.5)) +
-            geom_hline(data = df_null_plot,
-                       aes(yintercept = high_z),
-                       linetype = "dotted",
-                       color = grey(0.5)) +
-            geom_hline(data = df_null_plot,
-                       aes(yintercept = low_z),
-                       linetype = "dotted",
-                       color = grey(0.5)) +
-            geom_violin(alpha = 0.1,
-                        linewidth = 0.1,
-                        draw_quantiles = 0.5) +
-            facet_grid(rows = vars(sigma_alpha),
-                       cols = vars(min_r, max_r),
-                       scales = "free",
-                       labeller = labeller(min_r = as_labeller(lab_min,
-                                                               label_parsed),
-                                           max_r = as_labeller(lab_max,
-                                                               label_parsed),
-                                           sigma_alpha = as_labeller(lab_sigma,
-                                                                     label_parsed))) +
-            labs(x = expression(mu[alpha]),
-                 y = expression(z[dev]),
-                 color = expression(sigma[alpha]),
-                 fill = expression(sigma[alpha])) +
-            theme_bw() +
-            theme(panel.grid = element_blank(),
-                  strip.background = element_blank())
-          
-          ggsave(g2,
-                 filename = paste0("output/figure_lm_vio_t_", x$nt, "_s_", x$nsp, "_k_", x$min_k, ".pdf"),
-                 width = 12,
-                 height = 8)
         }
+
+## null plot
+
+df_z %>% 
+  ggplot(aes(y = abs(z_dev),
+             x = factor(nsp),
+             color = factor(nt),
+             fill = factor(nt))) +
+  geom_violin(alpha = 0.1, draw_quantiles = 0.5) +
+  facet_grid(rows = vars(max_r),
+             cols = vars(min_r)) +
+  scale_y_continuous(trans = "log10") +
+  theme_bw()

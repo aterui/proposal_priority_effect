@@ -117,13 +117,15 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                        
                                        ## mean frequency
                                        df_p <- df0 %>% 
-                                         mutate(total = sum(x)) %>% 
-                                         group_by(species) %>% 
-                                         summarize(sum_x = sum(x),
-                                                   total = unique(total)) %>% 
+                                         group_by(timestep) %>% 
+                                         mutate(total = sum(x),
+                                                p = x / total) %>% 
                                          ungroup() %>% 
-                                         mutate(p = sum_x / total) %>% 
-                                         dplyr::select(species, p)
+                                         group_by(species) %>% 
+                                         summarize(log_p = mean(log(p)),
+                                                   log_p = ifelse(is.infinite(log_p),
+                                                                  NA,
+                                                                  log_p))    
                                        
                                        ## combine
                                        df_b <- df_coef %>% 
@@ -152,10 +154,8 @@ df_z <- df_sim %>%
   mutate(y = log(abs(b1))) %>% 
   group_by(group, replicate) %>% 
   filter(!any(is.infinite(y))) %>%
-  do(c = coef(lm(y ~ log(p),
-                 data = .))[1],
-     z = coef(lm(y ~ log(p),
-                 data = .))[2]) %>% 
+  do(c = coef(lm(y ~ log_p, data = .))[1],
+     z = coef(lm(y ~ log_p, data = .))[2]) %>% 
   ungroup() %>% 
   mutate(across(.cols = where(is.list), .fns = unlist),
          z_dev = abs(z - (-2))) %>% # deviation from -2
