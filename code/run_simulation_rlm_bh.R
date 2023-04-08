@@ -37,7 +37,6 @@ fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
 n_rep <- 100
-n_maxit <- 1000
 
 tic()
 df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
@@ -88,12 +87,9 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                                   model = "bh",
                                                                   immigration = x$m)
                                        
-                                       ## add observation error
+                                       ## estimate freq dependency
                                        df0 <- list_dyn$df_dyn %>%
-                                         mutate(x = rpois(nrow(.), lambda = density))
-                                       
-                                       ## calc frequency dependence
-                                       df_coef <- df0 %>% 
+                                         mutate(x = rpois(nrow(.), lambda = density)) %>%
                                          group_by(timestep) %>% 
                                          mutate(total = sum(x),
                                                 p = x / total) %>% 
@@ -103,31 +99,28 @@ df_sim <- foreach(x = iterators::iter(df_para, by = "row"),
                                                 p0 = lag(p)) %>% 
                                          drop_na(x0, p0) %>% 
                                          ungroup() %>% 
-                                         mutate(lambda = x/x0,
-                                                lambda = ifelse(is.infinite(lambda),
+                                         mutate(lambda = ifelse(x0 == 0,
                                                                 NA, # remove 0 counts from lambda estimate
-                                                                lambda)) %>% 
-                                         group_by(species) %>% 
-                                         do(b0 = coef(lm(lambda ~ p0, data = .))[1],
-                                            b1 = coef(lm(lambda ~ p0, data = .))[2]) %>% 
-                                         mutate(across(.cols = where(is.list)))
+                                                                x / x0),
+                                                f_sp = factor(species),
+                                                f_t = factor(timestep)) %>% 
+                                         drop_na(lambda)
+                                       
+                                       beta <- coef(MASS::rlm(lambda ~ f_sp * p0,
+                                                              data = df0,
+                                                              psi = MASS::psi.huber))
+                                       
+                                       b0 <- beta[1] + c(0, beta[2:nsp])
+                                       b1 <- beta[nsp + 1] + c(0, beta[(nsp + 2):(2 * nsp)])
                                        
                                        ## mean frequency
-                                       df_p <- df0 %>% 
-                                         group_by(timestep) %>% 
-                                         mutate(total = sum(x),
-                                                p = x / total) %>% 
-                                         ungroup() %>% 
+                                       df_b <- df0 %>% 
                                          group_by(species) %>% 
-                                         summarize(log_p = mean(log(p)),
-                                                   log_p = ifelse(is.infinite(log_p),
-                                                                  NA,
-                                                                  log_p))
-                                       
-                                       ## combine
-                                       df_b <- df_coef %>% 
-                                         left_join(df_p,
-                                                   by = "species")
+                                         summarize(log_p0 = ifelse(any(p0 == 0),
+                                                                   NA,
+                                                                   mean(log(p0)))) %>% 
+                                         mutate(b0 = b0,
+                                                b1 = b1)
                                        
                                        ## return
                                        return(tibble(df_b, x, replicate = j))
@@ -151,8 +144,8 @@ df_z <- df_sim %>%
   mutate(y = log(abs(b1))) %>% 
   group_by(group, replicate) %>% 
   filter(!any(is.infinite(y))) %>%
-  do(c = coef(lm(y ~ log_p, data = .))[1],
-     z = coef(lm(y ~ log_p, data = .))[2]) %>% 
+  do(c = coef(lm(y ~ log_p0, data = .))[1],
+     z = coef(lm(y ~ log_p0, data = .))[2]) %>% 
   ungroup() %>% 
   mutate(across(.cols = where(is.list), .fns = unlist),
          z_dev = abs(z - (-2))) %>% # deviation from -2

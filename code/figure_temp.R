@@ -62,7 +62,8 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
           
           ## plot
           g1 <- df_z_plot %>% 
-            filter(neutral == 0) %>% 
+            filter(neutral == 0,
+                   alpha != 0) %>% 
             ggplot(aes(x = factor(alpha),
                        y = z_dev,
                        color = sigma_alpha,
@@ -70,21 +71,25 @@ foreach(x = iterators::iter(df_set, by = "row")) %do% {
             geom_hline(data = df_null_plot,
                        aes(yintercept = med_dev),
                        linetype = "dashed",
-                       color = grey(0.5)) +
+                       color = grey(0.5),
+                       linewidth = 0.2) +
             geom_hline(data = df_null_plot,
                        aes(yintercept = high_dev),
                        linetype = "dotted",
-                       color = grey(0.5)) +
+                       color = grey(0.5),
+                       linewidth = 0.2) +
             geom_hline(data = df_null_plot,
                        aes(yintercept = low_dev),
                        linetype = "dotted",
-                       color = grey(0.5)) +
-            geom_jitter(alpha = 0.25,
-                        size = 0.5) +
-            geom_violin(alpha = 0.1,
-                        linewidth = 0.1,
-                        draw_quantiles = 0.5) +
-            scale_y_continuous(trans = "log10") +
+                       color = grey(0.5),
+                       linewidth = 0.2) +
+            # geom_jitter(alpha = 0.25,
+            #             size = 0.25) +
+            geom_boxplot(outlier.colour = NA,
+                         alpha = 0.1,
+                         notch = T,
+                         linewidth = 0.1) +
+            #scale_y_continuous(trans = "log10") +
             facet_grid(rows = vars(sigma_alpha),
                        cols = vars(min_r, max_r),
                        scales = "free",
