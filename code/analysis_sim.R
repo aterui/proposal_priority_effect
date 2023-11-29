@@ -11,7 +11,7 @@ df_param <- expand.grid(n_timestep = c(10, 30),
                         a0 = c(0.01, 0.02),
                         factor_a1 = c(0, 0.5, 1, 1.5),
                         factor_sd_a1 = c(0, 0.25),
-                        n_rep = 100) %>% 
+                        n_rep = 200) %>% 
   as_tibble() %>% 
   mutate(a1 = a0 * factor_a1,
          sd_a1 = a1 * factor_sd_a1)
