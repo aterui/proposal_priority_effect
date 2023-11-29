@@ -27,7 +27,7 @@ df_sim <- foreach(x = iterators::iter(df_param %>% slice(1), by = "row"),
                   .packages = c("tidyverse", "foreach", "cdyns"),
                   .combine = bind_rows) %dopar% {
                     
-                    df_out <- foreach(k = iterators::icount(5),
+                    df_out <- foreach(k = iterators::icount(25),
                                       .combine = bind_rows) %do% {
                                         
                                         cout <-with(x,
