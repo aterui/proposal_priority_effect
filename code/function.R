@@ -133,14 +133,38 @@ partial <- function(r, a, i, x0, model = "ricker") {
 
 stability <- function(n_species, R, A, model = "ricker") {
   
-  x0 <- drop(solve(A) %*% R)
+  # check input -------------------------------------------------------------
   
-  sapply(seq_len(n_species),
-         function(i) {
-           partial(r = R[i],
-                   a = A[i, ],
-                   x0 = x0,
-                   i = i,
-                   model = model)
-         })
+  if (any(unique(dim(A)) != n_species))
+    stop("dimension mismatch in A")
+  
+  if (length(R) == n_species)
+    stop("dimension mismatch in A")
+  
+
+  # get maximum absolute eigen value ----------------------------------------
+
+  if (det(A) == 0) {
+    
+    return(NA)
+    
+  } else {
+    
+    x0 <- drop(solve(A) %*% R)
+    J <- t(sapply(seq_len(n_species),
+                  function(i) {
+                    partial(r = R[i],
+                            a = A[i, ],
+                            x0 = x0,
+                            i = i,
+                            model = model)
+                  }))
+    
+    lambda <- eigen(J)
+    max_lambda <- max(abs(lambda$values))
+    attr(max_lambda, "J") <- J
+    
+    return(max_lambda)
+  }
+  
 }
