@@ -1,3 +1,5 @@
 
 pacman::p_load(tidyverse,
-               cdyns)
+               cdyns,
+               foreach,
+               doParallel)

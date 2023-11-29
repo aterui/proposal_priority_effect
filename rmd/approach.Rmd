@@ -1,0 +1,30 @@
+---
+date: "2023-09-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Model assumption
+
+Ricker model
+
+$$
+\begin{aligned}
+\log r_{i,t} &= r_{0,i} - \alpha_i x_i - \sum_{j \ne i} \beta_{ij}x_j\\
+&= r_i - (\alpha_i - \mu_{\beta}) x_i - \mu_{\beta} N - \sigma_{\beta} \sum_{j \ne i}{\beta_{ij}' x_j}\\       
+&= (r_{0,i} + \sigma_{\beta} c_i) - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_i - (\mu_{\beta} + \sigma_{\beta} \phi_i) N,
+\end{aligned}
+$$
+
+where $c_i = \sum_{j \ne i} \beta_{ij}' \sum_{k \ne i,j} x_k$ and $\phi_i = \sum_{j \ne i} \beta_{ij}'$.
+
+# Step
+
+1. Estimate the effects of $x_i$ and $N$ for observed data: $\hat{\beta}_{obs}$
+2. Simulate neutral community dynamics using $\mu_{\beta}$. Estimate as $\log \frac{N_{t+1}}{N_{t}} = \bar{r} - \mu_{\beta} N_{t} + \varepsilon_t$.
+3. Estimate the effects of $x_i$ and $N$ for simulated data for $100$ times or more: $\hat{\beta}_{null}$
+4. Compare the effect of $N$ - calculate $\Pr(\hat{\beta}_{obs} > \hat{\beta}_{null})$
+ 
