@@ -82,9 +82,14 @@ sim <- function(n_timestep,
     return(beta0)
   }
   
-  return(list(p = mean(b < v_beta),
-              b = b,
-              b_null = v_beta))
+  output <- list(p = mean(b < v_beta),
+                 b = b,
+                 b_null = v_beta)
+  
+  attr(output, "A") <- ma  
+  attr(output, "R") <- v_r  
+  
+  return(output)
 }
 
 
@@ -138,7 +143,7 @@ stability <- function(n_species, R, A, model = "ricker") {
   if (any(unique(dim(A)) != n_species))
     stop("dimension mismatch in A")
   
-  if (length(R) == n_species)
+  if (length(R) != n_species)
     stop("dimension mismatch in A")
   
 
@@ -150,18 +155,36 @@ stability <- function(n_species, R, A, model = "ricker") {
     
   } else {
     
-    x0 <- drop(solve(A) %*% R)
-    J <- t(sapply(seq_len(n_species),
-                  function(i) {
-                    partial(r = R[i],
-                            a = A[i, ],
-                            x0 = x0,
-                            i = i,
-                            model = model)
-                  }))
+    if (model == "ricker") {
+      x0 <- drop(solve(A) %*% R)
+      J <- t(sapply(seq_len(n_species),
+                    function(i) {
+                      partial(r = R[i],
+                              a = A[i, ],
+                              x0 = x0,
+                              i = i,
+                              model = model)
+                    }))
+      
+      lambda <- eigen(J)
+      max_lambda <- max(abs(lambda$values))
+    }
     
-    lambda <- eigen(J)
-    max_lambda <- max(abs(lambda$values))
+    if (model == "bh") {
+      x0 <- drop(solve(A) %*% (exp(R) - 1))
+      J <- t(sapply(seq_len(n_species),
+                    function(i) {
+                      partial(r = R[i],
+                              a = A[i, ],
+                              x0 = x0,
+                              i = i,
+                              model = model)
+                    }))
+      
+      lambda <- eigen(J)
+      max_lambda <- max(abs(lambda$values))
+    }
+    
     attr(max_lambda, "J") <- J
     
     return(max_lambda)
