@@ -23,7 +23,7 @@ cl <- makeCluster(detectCores() - 4)
 registerDoParallel(cl)
 
 tictoc::tic()
-df_sim <- foreach(x = iterators::iter(df_param %>% slice(1), by = "row"),
+df_sim <- foreach(x = iterators::iter(df_param, by = "row"),
                   .packages = c("tidyverse", "foreach", "cdyns"),
                   .combine = bind_rows) %dopar% {
                     
