@@ -1,0 +1,129 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+\usepackage[T1]{fontenc} % for font setting
+\usepackage{tgtermes} % for font setting
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+\usepackage[most]{tcolorbox}
+\usepackage[includeheadfoot,
+            top=2.54cm,
+            bottom=2.54cm,
+            left=2.54cm,
+            right=2.54cm]{geometry}%set margin
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\usepackage[font={sf, small}, labelfont={bf, small}]{caption}
+\usepackage{fancyhdr}
+
+\tcbuselibrary{breakable}
+\bibliographystyle{bibstyle}
+
+\begin{document}
+
+\section*{Research Strategy}
+
+\subsection*{Significance}
+
+% Over the past century, biologists have been intrigued by how interacting organisms are assembled in a certain environment.
+% This process, termed "community assembly," has crucial implications for human society's public health and sustainability.
+% For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion.
+% Community assembly also plays a critical role in large-scale biological outcomes, such as the environmental restoration of degraded habitats in human-dominated landscapes.
+% The effect of environmental restoration on ecological communities is contingent on how colonizing species reach the restored site, often defining the "success" of the restoration project that managers invest millions of dollars for implementation.
+% Therefore, understanding the regulatory rules in community assembly (hereafter, "assembly rule") is fundamental to a broad range of biological phenomena.
+% \ul{\emph{The proposed research will develop a novel statistical method that addresses unsolved methodological barriers}} to progressing community assembly research.
+
+\textbf{Problem statement.}
+% A central question in community assembly is whether the niche or neutral assembly rule dictates biological communities.
+% The niche paradigm assumes that species differ in their biological traits such that abiotic environments determine the outcome of local species interactions.
+% As such, this paradigm predicts that the interplay between species' traits and the environment leads to the convergence of community structure among similar habitats.
+% On the contrary, the neutral paradigm assumes the biological equivalence among species within a given community.
+% Under the neutral scenario, community dynamics are highly sensitive to stochastic factors (e.g., species' immigration history) because the outcome of species interactions is analogous to a flip of a fair two-sided coin; the probability of being the winner is equal among species.
+% The resultant community structure is unpredictable and can diverge even among otherwise identical habitats. Discerning assembly rules has practical importance.
+% For example, maintaining specific gut conditions may yield desired microbe communities \emph{only if} they are strongly structured via niche mechanisms. Hence, resolving the ``niche vs. neutral" debate represents a major contribution to basic and applied biological sciences.
+
+% Decades of the niche vs. neutral debate led to a general agreement that the dichotomous argument is inappropriate; both mechanisms act in concert to form observed biological communities.
+% This finding has motivated researchers to explore environmental drivers of their relative importance in natural systems, and several influential hypotheses have emerged.
+% Nonetheless, we argue that the state of knowledge in community assembly remains equivocal because \ul{\emph{a fundamental methodological issue is unsolved}}.
+% Current statistical methods exploit information from \emph{spatial} community data (i.e., community structure among spatially separated localities) to discern niche and neutral assembly mechanisms, and these approaches can be grouped into two broad categories: (i) the community-environment (CE) and (ii) the community randomization (CR) approaches.
+% The CE approach builds on the idea that if niche mechanisms are dominant, environmental similarity should explain the similarity in community structure among localities; unexplained variation is considered a sign of neutral mechanisms. Yet, this approach has been criticized because it is unrealistic to fully represent the species' niche dimensions with available environmental data. Meanwhile, the CR approach is robust to this problem. In this approach, we interpret that observed communities are niche-structured if their structure deviates from what would be expected under species' random distributions (i.e., the null model). While this method seems to overcome the aforementioned critique elegantly, a careful examination unveiled that non-random species' distributions can emerge through either niche or neutral mechanisms; thus, it is unclear that any deviations from random species distributions truly mean ``niche structured." Consequently, no existing method can measure the contributions of niche and neutral assembly rules from unmanipulated observational data.
+
+\textbf{Solution.}
+% Our proposal is motivated by the fact that \ul{\emph{time series data may provide deeper insights}} into community assembly rules. In theory, assembly rules are defined by the variation in species' traits within a given community, which dictates characteristic patterns of temporal community dynamics. In particular, niche and neutral communities show distinct signs of frequency dependency in species' population growth. If niche-structured, species' niche differences underpin the predominance of negative frequency dependence (= rarer species have greater population growth) such that rarer species can sustain populations; thus, the same set of species is likely to persist as far as the defining environments of species interactions remain similar. The neutral assembly, in contrast, lacks negative frequency dependency, facilitating the probabilistic mono-dominance of any species. Therefore, it is natural to expect that we may find a clear sign of assembly rules in time series data.
+
+% \ul{\emph{Here, we propose a new method that leverages this attribute of time series data}} to understand assembly rules. In Specific Aim 1, we will design a groundwork that derives a theoretical backbone of this novel method. In Specific Aim 2, we will assess the performance of the developed method using experimental yeast communities, in which we manipulate the strength of niche and neutral mechanisms. In Specific Aim 3, we combine the developed method with accumulating global time series of community data to ask: "\emph{What controls the relative importance of niche vs. neutral mechanisms in natural systems?}" In the long term, our contributions will help improve the public health and the sustainability of natural resources by illuminating the fundamental mechanisms of community assembly.
+
+\subsection*{Innovation}
+% Understanding assembly rules has far-reaching implications for human society's sustainability as it relates to human health, food production, and biodiversity conservation, to name just a few. We assert that our proposal will advance this research field significantly through three important breakthroughs. First, \ul{\emph{our proposal is conceptually innovative}} because our new method has the potential to find novel results that contrast previous findings. As mentioned, current statistical methods in community assembly contain fundamental limitations in distinguishing niche mechanisms from neutral ones with observational data. The new method solves this issue with the possibility of reaching conclusions overturning the fundamental wisdom of community assembly research. Second, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data. A major challenge in community assembly research is the curse of dimensionality -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful. The proposed method derives analytically that community-wide information can be condensed into a single parameter; this unique simplification allows us to use ordinary statistics to quantify the contributions of niche and neutral mechanisms. Lastly, \ul{\emph{our method is applicable, in principle, to a broad range of biological systems, from microscopic to gigantic organisms}}. This property allows for cross-taxonomic and cross-ecosystem comparisons of assembly rules. Hence, this proposal has three innovative qualities that meet the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
+
+\subsection*{Approach}
+
+\subsubsection*{Specific Aim 1: Development of a new modeling approach}
+
+\textbf{Overview.}
+
+Our goal in this aim is to develop a new modeling approach that identifies communities sensitive to priority effects.
+To this end, we will perform the following activities: (a) Derive a theoretical backbone to reduce the parameter dimension of a $S$ species competitive community. (b) Develop a statistical method that identifies sensitive communities. (c) Validate the performance of this method with simulation experiments.
+
+\textbf{Activity 1-a: Theoretical backbone.}
+
+In competitive communities, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact of a given species on population growth over time. Therefore, a critical first step is to obtain reliable estimates of competition parameters through an empirical time series. However, in empirical settings, it is often infeasible to directly estimate those parameters because of the ``\textit{curse of dimensionality}'': as the number of species $S$ in the community increases, the length of the required time series increases exponentially.  To address this issue, \ul{we provide a rationale for how complex competitive interactions can be summarized into an aggregate effect of the total community density to reduce the parameter dimension.}
+
+As a true state of community dynamics over time, we consider a discrete recursion equation. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
+
+\begin{equation}
+\label{eq:m0}
+x_{t + 1, i} = x_{t, i} f(x_{t, i}).
+\end{equation}
+
+$f(\cdot)$ is the function defining the per-capita population growth rate.
+Although the method we propose here applies to any functions that assume linear combinations of species interaction terms, let us use a Ricker model as an example (we drop the subscript $t$ from $x_{t,i}$ to simplify the expression):
+
+\begin{equation}
+\label{eq:ricker}
+f(x_{i}) = \exp(r_{0,i} - \alpha_i x_i - \sum_{j \ne i} \beta_{ij} x_{j}),
+\end{equation}
+
+where $r_{0,i}$ is the intrinsic population growth, $\alpha_{i}$ the intraspecific competition coefficient, and $\beta_{ij}$ the interspecific coefficient.
+Here, we assume that $\beta_{ij}$ is randomly drawn from a given probability distribution, resulting in a sample mean ($\mu_{\beta}$) and SD ($\sigma_{\beta}$). 
+Denoting the total community density as $x_T$ ($x_T = \sum_i x_i$), equation \ref{eq:m0} can be reorganized to:
+
+\begin{equation}
+\label{eq:rickermod}
+f(x_i) = \exp\left[g_i - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_i - (\mu_{\beta} + \sigma_{\beta} \phi_i) x_T \right],
+\end{equation}
+
+where $g_i = r_{0,i} + \sigma_{\beta} \sum_{j \ne i} b_{ij} \sum_{k \ne i, j} x_{k}$ and $\phi_i = \sum_{j \ne i} b_{ij}$.
+In equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$. Since $b_{ij}$ is a random variable with a mean $0$ and SD $1$, the expected value of the summation $E(\phi_i)$ is $\pm \sqrt{S - 1}$, where $S$ is the number of species in the community.
+
+The re-organized function (equation \ref{eq:rickermod}) has two important implications. First, \ul{the function can be expressed as a function of two variables (species $i$'s density $x_i$ and the total community density $x_T$), substantially reducing the parameter dimension of the model.} The original function (equation \ref{eq:ricker}) parameterized competition effects by species, resulting in $S$ parameters of competition. In contrast, in the re-organized equation, the competition effects are condensed into the aggregate effects of species $i$'s density ($\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$) and the total community density ($\mu_{\beta} + \sigma_{\beta} \phi_i$).
+
+Second, \ul{the re-parameterization enables statistical inference of interspecific competition with relatively short time series data}. Let $\gamma_i$ and $\delta_i$ be the effects of $i$'s population density and the total community density, respectively ($\gamma_i = -(\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i)$ and $\delta_i = -(\mu_{\beta} + \sigma_{\beta} \phi_i)$). Then, the log-transformed per-capita growth rate $\ln r_i$ becomes the following linear model:
+
+\begin{equation}
+    \ln f(x_i) = \ln r_i = g_i + \gamma_i x_i + \delta_i x_T
+\end{equation}
+
+Thus, this re-parameterization greatly reduces the number of competition parameters from $S$ to two, \textbf{regardless of the number of species in the community}. In empirical settings, it is almost impossible to estimate $S$ competition parameters in species-rich communities because the required time series length increases exponentially with the number of species. As such, the proposed simplification has a significant advantage in improving the feasibility of empirical data analysis.
+
+\textbf{Activity 1-b: Statistical method.}
+
+\textbf{Activity 1-c: Simulation experiment.}
+
+% \begin{tcolorbox}[{
+%   breakable,
+%   colback=white,
+%   colframe=gray,
+%   coltext=black,
+%   parbox=false,
+%   boxsep=5pt,
+%   arc=1pt}]
+
+% \end{tcolorbox}
+
+\end{document}
