@@ -30,7 +30,7 @@ w <- df_plot %>%
              scales = "free_x") +
   coord_cartesian(xlim = c(0.5, 10)) +
   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-       y = expression("Pr("*beta[obs]~">"~beta[null]*")"),
+       y = expression("Pr("*beta[obs]~"<"~beta[null]*")"),
        color = "Sensitivity") +
   MetBrewer::scale_color_met_d("Hiroshige",
                                direction = -1) +
