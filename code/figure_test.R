@@ -46,7 +46,7 @@ g1 | g2
 
 
 w1 <- df_plot %>% 
-  filter(sd_r == 0.1) %>% 
+  filter(sd_r == 0) %>% 
   ggplot(aes(x = eigen_max,
              y = p,
              color = stability)) +
