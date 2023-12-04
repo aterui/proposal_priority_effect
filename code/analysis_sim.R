@@ -9,7 +9,7 @@ df_param <- expand.grid(n_timestep = c(10, 30),
                         r = 1,
                         sd_r = c(0, 0.1),
                         a0 = c(0.01, 0.02),
-                        factor_a1 = c(0.25, 0.5, 0.75, 1, 1.25),
+                        factor_a1 = seq(0, 1.5, by = 0.25),
                         factor_sd_a1 = c(0, 0.25),
                         n_rep = 100) %>% 
   as_tibble() %>% 
