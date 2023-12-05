@@ -65,21 +65,21 @@
 
 \subsubsection*{Specific Aim 1: Development of a new modeling approach}
 
-\ul{The overarching goal of this aim is to develop a new modeling approach that identifies communities sensitive to priority effects.}
+\textbf{The overarching goal of this aim is to develop a new modeling approach that identifies communities sensitive to priority effects.}
 To this end, we will perform the following activities:
-(1a) Derive a theoretical backbone for a statistical method that identifies sensitive communities.
-(1b) Validate the performance of this method with simulation experiments.
+[1a] Derive a theoretical backbone for a statistical method that identifies sensitive communities.
+[1b] Validate the performance of the proposed method with simulation experiments.
 
 \textbf{Activity 1a: Development of a new statistical method}
 
-\textit{Activity 1a: Goal} -- 
+\textbf{\textit{Goal}} -- 
 Our goal in this activity is to derive a theoretical backbone for a statistical method that identifies sensitive communities.
 In competitive communities, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time.
 Therefore, a critical first step is to obtain reliable estimates of competition parameters through an empirical time series.
 However, in empirical settings, it is often infeasible to directly estimate those parameters because of the ``\textit{curse of dimensionality}:'' as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially.
 Here, we propose a robust statistical method that solves this issue -- \ul{our method can estimate the balance of intra- and interspecific competition, regardless of the number of species, by capitalizing the fact that species-level competition can be condensed into an aggregate effect of the total community density.}
 
-\textit{Method detail: theoretical backbone} -- 
+\textbf{\textit{Method detail: theoretical backbone}} -- 
 As a true state of community dynamics over time, we consider a discrete recursion equation. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
 
 \begin{equation}
@@ -121,10 +121,10 @@ Then, the log-transformed per-capita growth rate $\ln r_i$ becomes the following
     \ln f(x_i) = \ln r_i = g_i + \gamma_i x_i + \delta_i x_T
 \end{equation}
 
-Thus, this re-parameterization greatly reduces the number of competition parameters from $S$ to two, \textbf{regardless of the number of species in the community}.
+Thus, this re-parameterization greatly reduces the number of competition parameters from $S$ to two, \ul{regardless of the number of species in the community}.
 As such, this modeling approach will solve the ``curse of dimensionality'' hindering the empirical time series analysis of community data.
 
-\textit{Method detail: null model analysis} --
+\textbf{\textit{Method detail: null model analysis}} --
 The community's sensitivity to priority effects is strongly affected by the balance between intra- and interspecific competition.
 In this context, Equation \ref{eq:rickerlog} offers a promising avenue to simplify community data analysis. 
 An intuitive statistical method would be to compare the effects of $x_i$ ($\gamma_i$) and $x_T$ ($\delta_i$) on $i$'s population growth (see Equation \ref{eq:rickerlog}).
@@ -154,8 +154,30 @@ A neutral community is comprised of ecologically identical species (intraspecifi
     \item Approximate the probability of $\delta_{obs} < \delta_{null}$ [hereafter, $\Pr(\delta_{obs} < \delta_{null})$]. To approximate the probability, we produce $100 - 500$ simulated dynamics of a neutral community and yield $100 - 500$ estimates of $\delta_{null}$. $\Pr(\delta_{obs} < \delta_{null})$ will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} < \delta_{null}$.
 \end{enumerate}
 
-\textit{Method detail: simulation experiment (preliminary analysis)} --
-To validate the performance of the proposed null model analysis, we performed a simulation experiment. In this simulation experiment, we produced simulated data with known competition (and other) parameters so that we can validate the empirically estimable statitic $\Pr(\delta_{obs} < \delta_{null})$ 
+\textbf{Activity 1a: Simulation experiment}
+
+\textbf{\textit{Goal}} -- 
+The proposed method in Activity 1a provides a framework to identify communities sensitive to priority effects. The goal of this activity is to validate the performance of this method using simulation experiments.
+\ul{We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the proposed statistic $\Pr(\delta_{obs} < \delta_{null})$}.
+
+\textbf{\textit{Method detail: simulation experiment (preliminary analysis)}} -- 
+To validate the performance of the proposed null model analysis, we performed a simulation experiment. In this simulation, we 
+
+\begin{table}
+    \centering
+    \caption{Parameter values used in the preliminary sensitivity analysis.}
+    \begin{tabular}{cll}
+        Symbol & Interpretation & Value\\
+        \hline
+        $r_i$            & Intrinsic population growth  & 1.0 or $\mbox{Unif(0.9, 1.1)}$\\
+        $\alpha_{i}$     & Intraspecific competition    & 0.01, 0.02\\
+        $\beta_{ij}$     & Interspecific competition    & $\mbox{Normal}(\mu_{\beta}, \sigma_{\beta}^2)$\\
+        $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times \{0, 0.25, ..., 1.50\}$\\
+        $\sigma_{\beta}$ & SD interspecific competition & $\mu_{\beta} \times \{0,  0.25\}$\\
+        \hline
+    \end{tabular}
+    \label{tab:my_label}
+\end{table}
 
 \textit{Method detail: simulation experiment (proposed analysis)} --
 
@@ -165,6 +187,7 @@ To validate the performance of the proposed null model analysis, we performed a 
     \label{fig:diffuse}
 \end{wrapfigure}
 
+text here 
 
 % \begin{tcolorbox}[{
 %   breakable,
