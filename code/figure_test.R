@@ -17,19 +17,54 @@ label <- c('10' = 'Time series = 10',
            '5' = "Species number = 5",
            '15' = "Species number = 15")
 
-g_fill <- df_plot %>% 
-  ggplot(aes(fill = stability)) +
-  geom_density(aes(x = p),
-               color = "grey",
-               alpha = 0.3,
-               position = "fill") +
+# g_fill <- df_plot %>% 
+#   ggplot(aes(fill = stability)) +
+#   geom_density(aes(x = p),
+#                color = "grey",
+#                alpha = 0.3,
+#                position = "fill") +
+#   facet_grid(rows = vars(n_timestep),
+#              cols = vars(n_species),
+#              labeller = as_labeller(label),
+#              scales = "free_x") +
+#   labs(x = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+#        y = "Relative Frequency",
+#        fill = "Sensitivity") +
+#   MetBrewer::scale_color_met_d("Hiroshige",
+#                                direction = -1) +
+#   MetBrewer::scale_fill_met_d("Hiroshige",
+#                               direction = -1) +
+#   theme_bw() +
+#   theme(strip.background = element_blank(),
+#         panel.grid = element_blank(),
+#         legend.position = "bottom")
+# 
+# ggsave(g_fill,
+#        filename = "output/figure_eigen.pdf",
+#        height = 4.5,
+#        width = 4.5)
+
+# boxplot option
+g_box <- df_plot %>%
+  # filter(a0 == 0.01,
+  #        sd_r == 0) %>% 
+  ggplot(aes(x = stability,
+             y = p,
+             color = stability,
+             fill = stability)) +
+  geom_boxplot(alpha = 0.3) +
+  # geom_jitter(height = 0,
+  #             alpha = 0.3) +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free_x") +
-  labs(x = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
-       y = "Relative Frequency",
+  labs(y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+       x = "Sensitivity",
+       color = "Sensitivity",
        fill = "Sensitivity") +
+  guides(color = "none",
+         fill = "none") +
   MetBrewer::scale_color_met_d("Hiroshige",
                                direction = -1) +
   MetBrewer::scale_fill_met_d("Hiroshige",
@@ -39,39 +74,10 @@ g_fill <- df_plot %>%
         panel.grid = element_blank(),
         legend.position = "bottom")
 
-ggsave(g_fill,
+ggsave(g_box,
        filename = "output/figure_eigen.pdf",
        height = 4.5,
        width = 4.5)
-
-## boxplot option
-# g_box <- df_plot %>% 
-#   ggplot(aes(x = stability,
-#              y = p,
-#              color = stability,
-#              fill = stability)) +
-#   geom_boxplot(outlier.colour = NA,
-#                alpha = 0.3) +
-#   geom_jitter(height = 0,
-#               alpha = 0.3) +
-#   facet_grid(rows = vars(n_timestep),
-#              cols = vars(n_species),
-#              labeller = as_labeller(label),
-#              scales = "free_x") +
-#   labs(y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
-#        x = "Sensitivity",
-#        color = "Sensitivity",
-#        fill = "Sensitivity") +
-#   guides(color = "none",
-#          fill = "none") +
-#   MetBrewer::scale_color_met_d("Hiroshige",
-#                                direction = -1) +
-#   MetBrewer::scale_fill_met_d("Hiroshige",
-#                               direction = -1) +
-#   theme_bw() +
-#   theme(strip.background = element_blank(),
-#         panel.grid = element_blank(),
-#         legend.position = "bottom")
 
 ## scatter plot option
 # w <- df_plot %>% 
