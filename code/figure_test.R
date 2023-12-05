@@ -60,7 +60,7 @@ g_box <- df_plot %>%
              labeller = as_labeller(label),
              scales = "free_x") +
   labs(y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
-       x = "Sensitivity",
+       x = "True sensitivity",
        color = "Sensitivity",
        fill = "Sensitivity") +
   guides(color = "none",
