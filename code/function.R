@@ -162,6 +162,23 @@ stability <- function(n_species, R, A, model = "ricker") {
     
     if (model == "ricker") {
       x0 <- drop(solve(A) %*% R)
+      
+      # check negative equilibrium
+      if (any(x0 < 0)) {
+        # species going extinct
+        e <- which(x0 < 0)
+
+        # remove species that goes extinct
+        A_prime <- A[-e, -e]
+        R_prime <- R[-e]
+        # re-calculate equilibrium
+        x0_prime <- solve(A_prime) %*% R_prime
+
+        # update equilibrium value
+        x0[-e] <- x0_prime
+        x0[e] <- 0
+      }
+      
       J <- t(sapply(seq_len(n_species),
                     function(i) {
                       partial(r = R[i],
@@ -177,6 +194,23 @@ stability <- function(n_species, R, A, model = "ricker") {
     
     if (model == "bh") {
       x0 <- drop(solve(A) %*% (exp(R) - 1))
+
+      # check negative equilibrium
+      if (any(x0 < 0)) {
+        # species going extinct
+        e <- which(x0 < 0)
+        
+        # remove species that goes exinct
+        A_prime <- A[-e, -e]
+        R_prime <- R[-e]
+        # re-calculate equilibrium
+        x0_prime <- solve(A_prime) %*% R_prime
+        
+        # update equilibrium value
+        x0[-e] <- x0_prime
+        x0[e] <- 0
+      }
+      
       J <- t(sapply(seq_len(n_species),
                     function(i) {
                       partial(r = R[i],
