@@ -19,13 +19,18 @@ df_param <- expand.grid(n_timestep = c(10, 30),
 
 # simulation --------------------------------------------------------------
 
-cl <- makeCluster(detectCores() - 4)
-registerDoParallel(cl)
+cl <- makeCluster(parallel::detectCores() - 4)
+registerDoSNOW(cl)
+
+pb <- txtProgressBar(max = nrow(df_param), style = 3)
+fun_progress <- function(n) setTxtProgressBar(pb, n)
+opts <- list(progress = fun_progress)
 
 tictoc::tic()
 df_sim <- foreach(x = iterators::iter(df_param, by = "row"),
                   .packages = c("tidyverse", "foreach", "cdyns"),
-                  .combine = bind_rows) %dopar% {
+                  .combine = bind_rows,
+                  .options.snow = opts) %dopar% {
                     
                     df_out <- foreach(k = iterators::icount(25),
                                       .combine = bind_rows) %do% {
