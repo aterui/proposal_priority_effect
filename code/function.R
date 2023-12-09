@@ -7,7 +7,8 @@ sim <- function(n_timestep,
                 a1,
                 sd_a1,
                 sd_env = 0.05,
-                n_rep = 100) {
+                n_rep = 100,
+                const = 1E-4) {
   
   source("code/library.R")
   
@@ -23,7 +24,8 @@ sim <- function(n_timestep,
                       alpha = ma,
                       int_type = "manual",
                       alpha_scale = "unscaled",
-                      sd_env = sd_env)
+                      sd_env = sd_env,
+                      immigration = const)
   
   ## fitting
   df_dyn <- list_dyn$df_dyn %>% 
@@ -62,7 +64,8 @@ sim <- function(n_timestep,
                         alpha = ma_hat,
                         int_type = "manual",
                         alpha_scale = "unscaled",
-                        sd_env = sd_env)
+                        sd_env = sd_env,
+                        immigration = const)
     
     df_sim <- list_sim$df_dyn %>% 
       group_by(timestep) %>% 
@@ -76,13 +79,8 @@ sim <- function(n_timestep,
       ungroup() %>% 
       mutate(species = factor(species))
     
-    if (n_distinct(df_sim$species) > 1) {
-      fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
-      beta0 <- coef(fit_sim)[3]
-    } else {
-      fit_sim <- lm(log_r ~ n0 + nt0, data = df_sim)
-      beta0 <- coef(fit_sim)[3]
-    }
+    fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
+    beta0 <- coef(fit_sim)[3]
     
     return(beta0)
   }
