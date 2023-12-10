@@ -6,15 +6,15 @@ sim <- function(n_timestep,
                 a0,
                 a1,
                 sd_a1,
-                sd_env = 0.1,
+                sd_env = 0.05,
                 n_rep = 100,
-                const = 0) {
+                const = 1E-4) {
   
   source("code/library.R")
   
   v_r <- runif(n_species, min = r - sd_r, max = r + sd_r)
   
-  v_a1 <- abs(rnorm(n_species^2, mean = a1, sd = sd_a1))
+  v_a1 <- exp(rnorm(n_species^2, mean = log(a1), sd = sd_a1))
   ma <- matrix(v_a1, n_species, n_species)
   diag(ma) <- a0
   
@@ -46,58 +46,68 @@ sim <- function(n_timestep,
     mutate(log_r = log(nt1 / nt0)) %>% 
     drop_na(log_r)
   
-  fit <- lm(log_r ~ n0 + nt0, data = df_dyn)
-  b <- coef(fit)[3]
-  
-  fit_c <- lm(log_r ~ nt0,
-              data = df_c)
-  
-  sd_env <- sd(resid(fit_c))
-  
-  ## simulated null distribution
-  r_hat <- coef(fit_c)[1]
-  ma_hat <- matrix(-coef(fit_c)[2], n_species, n_species)
-  
-  v_beta <- foreach(i = iterators::icount(n_rep), .combine = c) %do% {
+  if (n_distinct(df_dyn$species) == n_species) {
     
-    list_sim <- cdynsim(n_timestep = n_timestep,
-                        n_species = n_species,
-                        r = r_hat,
-                        alpha = ma_hat,
-                        int_type = "manual",
-                        alpha_scale = "unscaled",
-                        sd_env = sd_env,
-                        immigration = const)
+    fit <- lm(log_r ~ n0 + nt0, data = df_dyn)
+    b <- coef(fit)[3]
     
-    df_sim <- list_sim$df_dyn %>% 
-      group_by(timestep) %>% 
-      mutate(nt1 = sum(density)) %>% 
-      ungroup() %>% 
-      group_by(species) %>% 
-      mutate(n0 = lag(density),
-             n1 = density,
-             log_r = log(n1 / n0),
-             nt0 = lag(nt1)) %>% 
-      ungroup() %>% 
-      mutate(species = factor(species)) %>% 
-      drop_na(log_r)
+    fit_c <- lm(log_r ~ nt0,
+                data = df_c)
     
-    if (n_distinct(df_sim$species) == n_species) {
-      fit_sim <- lm(log_r ~ n0 + nt0, data = df_sim)
-      beta0 <- coef(fit_sim)[3]
-    } else {
-      beta0 <- NA
+    sd_env <- sd(resid(fit_c))
+    
+    ## simulated null distribution
+    r_hat <- coef(fit_c)[1]
+    ma_hat <- matrix(-coef(fit_c)[2], n_species, n_species)
+    
+    v_beta <- foreach(i = iterators::icount(n_rep), .combine = c) %do% {
+      
+      list_sim <- cdynsim(n_timestep = n_timestep,
+                          n_species = n_species,
+                          r = r_hat,
+                          alpha = ma_hat,
+                          int_type = "manual",
+                          alpha_scale = "unscaled",
+                          sd_env = sd_env,
+                          immigration = const)
+      
+      df_sim <- list_sim$df_dyn %>% 
+        group_by(timestep) %>% 
+        mutate(nt1 = sum(density)) %>% 
+        ungroup() %>% 
+        group_by(species) %>% 
+        mutate(n0 = lag(density),
+               n1 = density,
+               log_r = log(n1 / n0),
+               nt0 = lag(nt1)) %>% 
+        ungroup() %>% 
+        mutate(species = factor(species)) %>% 
+        drop_na(log_r)
+      
+      if (n_distinct(df_sim$species) == n_species) {
+        fit_sim <- lm(log_r ~ n0 + nt0, data = df_sim)
+        beta0 <- coef(fit_sim)[3]
+      } else {
+        beta0 <- NA
+      }
+      
+      return(beta0)
     }
+
+    v_beta <- na.omit(v_beta)
+    output <- list(p = mean(b < v_beta),
+                   b = b,
+                   b_null = v_beta,
+                   n = length(v_beta))
+  } else {
     
-    return(beta0)
+    output <- list(p = NA,
+                   b = NA,
+                   b_null = NA,
+                   n = NA)
+    
   }
-  
-  v_beta <- na.omit(v_beta)
-  output <- list(p = mean(b < v_beta),
-                 b = b,
-                 b_null = v_beta,
-                 n = length(v_beta))
-  
+
   attr(output, "A") <- ma  
   attr(output, "R") <- v_r  
   
