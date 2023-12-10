@@ -13,7 +13,7 @@ df_param <- expand.grid(n_timestep = c(10, 30),
                         factor_a1 = seq(0, 1.5, by = 0.25),
                         n_rep = 100) %>% 
   as_tibble() %>% 
-  mutate(a1 = round(a0 * factor_a1, 10))
+  mutate(a1 = round(a0 * factor_a1, 10)) # rounded to avoid float point issue
 
 sim_run <- purrr::possibly(sim, otherwise = NULL)
 
