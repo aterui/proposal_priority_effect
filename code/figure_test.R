@@ -10,6 +10,15 @@ df_sim <- readRDS("output/simulation.rds") %>%
 df_plot <- df_sim %>% 
   drop_na(eigen_max)
 
+df_neut <- df_sim %>% 
+  filter(sd_r == 0,
+         factor_sd_a1 == 0,
+         factor_a1 == 1) %>% 
+  group_by(n_timestep, n_species) %>% 
+  reframe(med = median(p),
+          up = quantile(p, 0.75),
+          low = quantile(p, 0.25))
+
 # plot --------------------------------------------------------------------
 
 label <- c('10' = 'Time series = 10',
@@ -17,7 +26,7 @@ label <- c('10' = 'Time series = 10',
            '5' = "Species number = 5",
            '15' = "Species number = 15")
 
-# g_fill <- df_plot %>% 
+# g_fill <- df_plot %>%
 #   ggplot(aes(fill = stability)) +
 #   geom_density(aes(x = p),
 #                color = "grey",
@@ -52,9 +61,11 @@ g_box <- df_plot %>%
              y = p,
              color = stability,
              fill = stability)) +
-  geom_boxplot(alpha = 0.3) +
-  # geom_jitter(height = 0,
-  #             alpha = 0.3) +
+  geom_jitter(height = 0,
+              alpha = 0.3,
+              size = 0.5) +
+  geom_boxplot(alpha = 0.3,
+               outlier.color = NA) +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
              labeller = as_labeller(label),
@@ -79,17 +90,17 @@ ggsave(g_box,
        height = 4.5,
        width = 4.5)
 
-## scatter plot option
-# w <- df_plot %>% 
+# scatter plot option
+# w <- df_plot %>%
 #   ggplot(aes(x = eigen_max,
 #              y = p,
 #              color = stability)) +
 #   geom_point(alpha = 0.25,
-#              size = 0.5) +
-#   scale_x_continuous(trans = "log10") +
-#   facet_grid(rows = vars(n_timestep),
-#              cols = vars(n_species),
-#              labeller = as_labeller(label),
+#              size = 1) +
+#   scale_x_continuous(trans = "sqrt") +
+#   facet_grid(rows = vars(n_timestep, factor_sd_a1),
+#              cols = vars(n_species, sd_r),
+#              labeller = label_both,#as_labeller(label),
 #              scales = "free_x") +
 #   coord_cartesian(xlim = c(0.5, 10)) +
 #   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),

@@ -8,7 +8,7 @@ df_param <- expand.grid(n_timestep = c(10, 30),
                         n_species = c(5, 15),
                         r = 1,
                         sd_r = c(0, 0.1),
-                        a0 = c(0.01, 0.02),
+                        a0 = c(0.01, 0.05),
                         factor_a1 = seq(0, 1.5, by = 0.25),
                         factor_sd_a1 = c(0, 0.25),
                         n_rep = 100) %>% 
@@ -19,7 +19,7 @@ df_param <- expand.grid(n_timestep = c(10, 30),
 
 # simulation --------------------------------------------------------------
 
-cl <- makeCluster(parallel::detectCores() - 4)
+cl <- makeCluster(parallel::detectCores() - 2)
 registerDoSNOW(cl)
 
 pb <- txtProgressBar(max = nrow(df_param), style = 3)

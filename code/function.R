@@ -6,9 +6,9 @@ sim <- function(n_timestep,
                 a0,
                 a1,
                 sd_a1,
-                sd_env = 0.05,
+                sd_env = 0.1,
                 n_rep = 100,
-                const = 1E-4) {
+                const = 0) {
   
   source("code/library.R")
   
@@ -38,13 +38,15 @@ sim <- function(n_timestep,
            log_r = log(n1 / n0),
            nt0 = lag(nt1)) %>% 
     ungroup() %>% 
-    mutate(species = factor(species))
+    mutate(species = factor(species)) %>% 
+    drop_na(log_r)
   
   df_c <- df_dyn %>% 
     distinct(timestep, nt0, nt1) %>% 
-    mutate(log_r = log(nt1 / nt0))
+    mutate(log_r = log(nt1 / nt0)) %>% 
+    drop_na(log_r)
   
-  fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
+  fit <- lm(log_r ~ n0 + nt0, data = df_dyn)
   b <- coef(fit)[3]
   
   fit_c <- lm(log_r ~ nt0,
@@ -77,17 +79,24 @@ sim <- function(n_timestep,
              log_r = log(n1 / n0),
              nt0 = lag(nt1)) %>% 
       ungroup() %>% 
-      mutate(species = factor(species))
+      mutate(species = factor(species)) %>% 
+      drop_na(log_r)
     
-    fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
-    beta0 <- coef(fit_sim)[3]
+    if (n_distinct(df_sim$species) == n_species) {
+      fit_sim <- lm(log_r ~ n0 + nt0, data = df_sim)
+      beta0 <- coef(fit_sim)[3]
+    } else {
+      beta0 <- NA
+    }
     
     return(beta0)
   }
   
+  v_beta <- na.omit(v_beta)
   output <- list(p = mean(b < v_beta),
                  b = b,
-                 b_null = v_beta)
+                 b_null = v_beta,
+                 n = length(v_beta))
   
   attr(output, "A") <- ma  
   attr(output, "R") <- v_r  
