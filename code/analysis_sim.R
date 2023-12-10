@@ -13,8 +13,9 @@ df_param <- expand.grid(n_timestep = c(10, 30),
                         factor_a1 = seq(0, 1.5, by = 0.25),
                         n_rep = 100) %>% 
   as_tibble() %>% 
-  mutate(a1 = a0 * factor_a1)
+  mutate(a1 = round(a0 * factor_a1, 10))
 
+sim_run <- purrr::possibly(sim, otherwise = NULL)
 
 # simulation --------------------------------------------------------------
 
@@ -31,25 +32,29 @@ df_sim <- foreach(x = iterators::iter(df_param, by = "row"),
                   .combine = bind_rows,
                   .options.snow = opts) %dopar% {
                     
-                    df_out <- foreach(k = iterators::icount(25),
+                    df_out <- foreach(k = iterators::icount(3),
                                       .combine = bind_rows) %do% {
                                         
                                         cout <-with(x,
-                                                    sim(n_timestep = n_timestep,
-                                                        n_species = n_species,
-                                                        r = r,
-                                                        sd_r = sd_r,
-                                                        a0 = a0,
-                                                        a1 = a1, 
-                                                        sd_a1 = sd_a1,
-                                                        n_rep = n_rep))
+                                                    sim_run(n_timestep = n_timestep,
+                                                            n_species = n_species,
+                                                            r = r,
+                                                            sd_r = sd_r,
+                                                            a0 = a0,
+                                                            a1 = a1, 
+                                                            sd_a1 = sd_a1,
+                                                            n_rep = n_rep))
                                         
-                                        A <- attr(cout, "A")
-                                        R <- attr(cout, "R")
-                                        
-                                        eigen_max <- stability(n_species = x$n_species,
-                                                               R = R,
-                                                               A = A)
+                                        if (!is.null(cout)) {
+                                          eigen_max <- stability(n_species = x$n_species,
+                                                                 R = attr(cout, "R"),
+                                                                 A = attr(cout, "A"))
+                                        } else {
+                                          cout <- NULL
+                                          cout$p <- NA
+                                          cout$b <- NA
+                                          cout$n <- NA
+                                        }
                                         
                                         return(tibble(replicate = k,
                                                       x,

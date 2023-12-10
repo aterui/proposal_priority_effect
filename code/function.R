@@ -8,24 +8,31 @@ sim <- function(n_timestep,
                 sd_a1,
                 sd_env = 0.05,
                 n_rep = 100,
-                const = 1E-4) {
+                const = 0) {
   
   source("code/library.R")
   
   v_r <- runif(n_species, min = r - sd_r, max = r + sd_r)
   
-  v_a1 <- exp(rnorm(n_species^2, mean = log(a1), sd = sd_a1))
+  if (sd_a1 > 0) {
+    v_a1 <- exp(rnorm(n_species^2, mean = log(a1), sd = sd_a1))
+  } else {
+    v_a1 <- rep(a1, n_species^2)
+  }
+  
   ma <- matrix(v_a1, n_species, n_species)
   diag(ma) <- a0
   
-  list_dyn <- cdynsim(n_timestep = n_timestep,
-                      n_species = n_species,
-                      r = v_r,
-                      alpha = ma,
-                      int_type = "manual",
-                      alpha_scale = "unscaled",
-                      sd_env = sd_env,
-                      immigration = const)
+  list_dyn <- suppressMessages(
+    cdynsim(n_timestep = n_timestep,
+            n_species = n_species,
+            r = v_r,
+            alpha = ma,
+            int_type = "manual",
+            alpha_scale = "unscaled",
+            sd_env = sd_env,
+            immigration = const)
+  )
   
   ## fitting
   df_dyn <- list_dyn$df_dyn %>% 
@@ -62,14 +69,16 @@ sim <- function(n_timestep,
     
     v_beta <- foreach(i = iterators::icount(n_rep), .combine = c) %do% {
       
-      list_sim <- cdynsim(n_timestep = n_timestep,
-                          n_species = n_species,
-                          r = r_hat,
-                          alpha = ma_hat,
-                          int_type = "manual",
-                          alpha_scale = "unscaled",
-                          sd_env = sd_env,
-                          immigration = const)
+      list_sim <- suppressMessages(
+        cdynsim(n_timestep = n_timestep,
+                n_species = n_species,
+                r = r_hat,
+                alpha = ma_hat,
+                int_type = "manual",
+                alpha_scale = "unscaled",
+                sd_env = sd_env,
+                immigration = const)
+      )
       
       df_sim <- list_sim$df_dyn %>% 
         group_by(timestep) %>% 
