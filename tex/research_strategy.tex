@@ -54,7 +54,8 @@ Over the past few decades, the results of the controlled experiments suggested t
 Even more, they spawned several influential hypotheses predicting the likely biological scenarios in which priority effects should matter.
 For example, priority effects are hypothesized to be prevalent in the environment that enhances the rapid establishment of early colonizing species, such as small habitat size, high productivity, and low environmental variability, among others.
 
-Nonetheless, some experts remain concerned about the prevalence and importance of priority effects because they have rarely been confirmed \textit{in unmanipulated natural systems}. Often, controlled experiments are too small in scale and too simplified to be meaningful in the real world.
+Nonetheless, some experts remain concerned about the prevalence and importance of priority effects because they have rarely been confirmed \textit{in unmanipulated natural systems}.
+Often, controlled experiments are too small in scale and too simplified to be meaningful in the real world.
 But, in natural systems, knowing the order of species' arrival is virtually impossible.
 As such, resolving this fundamental problem requires a statistical method that captures the signature of priority effects \textit{without knowing the colonization history}.
 We are unaware of such a novel statistical method, however. 
@@ -122,18 +123,18 @@ Although the method we propose here applies to any functions that assume linear 
 f(x_{i}) = \exp(r_{0,i} - \alpha_i x_i - \sum_{j \ne i} \beta_{ij} x_{j}),
 \end{equation}
 
-where $r_{0,i}$ is the intrinsic population growth, $\alpha_{i}$ the intraspecific competition coefficient, and $\beta_{ij}$ the interspecific coefficient.
-Here, we assume that $\beta_{ij}$ is drawn randomly from a given probability distribution with a sample mean ($\mu_{\beta}$) and SD ($\sigma_{\beta}$). 
+where $r_{0,i}$ is the intrinsic population growth, and $\alpha_{i}$ and $\beta_{ij}$ the intra- and interspecific competition coefficient.
+The parameter $\beta_{ij}$ has a sample mean ($\mu_{\beta}$) and SD ($\sigma_{\beta}$), assuming that they are drawn from a given probability distribution. 
 Denoting the total community density as $x_T$ ($x_T = \sum_i x_i$), Equation \ref{eq:m0} can be reorganized to:
 
 \begin{equation}
 \label{eq:rickermod}
-f(x_i) = \exp\left[r_{0,i} - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_i - (\mu_{\beta} + \sigma_{\beta} \phi_i) x_T + e_i \right],
+f(x_i) = \exp\left[r_{0,i} - (\alpha_i - \mu_{\beta}) x_i - \mu_{\beta} x_T + e_i \right],
 \end{equation}
 
-where $e_i = \sigma_{\beta} \sum_{j \ne i} b_{ij} (x_T - x_i - x_j)$ and $\phi_i = \sum_{j \ne i} b_{ij}$.
+where $e_i = \sigma_{\beta} \sum_{j} b_{ij} x_j$ and $\phi_i = \sum_{j \ne i} b_{ij}$.
 In Equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$.
-Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; if we let $S$ denote the number of species in the community, the summation $\phi_i$ asymptotically follows $\mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
+Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; if we let $S$ denote the number of species in the community, the summation $\phi_i$ asymptotically follows a Normal distribution as $\phi_i \sim \mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
 
 The re-organized function (Equation \ref{eq:rickermod}) has two important implications.
 First, \ul{the function can be expressed as a function of two variables (species $i$'s density $x_i$ and the total community density $x_T$), substantially reducing the parameter dimension of the model.}
@@ -201,25 +202,7 @@ When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equ
 Otherwise ($|\lambda_{max}| > 1$), the community's equilibrium is locally unstable with the possibility of priority effects.
 We acknowledge that the criterion of $|\lambda_{max}| > 1$ is a necessary, not sufficient, condition for a priority effect to emerge; yet, it is reasonable to assume that such communities are highly sensitive to priority effects as the equilibrium condition is locally unstable. 
 
-% \begin{table}
-%     \centering
-%     \caption{Parameter values used in the preliminary analysis. In the preliminary analysis, we used a Ricker model to simulate community dynamics.}
-%     \begin{tabular}{cll}
-%         Symbol & Interpretation & Value\\
-%         \hline
-%         $r_i$            & Intrinsic population growth  & 1.00 or $\mbox{Unif(0.90, 1.10)}$\\
-%         $\alpha_{i}$     & Intraspecific competition    & 0.01, 0.02\\
-%         $\beta_{ij}$     & Interspecific competition    & $\mbox{Normal}(\mu_{\beta}, \sigma_{\beta}^2)$\\
-%         $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times \{0.00, 0.25, ..., 1.50\}$\\
-%         $\sigma_{\beta}$ & SD interspecific competition & $\mu_{\beta} \times \{0.00,  0.25\}$\\
-%         $S$              & Number of species in a community & $5, 15$\\
-%         $L_t$            & Length of time series            & $10, 30$\\
-%         \hline
-%     \end{tabular}
-%     \label{tab:param0}
-% \end{table}
-
-With this sensitivity criterion, we performed a preliminary analysis of the method's performance. We used the model formula presented in Equation \ref{eq:ricker} (the Ricker model) to produce simulated time series data. We considered 224 parameter combinations to yield a sufficient variation in the leading eigenvalue $|\lambda_{max}|$. Within each parameter combination, 25 replicates of time series data were produced, resulting in $224 \times 25 = 5600$ runs.
+With this sensitivity criterion, we performed a preliminary analysis of the method's performance. We used the model formula presented in Equation \ref{eq:ricker} (the Ricker model) to produce simulated time series data. We considered 224 parameter combinations, within each of which 25 replicates of time series data were produced ($224 \times 25 = 5600$ runs). Parameter values were chosen to yield a sufficient variation in the leading eigenvalue $|\lambda_{max}|$ (Table \ref{tab:param1}).
 
 The results of the preliminary analysis were promising -- \ul{the estimated statistic $\Pr(\delta_{obs} > \delta_{null})$ clearly segregated the insensitive and sensitive communities} (Figure \ref{fig:box}). It is important to note that (i) the number of species did not affect the performance of the proposed method; (ii) the performance was reasonable with a relatively short time series (t = 10). These results may indicate that our method can be applied to a short time series of a species-rich community. 
 
@@ -255,19 +238,19 @@ Collectively, these proposed activities will increase the credibility of our pro
 
 \begin{table}
     \flushleft
-    \caption{Possible parameter values in the proposed analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics.}
+    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics.}
     \begin{tabular}{clll}
         Symbol           & Interpretation               & Value (proposed)                                 & Value (preliminary)\\
         \hline
         $r_i$            & Intrinsic population growth  & $\mbox{Unif(\mu_r - h_r, \mu_r + h_r)}$          & \\
-        $\mu_r$          & Average $r_i$                & $0.50~\mbox{to}~1.50$                              & [1.00]\\
-        $h_r$            & Half range in $r_i$          & $0.10~\mbox{to}~0.50$                               & [0.00, 0.10]\\  
-        $\alpha_{i}$     & Intraspecific competition    & $0.01~\mbox{to}~0.10$                         & [0.01, 0.05]\\
+        $\mu_r$          & Average $r_i$                & $0.50~\mbox{to}~1.50$                              & 1.00\\
+        $h_r$            & Half range in $r_i$          & $0.10~\mbox{to}~0.50$                               & 0.00, 0.10\\  
+        $\alpha_{i}$     & Intraspecific competition    & $0.01~\mbox{to}~0.10$                         & 0.01, 0.05\\
         $\beta_{ij}$     & Interspecific competition    & $\mbox{Normal}(\mu_{\beta}, \sigma_{\beta}^2)$   & \\
-        $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & [$0.00~\mbox{to}~1.50$]\\
-        $\sigma_{\beta}$ & SD interspecific competition & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & [0.00, 0.25]\\
-        $S$              & Number of species in a community & $5, 10, 20, 40$ & [5, 15] \\
-        $L_t$            & Length of time series            & $5, 10, 20, 40$ & [10, 30] \\
+        $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & $0.00~\mbox{to}~1.50$\\
+        $\sigma_{\beta}$ & SD interspecific competition & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & 0.00, 0.25\\
+        $S$              & Number of species in a community & $2, 8, 32, 128$ & 5, 15\\
+        $L_t$            & Length of time series            & $5, 10, 20, 40$ & 10, 30\\
         \hline
     \end{tabular}
     \label{tab:param1}
@@ -292,7 +275,7 @@ Collectively, these proposed activities will increase the credibility of our pro
         g(e_i) = \ln(c) + \frac{e_i}{c} - \frac{e_i^2}{2 c^2} + O(e_i),
     \end{equation}
 
-    where $O(e_i)$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored.
+    where $O(e_i)$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $g(e_i) \approx \ln(c) + e_i / c$.
     As a result, after accounting for environmental noise, the BH model can be approximated as:
 
     \begin{align}
@@ -316,13 +299,20 @@ We will use published time-series data of microbial communities for the model va
 \textit{\textbf{Method details: data source}} --
 We identified XXX papers that controlled the colonization history of microbes to determine the influence of priority effects (Table XXX).
 These data are ideal for our model validation for two reasons. First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
-Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ identifies communities (species combinations) in which priority effects manifest.
-Second, these experiments vary in time series length and the number of species.
-As such, we can evaluate the sensitivity of our method to the varied data quality.
-
-\textit{\textbf{Method details: preliminary analysis}} --
+Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ identifies communities in which priority effects manifest.
+Second, these experiments vary in time series length and the number of species, allowing us to evaluate the sensitivity of our method to the varied data quality.
 
 \textit{\textbf{Method details: proposed analysis}} --
+Our empirical data analysis will proceed as follows:
+
+\begin{enumerate}
+    \item Select the appropriate ecological model.
+    We will fit Ricker and BH models to an empirical time series and estimate AIC values for each model.
+    In the following analysis, we will the model assumption that yields a lower AIC value.
+    \item Perform the null model analysis to yield the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
+    Note that the model is provided with only time series data (the information on colonization history is not given as data).
+    \item Validate the relationship between the community sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
+\end{enumerate}
 
 \subsection*{Specific Aim 3: Application to Field Data}
 
