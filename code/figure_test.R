@@ -8,7 +8,7 @@ df_sim <- readRDS("output/simulation.rds") %>%
   mutate(stability = ifelse(eigen_max > 1, "Sensitive", "Insensitive"))
 
 df_plot <- df_sim %>% 
-  drop_na(eigen_max)
+  drop_na(eigen_max, p)
 
 # df_neut <- df_sim %>% 
 #   filter(sd_r == 0,
@@ -83,12 +83,14 @@ g_box <- df_plot %>%
   theme_bw() +
   theme(strip.background = element_blank(),
         panel.grid = element_blank(),
-        legend.position = "bottom")
+        legend.position = "bottom") +
+  geom_ysidedensity(aes(x = stat(density)),
+                    alpha = 0.50)
 
 ggsave(g_box,
        filename = "output/figure_eigen.pdf",
        height = 4.5,
-       width = 4.5)
+       width = 6)
 
 # scatter plot option
 # w <- df_plot %>%
