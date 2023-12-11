@@ -10,14 +10,14 @@ df_sim <- readRDS("output/simulation.rds") %>%
 df_plot <- df_sim %>% 
   drop_na(eigen_max)
 
-df_neut <- df_sim %>% 
-  filter(sd_r == 0,
-         factor_sd_a1 == 0,
-         factor_a1 == 1) %>% 
-  group_by(n_timestep, n_species) %>% 
-  reframe(med = median(p),
-          up = quantile(p, 0.75),
-          low = quantile(p, 0.25))
+# df_neut <- df_sim %>% 
+#   filter(sd_r == 0,
+#          factor_sd_a1 == 0,
+#          factor_a1 == 1) %>% 
+#   group_by(n_timestep, n_species) %>% 
+#   reframe(med = median(p),
+#           up = quantile(p, 0.75),
+#           low = quantile(p, 0.25))
 
 # plot --------------------------------------------------------------------
 
@@ -26,32 +26,32 @@ label <- c('10' = 'Time series = 10',
            '5' = "Species number = 5",
            '15' = "Species number = 15")
 
-# g_fill <- df_plot %>%
-#   ggplot(aes(fill = stability)) +
-#   geom_density(aes(x = p),
-#                color = "grey",
-#                alpha = 0.3,
-#                position = "fill") +
-#   facet_grid(rows = vars(n_timestep),
-#              cols = vars(n_species),
-#              labeller = as_labeller(label),
-#              scales = "free_x") +
-#   labs(x = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
-#        y = "Relative Frequency",
-#        fill = "Sensitivity") +
-#   MetBrewer::scale_color_met_d("Hiroshige",
-#                                direction = -1) +
-#   MetBrewer::scale_fill_met_d("Hiroshige",
-#                               direction = -1) +
-#   theme_bw() +
-#   theme(strip.background = element_blank(),
-#         panel.grid = element_blank(),
-#         legend.position = "bottom")
-# 
-# ggsave(g_fill,
-#        filename = "output/figure_eigen.pdf",
-#        height = 4.5,
-#        width = 4.5)
+g_fill <- df_plot %>%
+  ggplot(aes(fill = stability)) +
+  geom_density(aes(x = p),
+               color = "grey",
+               alpha = 0.3,
+               position = "fill") +
+  facet_grid(rows = vars(n_timestep),
+             cols = vars(n_species),
+             labeller = as_labeller(label),
+             scales = "free_x") +
+  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       y = "Relative Frequency",
+       fill = "Sensitivity") +
+  MetBrewer::scale_color_met_d("Hiroshige",
+                               direction = -1) +
+  MetBrewer::scale_fill_met_d("Hiroshige",
+                              direction = -1) +
+  theme_bw() +
+  theme(strip.background = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "bottom")
+
+ggsave(g_fill,
+       filename = "output/figure_prop.pdf",
+       height = 4.5,
+       width = 4.5)
 
 # boxplot option
 g_box <- df_plot %>%
@@ -70,7 +70,7 @@ g_box <- df_plot %>%
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free_x") +
-  labs(y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+  labs(y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
        x = "True sensitivity",
        color = "Sensitivity",
        fill = "Sensitivity") +

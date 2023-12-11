@@ -15,7 +15,9 @@ sim <- function(n_timestep,
   v_r <- runif(n_species, min = r - sd_r, max = r + sd_r)
   
   if (sd_a1 > 0) {
-    v_a1 <- exp(rnorm(n_species^2, mean = log(a1), sd = sd_a1))
+    v_a1 <- runif(n = n_species^2,
+                  min = max(a1 - sd_a1, 0),
+                  max = a1 + sd_a1)
   } else {
     v_a1 <- rep(a1, n_species^2)
   }
@@ -55,7 +57,7 @@ sim <- function(n_timestep,
   
   if (n_distinct(df_dyn$species) == n_species) {
     
-    fit <- lm(log_r ~ n0 + nt0, data = df_dyn)
+    fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
     b <- coef(fit)[3]
     
     fit_c <- lm(log_r ~ nt0,
@@ -94,7 +96,7 @@ sim <- function(n_timestep,
         drop_na(log_r)
       
       if (n_distinct(df_sim$species) == n_species) {
-        fit_sim <- lm(log_r ~ n0 + nt0, data = df_sim)
+        fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
         beta0 <- coef(fit_sim)[3]
       } else {
         beta0 <- NA
