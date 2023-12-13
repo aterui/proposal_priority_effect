@@ -67,6 +67,7 @@ df_n <- df_m %>%
   mutate(log_r = log(n + const) - log(n0 + const)) %>% 
   select(-c(x, y, species, predictor, z0))
 
+saveRDS(df_m, file = "data_fmt/data_hsu_fmt.rds")
 
 # analysis ----------------------------------------------------------------
 

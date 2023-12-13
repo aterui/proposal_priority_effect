@@ -124,9 +124,28 @@ ggsave(g_box,
 
 # hsu results -------------------------------------------------------------
 
-df_delta <- readRDS("output/data_hsu.rds")
+df_delta <- readRDS("output/simulation_hsu.rds")
+df_hsu <- readRDS("data_fmt/data_hsu_fmt.rds")
 
-g_hsu <- df_delta %>% 
+df_x <- df_hsu %>% 
+  group_by(replicate, treatment, light) %>% 
+  summarize(x_max = max(x),
+            y_max = max(y)) %>% 
+  pivot_wider(id_cols = c("replicate", "light"),
+              names_from = "treatment",
+              values_from = c("x_max", "y_max")) %>% 
+  ungroup() %>% 
+  mutate(rr_x = abs(log(x_max_cp) - log(x_max_pc)),
+         rr_y = abs(log(y_max_cp) - log(y_max_pc))) %>% 
+  rowwise() %>% 
+  summarize(replicate,
+            light,
+            log_rr = mean(rr_x, rr_y))
+
+df_delta <- df_delta %>% 
+  left_join(df_x, by = c("replicate", "light"))
+
+g_hsu_box <- df_delta %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
@@ -135,10 +154,10 @@ g_hsu <- df_delta %>%
              y = p,
              fill = sensitivity)) +
   geom_boxplot(outlier.color = NA,
-               alpha = 0.5) +
+              alpha = 0.5) +
   geom_jitter(height = 0,
-              width = 0.1,
-              alpha = 0.5) + 
+             width = 0.1,
+             alpha = 0.5) +
   MetBrewer::scale_fill_met_d("Hiroshige", direction = -1) +
   labs(x = "Sensitivity",
        y = expression("Pr("*delta[obs]~">"~delta[null]*")")) +
@@ -146,6 +165,27 @@ g_hsu <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
+g_hsu <- df_delta %>% 
+  drop_na(p) %>% 
+  mutate(sensitivity = ifelse(light == 0,
+                              "Insensitive",
+                              "Sensitive")) %>% 
+  ggplot(aes(x = log_rr,
+             y = p,
+             color = light)) +
+  geom_point(size = 3) +
+  MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
+  labs(x = "Strength of priority effects",
+       y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       color = "Light") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+
+ggsave(g_hsu_box,
+       filename = "output/figure_box_hsu.pdf",
+       width = 4.5, height = 4)
+
 ggsave(g_hsu,
-       filename = "output/figure_hsu.pdf",
-       width = 4, height = 4)
+       filename = "output/figure_scatter_hsu.pdf",
+       width = 6, height = 4)
