@@ -259,3 +259,56 @@ stability <- function(n_species, R, A, model = "ricker") {
   }
   
 }
+
+
+# null model function -----------------------------------------------------
+
+null <- function(n_species, n_timestep, r_hat, a_hat, sd_env, 
+                 seed = 50,
+                 nsim = 100,
+                 const = 1) {
+  
+  ma_hat <- matrix(-a_hat, n_species, n_species)
+  
+  v_beta <- foreach(i = iterators::icount(nsim),
+                    .combine = c) %do% {
+    
+    list_sim <- suppressMessages(
+      cdyns::cdynsim(n_timestep = n_timestep,
+                     n_species = n_species,
+                     #n_warmup = 0,
+                     #n_burnin = 0,
+                     r = r_hat,
+                     alpha = ma_hat,
+                     int_type = "manual",
+                     alpha_scale = "unscaled",
+                     sd_env = sd_env,
+                     seed = seed,
+                     immigration = 0)
+    )
+    
+    df_sim <- list_sim$df_dyn %>% 
+      group_by(timestep) %>% 
+      mutate(n = sum(density)) %>% 
+      ungroup() %>% 
+      group_by(species) %>% 
+      mutate(z0 = lag(density),
+             z = density,
+             log_r = log(z + const) - log(z0 + const),
+             n0 = lag(n)) %>% 
+      ungroup() %>% 
+      mutate(species = factor(species)) %>% 
+      drop_na(log_r)
+    
+    if (n_distinct(df_sim$species) == n_species) {
+      fit_sim <- lm(log_r ~ n0 + z0 * species, data = df_sim)
+      beta0 <- coef(fit_sim)[2]
+    } else {
+      beta0 <- NA
+    }
+    
+    return(beta0)
+  }
+  
+  return(v_beta)
+}

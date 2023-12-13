@@ -120,3 +120,32 @@ ggsave(g_box,
 #        height = 3.5,
 #        width = 3.5)
 
+
+
+# hsu results -------------------------------------------------------------
+
+df_delta <- readRDS("output/data_hsu.rds")
+
+g_hsu <- df_delta %>% 
+  drop_na(p) %>% 
+  mutate(sensitivity = ifelse(light == 0,
+                              "Insensitive",
+                              "Sensitive")) %>% 
+  ggplot(aes(x = sensitivity,
+             y = p,
+             fill = sensitivity)) +
+  geom_boxplot(outlier.color = NA,
+               alpha = 0.5) +
+  geom_jitter(height = 0,
+              width = 0.1,
+              alpha = 0.5) + 
+  MetBrewer::scale_fill_met_d("Hiroshige", direction = -1) +
+  labs(x = "Sensitivity",
+       y = expression("Pr("*delta[obs]~">"~delta[null]*")")) +
+  guides(fill = "none") + 
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
+ggsave(g_hsu,
+       filename = "output/figure_hsu.pdf",
+       width = 4, height = 4)

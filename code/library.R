@@ -4,4 +4,5 @@ pacman::p_load(tidyverse,
                foreach,
                doSNOW,
                patchwork,
-               ggside)
+               ggside,
+               runjags)
