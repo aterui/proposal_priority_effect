@@ -117,7 +117,7 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                                        a_hat = a_hat,
                                        seed = 50,
                                        sd_env = sd(resid(m0) * m0$w),
-                                       nsim = 500,
+                                       nsim = 100,
                                        const = const)
                         
                         cout <- cout %>%
@@ -138,7 +138,7 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                     }
 
 saveRDS(df_delta,
-        file = "output/data_hsu.rds")
+        file = "output/simulation_hsu.rds")
 
 # figure ------------------------------------------------------------------
 

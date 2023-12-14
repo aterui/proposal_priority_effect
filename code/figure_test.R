@@ -170,13 +170,13 @@ g_hsu <- df_delta %>%
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
                               "Sensitive")) %>% 
-  ggplot(aes(x = log_rr,
-             y = p,
+  ggplot(aes(x = p,
+             y = log_rr,
              color = light)) +
   geom_point(size = 3) +
   MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
-  labs(x = "Strength of priority effects",
-       y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       y = "Strength of priority effects",
        color = "Light") +
   theme_bw() +
   theme(panel.grid = element_blank())
