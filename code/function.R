@@ -120,7 +120,7 @@ sim <- function(n_timestep,
     v_beta <- na.omit(v_beta)
     names(v_beta) <- NULL
     p <- mean(b < v_beta)
-    output <- list(p = p,
+    output <- list(p = ifelse(is.nan(p), NA, p),
                    b = b,
                    b_null = v_beta,
                    n = length(v_beta))
