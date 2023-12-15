@@ -11,7 +11,7 @@ sim <- function(n_timestep,
                 a1,
                 h_a1,
                 sd_env = 0.05,
-                n_rep = 100,
+                nsim = 100,
                 const = 0) {
   
   if (h_a1 > 0) {
@@ -61,15 +61,7 @@ sim <- function(n_timestep,
     mutate(log_r = log(nt1 / nt0)) %>% 
     drop_na(log_r)
   
-  ## fitting - species level
-  fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
-  b <- coef(fit)[3]
-  
-  ## fitting - community level
-  fit_c <- lm(log_r ~ nt0, data = df_c)
-  sd_env <- sd(resid(fit_c))
-  
-  if (coef(fit_c)[2] >= 0) {
+  if (n_distinct(df_dyn$species) != n_species) {
     # NOTE - community grow infinitely; exclude
     output <- list(p = NA,
                    b = NA,
@@ -78,11 +70,18 @@ sim <- function(n_timestep,
     
   } else {
     
-    ## simulated null distribution
+    ## parameter observed
+    fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
+    b <- coef(fit)[3]
+    
+    ## parameter for a null model
+    fit_c <- lm(log_r ~ nt0, data = df_c)
+    sd_env <- sd(resid(fit_c))
     r_hat <- coef(fit_c)[1]
     ma_hat <- matrix(-coef(fit_c)[2], n_species, n_species)
     
-    v_beta <- foreach(i = iterators::icount(n_rep), .combine = c) %do% {
+    v_beta <- foreach(i = iterators::icount(nsim),
+                      .combine = c) %do% {
       
       list_sim <- suppressMessages(
         cdynsim(n_timestep = n_timestep,
@@ -108,12 +107,18 @@ sim <- function(n_timestep,
         mutate(species = factor(species)) %>%
         drop_na(log_r)
       
-      fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
-      beta0 <- coef(fit_sim)[3]
+      if (n_distinct(df_sim$species) != n_species) {
+        beta0 <- NA
+      } else {
+        fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
+        beta0 <- coef(fit_sim)[3]
+      }
       
       return(beta0)
     }
     
+    v_beta <- na.omit(v_beta)
+    names(v_beta) <- NULL
     p <- mean(b < v_beta)
     output <- list(p = p,
                    b = b,

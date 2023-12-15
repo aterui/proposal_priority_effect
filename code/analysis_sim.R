@@ -6,15 +6,15 @@ source("code/function.R")
 
 df_param <- expand.grid(n_timestep = c(10, 30),
                         n_species = c(5, 15),
-                        r = 1,
-                        sd_r = c(0, 0.1),
+                        x0 = 1,
+                        h_x0 = seq(0, 1, by = 0.5),
                         a0 = c(0.01, 0.05),
                         factor_a1 = seq(0, 1.5, by = 0.25),
-                        factor_sd_a1 = c(0, 0.25),
-                        n_rep = 100) %>% 
+                        factor_h_a1 = c(0.01, 0.25),
+                        nsim = 100) %>% 
   as_tibble() %>% 
   mutate(a1 = round(a0 * factor_a1, 10),
-         sd_a1 = a1 * factor_sd_a1) # rounded to avoid float point issue
+         h_a1 = a1 * factor_h_a1) # rounded to avoid float point issue
 
 sim_run <- purrr::possibly(sim, otherwise = NULL)
 
@@ -28,7 +28,7 @@ fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
 tictoc::tic()
-df_sim <- foreach(i = seq_len(nrow(df_param)),
+df_sim <- foreach(i = 1:2,#seq_len(nrow(df_param)),
                   .packages = c("tidyverse", "foreach", "cdyns"),
                   .combine = bind_rows,
                   .options.snow = opts) %dopar% {
@@ -44,12 +44,12 @@ df_sim <- foreach(i = seq_len(nrow(df_param)),
                                         cout <-with(x,
                                                     sim_run(n_timestep = n_timestep,
                                                             n_species = n_species,
-                                                            r = r,
-                                                            sd_r = sd_r,
+                                                            x0 = x0,
+                                                            h_x0 = h_x0,
                                                             a0 = a0,
                                                             a1 = a1, 
-                                                            sd_a1 = sd_a1,
-                                                            n_rep = n_rep))
+                                                            h_a1 = h_a1,
+                                                            nsim = nsim))
                                         
                                         if (!is.null(cout)) {
                                           eigen_max <- stability(n_species = x$n_species,

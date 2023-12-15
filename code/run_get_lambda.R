@@ -6,16 +6,14 @@ source("code/function.R")
 
 # get lambda --------------------------------------------------------------
 
-df_param <- expand.grid(n_species = 5,
-                        n_timestep = 10,
-                        x0 = 5,
-                        h_x0 = seq(0, 5, by = 1),
+df_param <- expand.grid(n_species = c(5, 15),
+                        x0 = 1,
+                        h_x0 = seq(0, 1, by = 0.5),
                         a0 = c(0.01, 0.05),
                         factor_a1 = seq(0, 1.5, by = 0.25),
-                        factor_sd_a1 = c(0, 0.25),
-                        n_rep = 100) %>% 
-  as_tibble() %>% 
-  filter(factor_a1 != 1) %>% 
+                        factor_sd_a1 = c(0.01, 0.25),
+                        nsim = 100) %>% 
+  as_tibble() %>%  
   mutate(a1 = round(a0 * factor_a1, 10),
          h_a1 = a1 * factor_sd_a1)
 
@@ -61,4 +59,4 @@ df_out %>%
              color = factor(a0))) +
   geom_point() +
   facet_grid(rows = vars(h_x0),
-             cols = vars(factor_sd_a1, x0))
+             cols = vars(factor_sd_a1, x0, n_species))
