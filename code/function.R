@@ -1,16 +1,16 @@
 
-sim <- function(n_timestep,
-                n_species,
-                r,
-                sd_r,
-                a0,
-                a1,
-                sd_a1,
+source("code/library.R")
+
+sim <- function(n_timestep = 10,
+                n_species = 5,
+                r = 1,
+                sd_r = 0,
+                a0 = 0.010,
+                a1 = 0.001,
+                sd_a1 = 0,
                 sd_env = 0.05,
                 n_rep = 100,
                 const = 0) {
-  
-  source("code/library.R")
   
   v_r <- runif(n_species, min = r - sd_r, max = r + sd_r)
   
@@ -34,9 +34,9 @@ sim <- function(n_timestep,
             alpha_scale = "unscaled",
             sd_env = sd_env,
             immigration = const)
-  )
+    )
   
-  ## fitting
+  ## format data for fitting
   df_dyn <- list_dyn$df_dyn %>% 
     group_by(timestep) %>% 
     mutate(nt1 = sum(density)) %>% 
@@ -57,19 +57,18 @@ sim <- function(n_timestep,
   
   if (n_distinct(df_dyn$species) == n_species) {
     
+    ## observation parameter
     fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
     b <- coef(fit)[3]
     
-    fit_c <- lm(log_r ~ nt0,
-                data = df_c)
-    
-    sd_env <- sd(resid(fit_c))
-    
-    ## simulated null distribution
+    ## parameters for simulated null distribution
+    fit_c <- lm(log_r ~ nt0, data = df_c)
     r_hat <- coef(fit_c)[1]
     ma_hat <- matrix(-coef(fit_c)[2], n_species, n_species)
+    sd_env <- sd(resid(fit_c))
     
-    v_beta <- foreach(i = iterators::icount(n_rep), .combine = c) %do% {
+    v_beta <- foreach(i = iterators::icount(n_rep),
+                      .combine = c) %do% {
       
       list_sim <- suppressMessages(
         cdynsim(n_timestep = n_timestep,
@@ -104,7 +103,9 @@ sim <- function(n_timestep,
       
       return(beta0)
     }
-
+    
+    names(v_beta) <- NULL
+    
     v_beta <- na.omit(v_beta)
     p <- mean(b < v_beta)
     output <- list(p = ifelse(is.nan(p), NA, p),
@@ -254,6 +255,7 @@ stability <- function(n_species, R, A, model = "ricker") {
     }
     
     attr(max_lambda, "J") <- J
+    attr(max_lambda, "x0") <- x0
     
     return(max_lambda)
   }
