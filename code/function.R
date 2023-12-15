@@ -1,6 +1,8 @@
 
 source("code/library.R")
 
+# simulation --------------------------------------------------------------
+
 sim <- function(n_timestep,
                 n_species,
                 x0,
@@ -127,6 +129,8 @@ sim <- function(n_timestep,
 }
 
 
+# partial -----------------------------------------------------------------
+
 partial <- function(r, a, i, x0, model = "ricker") {
   
   ## vectorized parameters and variables
@@ -169,6 +173,9 @@ partial <- function(r, a, i, x0, model = "ricker") {
     
   return(pracma::jacobian(f, x0 = x0, r = r, a = a))
 }
+
+
+# stability ---------------------------------------------------------------
 
 stability <- function(n_species, R, x0, A, model = "ricker") {
   
