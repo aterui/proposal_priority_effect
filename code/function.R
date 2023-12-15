@@ -26,8 +26,10 @@ sim <- function(n_timestep,
   diag(ma) <- a0
   
   v_x0 <- runif(n_species,
-                min = max(x0 - h_x0, 0),
+                min = x0 - h_x0,
                 max = x0 + h_x0)
+  
+  v_x0[v_x0 < 0] <- 0
   
   v_r <- drop(ma %*% v_x0)
   

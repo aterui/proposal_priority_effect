@@ -4,10 +4,13 @@
 source("code/library.R")
 source("code/function.R")
 
-df_param <- expand.grid(n_timestep = c(10, 30),
+df_param <- readRDS("data_fmt/param_set.rds") %>% 
+  expand(colnames(.))
+  
+  expand.grid(n_timestep = c(10, 30),
                         n_species = c(5, 15),
                         x0 = 1,
-                        h_x0 = seq(0, 1, by = 0.5),
+                        h_x0 = seq(0, 1.5, by = 0.5),
                         a0 = c(0.01, 0.05),
                         factor_a1 = seq(0, 1.5, by = 0.25),
                         factor_h_a1 = c(0.01, 0.25),
