@@ -1,8 +1,7 @@
 \documentclass[12pt, class=article, crop=false]{standalone}
 \usepackage[subpreambles=true]{standalone}
-\usepackage[T1]{fontenc} % for font setting
-\usepackage{tgtermes} % for font setting
 
+% general use packages
 \usepackage{import,
             graphicx,
             parskip,
@@ -11,25 +10,33 @@
             wrapfig,
             soul}
 
+% box setup
 \usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
 
+% margin setup
 \usepackage[includeheadfoot,
             top=2.54cm,
             bottom=2.54cm,
             left=2.54cm,
             right=2.54cm]{geometry}%set margin
 
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
 \usepackage{sidecap}
 \sidecaptionvpos{figure}{t}
 
+% citation style
 \usepackage[sort&compress]{natbib}
 \setcitestyle{square}
 \setcitestyle{comma}
-\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
-\usepackage{fancyhdr}
-
-\tcbuselibrary{breakable}
 \bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
 
 \begin{document}
 
@@ -39,10 +46,10 @@
 
 \textbf{Background} --
 Over the past century, biologists have been intrigued by how interacting organisms are assembled in a given environment.
-This process, termed ``community assembly,'' has crucial implications for human society's public health and sustainability.
-For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion.
-Community assembly also plays a critical role in large-scale biological outcomes, such as the environmental restoration of degraded habitats in human-dominated landscapes.
-The effect of environmental restoration on ecological communities is contingent on how colonizing species reach the restored site, often defining the ``success'' of the restoration project that managers invest millions of dollars for implementation.
+This process, termed ``community assembly,'' has crucial implications for human society's public health and sustainability \citep{leibold_metacommunity_2004, palmer_ecological_2014, fukami_historical_2015, ojima_priority_2022}.
+For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion (REF).
+Community assembly also plays a critical role in large-scale biological outcomes, such as the environmental restoration of degraded habitats in human-dominated landscapes \citep{palmer_ecological_2014, koning_network_2020, terui_emergent_2021}.
+The effect of environmental restoration on ecological communities is contingent on how colonizing species reach the restored site, often defining the ``success'' of the restoration project that managers invest millions of dollars for implementation \citep{stoll_importance_2014}.
 Therefore, understanding the regulatory rules in community assembly (hereafter, ``assembly rule'') is fundamental to a broad range of biological phenomena.
 
 The prevailing paradigm in community assembly suggests that the interaction between the environment and species attributes determines the structure of biological communities  (e.g., the relative abundance of different species) -- if the same set of species colonizes into a given habitat, the community structure will ultimately reach the identical state of community structure at equilibrium (the ``niche'' paradigm).
@@ -205,18 +212,14 @@ To validate the performance of the proposed null model analysis, we need to know
 In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition; however, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs.
 
 \begin{SCfigure}
-    \caption{The proposed statistic (y-axis) captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data. Dots are individual simulation replicates, and box plots show quantile values.
+    \caption{The proposed statistic (y-axis) captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data.
+    Boxplots denote quantile values with whiskers extending to 90 percentiles. 
+    Dots are individual simulation replicates.
     The sidebars are corresponding density distributions in each panel (orange: sensitive, blue: insensitive).
     The sensitivity is determined by the leading eigenvalue $\lambda_{max}$ of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).}
-    \includegraphics[scale=0.75]{output/figure_eigen.pdf}
+    \includegraphics[scale=0.5]{output/figure_eigen.pdf}
     \label{fig:box}
 \end{SCfigure}
-
-% \begin{wrapfigure}{r}{0.55\textwidth}
-%     \includegraphics[scale=0.75]{output/figure_eigen.pdf}
-%     \caption{The proposed method captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data. The sensitivity is determined by the leading eigenvalue $\lambda_{max}$ of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).}
-%     \label{fig:box}
-% \end{wrapfigure}
 
 Here, we use the leading eigenvalue $\lambda_{max}$ of the community matrix (the Jacobian of Equation \ref{eq:m0}) to determine whether the simulated community is sensitive to priority effects.
 When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable and hence no priority effects.
@@ -278,39 +281,39 @@ Collectively, these proposed activities will increase the credibility of our pro
     \label{tab:param1}
 \end{table}
 
-\begin{tcolorbox}[{
-  breakable,
-  colback=white,
-  colframe=gray,
-  coltext=black,
-  parbox=false,
-  boxsep=5pt,
-  arc=1pt}]
-    Box 1: Approximation of the Beverton-Holt model
-    \hline
-    In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$ (Equation \ref{eq:bh}).
-    After the transformation outlined in the main text, this formula takes the following form $\ln(1 + \gamma_i x_{t,i} + \delta_i X_t + e_{t,i})$.
-    Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_{t,i} + \delta_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
+% \begin{tcolorbox}[{
+%   breakable,
+%   colback=white,
+%   colframe=gray,
+%   coltext=black,
+%   parbox=false,
+%   boxsep=5pt,
+%   arc=1pt}]
+%     Box 1: Approximation of the Beverton-Holt model
+%     \hline
+%     In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$ (Equation \ref{eq:bh}).
+%     After the transformation outlined in the main text, this formula takes the following form $\ln(1 + \gamma_i x_{t,i} + \delta_i X_t + e_{t,i})$.
+%     Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_{t,i} + \delta_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
 
-    \begin{equation}
-        \label{eq:bhtaylor}
-        w(e_i) = \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + O(e_{t,i}),
-    \end{equation}
+%     \begin{equation}
+%         \label{eq:bhtaylor}
+%         w(e_i) = \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + O(e_{t,i}),
+%     \end{equation}
 
-    where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $w(e_{t,i}) \approx \ln(c) + e_{t,i} c^{-1}$.
-    As a result, after accounting for environmental noise, the BH model can be approximated as:
+%     where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $w(e_{t,i}) \approx \ln(c) + e_{t,i} c^{-1}$.
+%     As a result, after accounting for environmental noise, the BH model can be approximated as:
 
-    \begin{align}
-    \begin{split}
-        \ln f(\overset{\rightarrow}{x}_{t}) 
-            &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
-            &= r_i - \ln(1 + \gamma_i x_{t,i} + \delta_{i} X_t + e_{t,j})\\
-            &\approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_{t,i},
-    \end{split}
-    \end{align}
+%     \begin{align}
+%     \begin{split}
+%         \ln f(\overset{\rightarrow}{x}_{t}) 
+%             &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
+%             &= r_i - \ln(1 + \gamma_i x_{t,i} + \delta_{i} X_t + e_{t,j})\\
+%             &\approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_{t,i},
+%     \end{split}
+%     \end{align}
 
-    where $g'_{i} = r_i + \overline{e_{t,i} c^{-1}}$. This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
-\end{tcolorbox}
+%     where $g'_{i} = r_i + \overline{e_{t,i} c^{-1}}$. This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
+% \end{tcolorbox}
 
 \subsection*{Specific Aim 2: Experimental Validation}
 
@@ -330,12 +333,17 @@ Second, these experiments vary in time series length and the number of species, 
     \flushleft
     \caption{Published time series data of experimental communities.}
     \begin{tabular}{llll}
-         Reference & Study system & Time series length & \# species in a community\\
+         Source & Study system & Time series length & \# species in a community\\
          \hline
+         Fukami and Morin 2003 & Protist & a & 18\\
+         Fukami 2004 & Protist & a & 14\\
          Price and Morin 2004 & Protist & $\ge 20$ & $2$ or $3$ \\
          Zhang and Zhang 2007 & Algae & $13$ & $2$\\
+         Jiang and Patel 2008 & Protist &  & $10$\\
          Tucker and Fukami 2014 & Bacteria and yeasts & $9$ & $4$\\
+         Pu and Jiang 2015 & Protist &  & $10$\\
          Ojima and Jiang 2016 & Protist & $23$ & $5$\\
+         Hsu and Moeller 2021 & Protist & $13~\mbox{to}~22$ & $2$\\
          Ojima et al. 2022 & Bacteria & $7$ & $2$ or $4$\\
          \hline
     \end{tabular}
@@ -343,19 +351,46 @@ Second, these experiments vary in time series length and the number of species, 
 \end{table}
 
 \textit{\textbf{Method details: preliminary analysis}} --
-XXX: add prelim anlaysis?
 
-\textit{\textbf{Method details: proposed analysis}} --
-Our empirical data analysis will proceed as follows:
+We applied our method to the dataset in Hsu and Moeller 2021, serving as a preliminary analysis of real biological data.
+In Hsu and Moeller 2021, the authors have manipulated the introduction order of bacterivorous ciliate competitors,
+\textit{Paramecium bursaria} and \textit{Colpidium} sp., under different light regimes (0, 50, 100, and 200
+$\mu~\mbox{mol}~\mbox{quanta}~m^{-2} s^{-1}$).
+Since \textit{P. bursaria} is an acquired phototroph while \textit{Colpidium} sp. is a strict heterotroph, this experimental setup created differential competitive interactions between the two species with varied strength of priority effects.
+In the absence of light, \textit{P. bursaria} was always outcompeted irrespective of the order of species introduction (= no priority effects).
+However, in the presence of light, the two species community reached different community states depending on the order of species introduction (= priority effects present).
+Thus, this dataset serves as an ideal dataset for our preliminary analysis.
+
+Our analysis proceeded as follows:
 
 \begin{enumerate}
     \item Select the appropriate ecological model.
-    We will fit Ricker and BH models to an empirical time series and estimate AIC values for each model.
-    In the following analysis, we will use the model assumption that yields a lower AIC value.
+    We fitted Ricker and BH models to the empirical time series and estimated AIC values for each model.
+    In the following analysis, we used the model assumption that yielded a lower AIC value (a Ricker model, in this case).
     \item Perform the null model analysis to yield the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
-    Note that the null model analysis is provided with only time series data (the information on colonization history is not given as data).
+    The null model analysis was provided with time series data after both species were introduced, thus no information on the colonization history was given as data.
     \item Validate the relationship between the true sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
 \end{enumerate}
+
+The preliminary analysis of Hsu and Moeller's data yielded promising results.
+As expected from our preliminary simulation experiments, sensitive communities (experimental replicates with lights) had higher values of the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ than those in insensitive communities.
+
+\begin{SCfigure}
+    \includegraphics[scale=0.75]{output/figure_box_hsu.pdf}
+    \caption{The proposed statistic $\Pr({\delta_{obs} > \delta_{null}})$ segregated insensitive and sensitive communities via real biological data (data from Hsu and Moeller, 2021).
+    Our method was applied to each of the individual time series replicates in their dataset.
+    Boxplots denote quantile values with whiskers extending to 90 percentiles. 
+    Dots are estimates from individual time series for each experimental replicate.}
+    \label{fig:box_hsu}
+\end{SCfigure}
+
+\textit{\textbf{Method details: proposed analysis}} --
+We will repeat the procedure of the preliminary analysis for other data sources (Table \ref{tab:expdata}). 
+In doing so, we will be able to answer the following questions critical to applications in the field: (i) does our method's performance vary by time series length and/or the number of species? (ii) does our method's performance vary by taxonomic group?
+
+We expect our method to be robust to the challenges in questions (i) and (ii) considering the results of the preliminary simulation experiments.
+Nevertheless, it is possible to notice unforeseen issues through this activity; if this is the case, we will carefully review the cases in which the method's performance was poor, and we will explore how we can improve our method to address the issue.
+If it is deemed an unaddressable problem, we will clarify the limitation of our method.
 
 \subsection*{Specific Aim 3: Application to Field Data}
 
@@ -452,5 +487,9 @@ Nutrient conditions limit lake productivity and are readily available in lakes i
 \ul{\textit{Other}} -- We will consider similar environmental covariates as in streams and rivers, including land use patterns in the surrounding area (within a $5$ to $10$ km buffer) and climatic variables (temperature and precipitation).
 
 \textbf{Human Gut}: XXX
+
+\newpage
+
+\bibliography{references}
 
 \end{document}
