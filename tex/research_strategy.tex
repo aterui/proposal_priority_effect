@@ -2,6 +2,7 @@
 \usepackage[subpreambles=true]{standalone}
 \usepackage[T1]{fontenc} % for font setting
 \usepackage{tgtermes} % for font setting
+
 \usepackage{import,
             graphicx,
             parskip,
@@ -9,16 +10,22 @@
             amsmath,
             wrapfig,
             soul}
+
 \usepackage[most]{tcolorbox}
+
 \usepackage[includeheadfoot,
             top=2.54cm,
             bottom=2.54cm,
             left=2.54cm,
             right=2.54cm]{geometry}%set margin
+
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
 \usepackage[sort&compress]{natbib}
 \setcitestyle{square}
 \setcitestyle{comma}
-\usepackage[font={sf, small}, labelfont={bf, small}]{caption}
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
 \usepackage{fancyhdr}
 
 \tcbuselibrary{breakable}
@@ -30,8 +37,7 @@
 
 \section{Significance}
 
-\subsection*{Background}
-
+\textbf{Background} --
 Over the past century, biologists have been intrigued by how interacting organisms are assembled in a given environment.
 This process, termed ``community assembly,'' has crucial implications for human society's public health and sustainability.
 For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion.
@@ -47,8 +53,7 @@ For example, it is often observed that the gut microbiome deviates far from the 
 The consequences of priority effects are well understood. Yet, a critical question remains unsolved: \ul{``\textit{when do priority effects occur?}}'' 
 Answering this question is not only critical to advancing basic science but also helps solve issues concerning public health and the sustainability of natural resources.
 
-\subsection*{Problem Statement}
-
+\textbf{Problem Statement} --
 The experimental manipulation of species' colonization order has been a common method -- perhaps \textit{the} method -- to confirm their existence; when priority effects manifest, the different colonization order of species leads to the divergent community states at the end of the experiment.
 Over the past few decades, the results of the controlled experiments suggested the pervasiveness of priority effects across a wide variety of biological communities, including microbes, plants, and animals.
 Even more, they spawned several influential hypotheses predicting the likely biological scenarios in which priority effects should matter.
@@ -60,8 +65,7 @@ But, in natural systems, knowing the order of species' arrival is virtually impo
 As such, resolving this fundamental problem requires a statistical method that captures the signature of priority effects \textit{without knowing the colonization history}.
 We are unaware of such a novel statistical method, however. 
 
-\subsection*{Solution}
-
+\textbf{Solution} --
 \ul{We propose to fill this knowledge gap by developing a new statistical method that identifies biological communities sensitive to priority effects}.
 Our method is motivated by the fact that time series data may provide deep insights into assembly rules.
 In theory, assembly rules are set by the composition of species' traits within a given community, which dictates characteristic patterns of temporal community dynamics.
@@ -76,12 +80,12 @@ To this end, our proposal is structured as follows:
     \item \textbf{Specific Aim 3}: We will apply the developed method to accumulating global time series data of biological communities. In doing so, we will ask: ``\textit{When are priority effects more likely to occur in natural systems?}''
 \end{itemize}
 
-\subsection*{Innovation}
+\section{Innovation}
 Understanding assembly rules has far-reaching implications for human society's sustainability as it relates to human health, food production, and biodiversity conservation, to name just a few.
 We assert that our proposal will advance this research field significantly through three important breakthroughs.
 First, \ul{\emph{our proposal is conceptually innovative}} because our new method has the potential to find novel results that contrast previous findings.
 As mentioned, current approaches in community assembly contain fundamental limitations in detecting priority effects.
-The new method solves this issue with the possibility of reaching conclusions overturning the prevailing wisdom of community assembly research.
+The new method solves this issue with the possibility of reaching conclusions that overturn the prevailing wisdom of community assembly research.
 Second, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
 A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
 The proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
@@ -103,7 +107,7 @@ To this end, we will perform the following activities:
 \textbf{\textit{Goal}} -- 
 Our goal in this activity is to derive a theoretical backbone for a statistical method that identifies sensitive communities.
 In competitive communities, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time.
-Therefore, a critical first step is to obtain reliable estimates of competition parameters through an empirical time series.
+Therefore, a critical first step is obtaining reliable competition estimates from an empirical time series.
 However, in empirical settings, it is often infeasible to directly estimate those parameters because of the ``\textit{curse of dimensionality}:'' as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially.
 Here, we propose a robust statistical method that solves this issue -- our method can estimate the balance of intra- and interspecific competition, regardless of the number of species, by capitalizing the fact that species-level competition can be condensed into an aggregate effect of the total community density.
 
@@ -112,29 +116,38 @@ As a true state of community dynamics over time, we consider a discrete recursio
 
 \begin{equation}
 \label{eq:m0}
-x_{t + 1, i} = x_{t, i} f(x_{t, i}).
+x_{t + 1, i} = x_{t, i} f(\overset{\rightarrow}{x}_{t}).
 \end{equation}
 
-$f(\cdot)$ is the function defining the per-capita population growth rate.
-Although the method we propose here applies to any functions that assume linear combinations of species interaction terms, let us use a Ricker model as an example (we drop the subscript $t$ from $x_{t,i}$ to simplify the expression):
+$f(\cdot)$ is the function defining the per-capita population growth rate, and $\overset{\rightarrow}{x}_{t}$ means a vector of population densities of potential competitors ($\overset{\rightarrow}{x}_{t} = \{x_{t,1}, x_{t,2}...x_{t,i},...,x_{t,S}\}$, where $S$ is the number of species).
+Although the method we propose here applies to any functions that assume linear combinations of species interaction terms, let us use a Ricker model as an example:
 
 \begin{equation}
 \label{eq:ricker}
-f(x_{i}) = \exp(r_{0,i} - \alpha_i x_i - \sum_{j \ne i} \beta_{ij} x_{j}),
+f(\overset{\rightarrow}{x}_{t}) = \exp(r_i - \alpha_i x_{t,i} - \sum_{j \ne i} \beta_{ij} x_{t,j}),
 \end{equation}
 
-where $r_{0,i}$ is the intrinsic population growth, and $\alpha_{i}$ and $\beta_{ij}$ the intra- and interspecific competition coefficient.
+where $r_i$ is the intrinsic population growth, and $\alpha_{i}$ and $\beta_{ij}$ the intra- and interspecific competition coefficient.
 The parameter $\beta_{ij}$ has a sample mean ($\mu_{\beta}$) and SD ($\sigma_{\beta}$), assuming that they are drawn from a given probability distribution. 
-Denoting the total community density as $x_T$ ($x_T = \sum_i x_i$), Equation \ref{eq:m0} can be reorganized to:
+Denoting the total community density as $X_t$ ($X_t = \sum_i x_{t,i}$), Equation \ref{eq:m0} can be reorganized to:
 
 \begin{equation}
 \label{eq:rickermod}
-f(x_i) = \exp\left[r_{0,i} - (\alpha_i - \mu_{\beta}) x_i - \mu_{\beta} x_T + e_i \right],
+f(\overset{\rightarrow}{x}_{t}) = \exp\left[r_i - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + e_{t,i} \right],
 \end{equation}
 
-where $e_i = \sigma_{\beta} \sum_{j} b_{ij} x_j$ and $\phi_i = \sum_{j \ne i} b_{ij}$.
+where $e_i = \sigma_{\beta} \sum_{j} b_{ij} x_{-ij}$ ($x_{-ij}$ equals $X_t - x_i - x_j$) and $\phi_i = \sum_{j \ne i} b_{ij}$.
 In Equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$.
-Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; if we let $S$ denote the number of species in the community, the summation $\phi_i$ asymptotically follows a Normal distribution as $\phi_i \sim \mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
+With $S$ denoting the number of species, the parameter $e_i$ becomes $\sigma_{\beta}(S - 1) \times \mbox{cov} (b_{ij}, x_{t,-ij})$ [$\mbox{cov}(\cdot)$ is the covariance] and may have a non-zero mean over time depending on the covariance.
+Thus, it can be decomposed into the constant ($\overline{e}_i$) and stochastic components ($\xi_{t,i}$) as $e_{t,i} = \overline{e}_i + \xi_{t,i}$.
+Writing $g_{i} = r_i + \overline{e}_i$, this re-formulation leads to:
+
+\begin{equation}
+    f(\overset{\rightarrow}{x}_{t}) = \exp\left[g_{i} - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + \xi_{t,i} \right].
+\end{equation}
+
+The temporal variance of the stochastic term $\xi_{t,i}$ should be close to zero at equilibrium in the absence of environmental stochasticity.
+Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; the summation $\phi_i$ asymptotically follows a Normal distribution as $\phi_i \sim \mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
 
 The re-organized function (Equation \ref{eq:rickermod}) has two important implications.
 First, \ul{the function can be expressed as a function of two variables (species $i$'s density $x_i$ and the total community density $x_T$), substantially reducing the parameter dimension of the model.}
@@ -143,14 +156,14 @@ In contrast, in the re-organized equation, the competition effects are condensed
 
 Second, \ul{the re-parameterization enables statistical inference of interspecific competition with relatively short time series data}.
 Let $\gamma_i$ and $\delta_i$ be the effects of $i$'s population density and the total community density, respectively ($\gamma_i = \alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$ and $\delta_i = \mu_{\beta} + \sigma_{\beta} \phi_i$).
-Then, the log-transformed per-capita growth rate $\ln r_i$ becomes the following linear model:
+Then, the log-transformed per-capita growth rate $\ln f(\overset{\rightarrow}{x}_{t})$ becomes the following linear model:
 
 \begin{equation}
 \label{eq:rickerlog}
-    \ln f(x_i) = \ln r_i = r_{0,i} - \gamma_i x_i - \delta_i x_T + \varepsilon_i,
+    \ln f(\overset{\rightarrow}{x}_{t}) = g_i - \gamma_i x_{t,i} - \delta_i X_t + \varepsilon_{t,i},
 \end{equation}
 
-where $\varepsilon_i$ is a composite of random environmental noise and $e_i$, which can be modeled as a stochastic term in statistical inference. Thus, this re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), \ul{regardless of the number of species in the community}.
+where $\varepsilon_i$ is a composite of random environmental noise and $\xi_{t,i}$, which can be modeled as a stochastic term in statistical inference. Thus, this re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), \ul{regardless of the number of species in the community}.
 As such, this modeling approach will solve the ``\textit{curse of dimensionality}'' hindering the empirical time series analysis of species-rich community data.
 
 \textbf{\textit{Method detail: null model analysis}} --
@@ -172,7 +185,7 @@ A neutral community is comprised of ecologically identical species (intraspecifi
     Under the neutral scenario, all species obey the same recursion equation, leading to the following dynamics of the total community density $x_T$:
 
     \begin{equation}
-        \ln r_T &= \ln {x_{T, t+1}} - \ln {x_{T, t}} = \bar{r}_0 - \bar{\alpha} x_{T, t}.
+        \ln f(X_t) &= \ln {X_{t+1}} - \ln {X_{t}} = \overline{r} - \overline{\alpha} X_{t}.
     \end{equation}
 
     As such, the key parameters for neutral simulation -- the intrinsic growth ($\bar{r}_0$) and competition strength ($\bar{\alpha}$) at the community level -- can be readily estimated with ordinary regression using the observed data of $x_T$.
@@ -191,11 +204,19 @@ We will use time series data simulated with known competition and other paramete
 To validate the performance of the proposed null model analysis, we need to know whether the simulated data are generated from an insensitive or sensitive community (= the truth).
 In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition; however, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs.
 
-\begin{wrapfigure}{r}{0.55\textwidth}
+\begin{SCfigure}
+    \caption{The proposed statistic (y-axis) captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data. Dots are individual simulation replicates, and box plots show quantile values.
+    The sidebars are corresponding density distributions in each panel (orange: sensitive, blue: insensitive).
+    The sensitivity is determined by the leading eigenvalue $\lambda_{max}$ of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).}
     \includegraphics[scale=0.75]{output/figure_eigen.pdf}
-    \caption{The proposed method captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data. The sensitivity is determined by the leading eigenvalue $\lambda_{max}$ of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).}
     \label{fig:box}
-\end{wrapfigure}
+\end{SCfigure}
+
+% \begin{wrapfigure}{r}{0.55\textwidth}
+%     \includegraphics[scale=0.75]{output/figure_eigen.pdf}
+%     \caption{The proposed method captures the sensitivity to priority effects. The rows and columns distinguish the number of species and the time series length used to generate simulated data. The sensitivity is determined by the leading eigenvalue $\lambda_{max}$ of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).}
+%     \label{fig:box}
+% \end{wrapfigure}
 
 Here, we use the leading eigenvalue $\lambda_{max}$ of the community matrix (the Jacobian of Equation \ref{eq:m0}) to determine whether the simulated community is sensitive to priority effects.
 When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable and hence no priority effects.
@@ -216,7 +237,7 @@ A Beverton-Holt (BH) model is another model widely used in ecology, describing t
 
 \begin{equation}
     \label{eq:bh}
-    \ln r_i = \ln f(x_i) = r_{0,i} - \ln(1 + \alpha_i x_i + \sum_j \beta_{ij} x_j)
+    \ln f(\overset{\rightarrow}{x}_{t}) = r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})
 \end{equation}
 
 While the model formula is different, the BH model shares an important feature with the Ricker model: the linear combination of competitive interaction terms.
@@ -224,10 +245,11 @@ Hence, as with a Ricker model, a BH model can be simplified as follows (see Box 
 
 \begin{equation}
     \label{eq:bhmod}
-    \ln r_i \approx r_{0,i} - \ln(1 + \gamma_i x_i + \delta_i x_T) + \varepsilon_i
+    \ln f(\overset{\rightarrow}{x}_{t}) \approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_i
 \end{equation}
 
 This formulation indicates that the statistical inference of the key parameter ($\delta_i$) is possible through the fitting of a non-linear model.
+We will use \texttt{stats::nls()} function in \texttt{R} to fit a non-linear model to the simulated data.
 
 (ii) \ul{Broader parameter space}: we will expand the parameter space of the simulation experiment.
 Although our preliminary analysis yielded promising results, the parameter space explored is narrow.
@@ -243,14 +265,14 @@ Collectively, these proposed activities will increase the credibility of our pro
         Symbol           & Interpretation               & Value (proposed)                                 & Value (preliminary)\\
         \hline
         $r_i$            & Intrinsic population growth  & $\mbox{Unif(\mu_r - h_r, \mu_r + h_r)}$          & \\
-        $\mu_r$          & Average $r_i$                & $0.50~\mbox{to}~1.50$                              & 1.00\\
-        $h_r$            & Half range in $r_i$          & $0.10~\mbox{to}~0.50$                               & 0.00, 0.10\\  
-        $\alpha_{i}$     & Intraspecific competition    & $0.01~\mbox{to}~0.10$                         & 0.01, 0.05\\
-        $\beta_{ij}$     & Interspecific competition    & $\mbox{Normal}(\mu_{\beta}, \sigma_{\beta}^2)$   & \\
+        $\mu_r$          & Average $r_i$                & $0.50~\mbox{to}~1.50$                              & $1.00$\\
+        $h_r$            & Half range in $r_i$          & $0.10~\mbox{to}~0.50$                               & $0.00, 0.10$\\  
+        $\alpha_{i}$     & Intraspecific competition    & $0.01~\mbox{to}~0.10$                         & $0.01, 0.05$\\
+        $\beta_{ij}$     & Interspecific competition    & $\mbox{Unif(\mu_{\beta} - h_{\beta}, \mu_{\beta} + h_{\beta})}$     & \\
         $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & $0.00~\mbox{to}~1.50$\\
-        $\sigma_{\beta}$ & SD interspecific competition & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & 0.00, 0.25\\
-        $S$              & Number of species in a community & $2, 8, 32, 128$ & 5, 15\\
-        $L_t$            & Length of time series            & $5, 10, 20, 40$ & 10, 30\\
+        $h_{\beta}$ & Half range in $\beta_{ij}$ & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & $0.00, 0.25$\\
+        $S$              & Number of species in a community & $2, 8, 32, 128$ & $5, 15$\\
+        $L_t$            & Length of time series            & $5, 10, 20, 40$ & $10, 30$\\
         \hline
     \end{tabular}
     \label{tab:param1}
@@ -266,27 +288,28 @@ Collectively, these proposed activities will increase the credibility of our pro
   arc=1pt}]
     Box 1: Approximation of the Beverton-Holt model
     \hline
-    In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_i + \sum_j \beta_{ij} x_j)$ (Equation \ref{eq:bh}).
-    After the transformation outlined in the maintext, this formula takes the following form $\ln(1 + \gamma_i x_i + \delta_i x_T + e_i)$.
-    Here, to separate the nuisance term $e_i$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_i + \delta_i x_T$ and consider the Taylor series of $g(e_i) = \ln(c + e_i)$ around $e_i = 0$:
+    In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$ (Equation \ref{eq:bh}).
+    After the transformation outlined in the main text, this formula takes the following form $\ln(1 + \gamma_i x_{t,i} + \delta_i X_t + e_{t,i})$.
+    Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_{t,i} + \delta_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
 
     \begin{equation}
         \label{eq:bhtaylor}
-        g(e_i) = \ln(c) + \frac{e_i}{c} - \frac{e_i^2}{2 c^2} + O(e_i),
+        w(e_i) = \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + O(e_{t,i}),
     \end{equation}
 
-    where $O(e_i)$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $g(e_i) \approx \ln(c) + e_i / c$.
+    where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $w(e_{t,i}) \approx \ln(c) + e_{t,i} c^{-1}$.
     As a result, after accounting for environmental noise, the BH model can be approximated as:
 
     \begin{align}
     \begin{split}
-        \ln r_i &= r_{0,i} - \ln(1 + \alpha_i x_i + \sum_j \beta_{ij} x_j)\\
-                &= r_{0,i} - \ln(1 + \gamma_i x_i + \delta_{i} x_T + e_i)\\
-                &\approx r_{0,i} - \ln(1 + \gamma_i x_i + \delta_i x_T) + \varepsilon_i.
+        \ln f(\overset{\rightarrow}{x}_{t}) 
+            &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
+            &= r_i - \ln(1 + \gamma_i x_{t,i} + \delta_{i} X_t + e_{t,j})\\
+            &\approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_{t,i},
     \end{split}
     \end{align}
 
-    This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
+    where $g'_{i} = r_i + \overline{e_{t,i} c^{-1}}$. This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
 \end{tcolorbox}
 
 \subsection*{Specific Aim 2: Experimental Validation}
@@ -294,13 +317,33 @@ Collectively, these proposed activities will increase the credibility of our pro
 \textbf{\textit{Goal}} -- 
 \ul{The overarching goal of this specific aim is to assess the performance of the proposed method using real experimental data, in which the colonization history is experimentally manipulated}.
 While simulation experiments provide a strong test case for the model performance, empirical validation is still desired.
-We will use published time-series data of microbial communities for the model validation.
+We will use published time-series data for the model validation.
 
 \textit{\textbf{Method details: data source}} --
-We identified XXX papers that controlled the colonization history of microbes to determine the influence of priority effects (Table XXX).
+We identified five papers that controlled the colonization history of microbes to determine the influence of priority effects (Table \ref{tab:expdata}).
 These data are ideal for our model validation for two reasons. First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
 Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ identifies communities in which priority effects manifest.
 Second, these experiments vary in time series length and the number of species, allowing us to evaluate the sensitivity of our method to the varied data quality.
+
+
+\begin{table}
+    \flushleft
+    \caption{Published time series data of experimental communities.}
+    \begin{tabular}{llll}
+         Reference & Study system & Time series length & \# species in a community\\
+         \hline
+         Price and Morin 2004 & Protist & $\ge 20$ & $2$ or $3$ \\
+         Zhang and Zhang 2007 & Algae & $13$ & $2$\\
+         Tucker and Fukami 2014 & Bacteria and yeasts & $9$ & $4$\\
+         Ojima and Jiang 2016 & Protist & $23$ & $5$\\
+         Ojima et al. 2022 & Bacteria & $7$ & $2$ or $4$\\
+         \hline
+    \end{tabular}
+    \label{tab:expdata}
+\end{table}
+
+\textit{\textbf{Method details: preliminary analysis}} --
+XXX: add prelim anlaysis?
 
 \textit{\textbf{Method details: proposed analysis}} --
 Our empirical data analysis will proceed as follows:
@@ -308,12 +351,106 @@ Our empirical data analysis will proceed as follows:
 \begin{enumerate}
     \item Select the appropriate ecological model.
     We will fit Ricker and BH models to an empirical time series and estimate AIC values for each model.
-    In the following analysis, we will the model assumption that yields a lower AIC value.
+    In the following analysis, we will use the model assumption that yields a lower AIC value.
     \item Perform the null model analysis to yield the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
-    Note that the model is provided with only time series data (the information on colonization history is not given as data).
-    \item Validate the relationship between the community sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
+    Note that the null model analysis is provided with only time series data (the information on colonization history is not given as data).
+    \item Validate the relationship between the true sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
 \end{enumerate}
 
 \subsection*{Specific Aim 3: Application to Field Data}
+
+\textbf{\textit{Goal}} -- 
+The overarching goal of this specific aim is to ask a critical question that has never been addressed in \textit{unmanipulated} natural systems: \ul{\textit{when do priority effects occur?}} Specifically, we will test the following hypotheses using global time series data, in which the colonization history is unknown:
+
+\textbf{Hypothesis 1}: Priority effects are more prevalent in small ecosystems.
+
+\textbf{Hypothesis 2}: Priority effects are more prevalent in productive systems.
+
+Small ecosystem size and/or high productivity have been hypothesized to increase the importance of priority effects because both factors facilitate the rapid establishment of early colonizing species.
+These hypotheses have been tested in controlled experimental systems; however, no empirical evidence exists in \textit{unmanipulated} natural systems.
+
+\textit{\textbf{Method details: data source}} --
+We identified XXX data sources of global time series data (Table XXX).
+These databases include various taxonomic groups and ecosystems, including fish, plankton, and plants.
+We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four generations (typical unit would be \texttt{year}); (ii) the entire community of the focal taxa is collected; (iii) quantitative abundance data are available; (iv) the sampling method is consistent across the time series; (v) sampling efforts (e.g., area or time sampled) are known.
+
+\textit{\textbf{Method details: time series analysis}} --
+Unlike simulated and experimental time series data, field data contain many observation errors; for example, even if a sampling method is consistent within a given time series, it is common that the sampling crew changes over time, causing unintentional noises in the data.
+To confront such difficulties, we will employ a Bayesian state-space model to account for observation errors.
+The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data; in our case, the competition parameter $\delta_i$.
+
+The observed abundance of species $i$ at time $t$, $A_{t,i}$, will be modeled as random draws from a Poisson distribution:
+
+\begin{equation}
+    A_{t,i} \sim \mbox{Poisson}(n_{t,i} E_{t,i}).
+\end{equation}
+
+The parameter $n_{t,i}$ is the species' density (abundance per unit effort) with observation errors and $E_{t,i}$ is the sampling effort.
+We will account for stochastic observation errors by drawing $n_{t,i}$ from the latent ``true'' density $x_{t,i}$ as:
+
+\begin{equation}
+    \ln n_{t,i} \sim \mbox{Normal}(\ln x_{t,i}, \sigma^2_{obs}),
+\end{equation}
+
+where $\sigma_{obs}$ measures the degree of stochastic observation errors.
+It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID; see XXX for example); thus, this modeling framework allows for robust statistical inference.
+Either a Ricker or BH model (Equation \ref{eq:rickermod} or \ref{eq:bhmod}; will be chosen based on the Bayes factor) will be fitted to the data to estimate $\delta_i$:
+
+\begin{align}
+\begin{split}
+    \ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i},\\
+    \varepsilon_{t,i} &\sim \mbox{Normal}(0, \sigma^2_{state}),
+\end{split}
+\end{align}
+
+where $\sigma_{state}$ is the parameter measuring the degree of stochastic environmental noise.
+In a Bayesian framework, we can estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
+We will calculate the proposed statistic as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
+
+\textit{\textbf{Method details: environmental drivers}} --
+We will use spatial replicates of time series data to explore the potential drivers of priority effects.
+Our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ ($Y_k$) at site $k$ as a response variable:
+
+\begin{align}
+\begin{split}
+    Y_k &\sim \mbox{Binomial}(N_{sim}, P_k),\\
+    \mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k},
+\end{split}
+\end{align}
+
+where $N_{sim}$ is the number of null simulation replicates; thus, $P_k$ is identical to $\Pr(\hat{\delta}_{obs} > \delta_{null})$ at site $k$.
+The parameter $\theta_0$ is the intercept and $\theta_q$ is the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$.
+The predictors will include proxies for ecosystem size, productivity, taxonomic group ID (if applicable), and/or other control variables that should be accounted for given the complexity of natural systems.
+We will perform this analysis separately for each ecosystem type because appropriate proxies for ``ecosystem size'' and ``productivity'' will vary among these classifications.
+Below, we describe core predictors in each ecosystem type:
+
+\textbf{Streams \& Rivers}.
+\ul{\textit{Ecosystem size}} --
+We will use \textit{watershed area} as a proxy for ecosystem size.
+A watershed area is defined as the land area draining into a specific point of a stream and a larger watershed area has greater water discharge.
+Therefore, a watershed area serves as an excellent proxy for ecosystem size.
+We will estimate the watershed area at each site using a global digital elevation map (available at a global scale; REF).
+\ul{\textit{Productivity}} -- 
+We will use the ratio of the watershed area to the riparian forest area (hereafter, the \textit{WF ratio}) as a proxy for productivity.
+Light availability is a critical determinant of stream productivity.
+The direct measure of light availability, however, is rarely available at sites where time series data are available.
+As such, we will use the \textit{WF ratio} to approximate light availability.
+Stream shading is greater when the stream size is small, but only if the riparian forest is present.
+Considering this, the \textit{WF ratio} will serve as an appropriate proxy for light availability and, therefore, productivity.
+The riparian forest area will be estimated as the area of any forest within a 500-m buffer of the sampling site.
+\ul{\textit{Other}} -- We will consider other environmental covariates that might control assembly rules, including land use variables in the upstream watershed area and climatic variables (temperature and precipitation).
+
+In all calculations, we will use the Copernics global land cover data (100-m resolution) to estimate land use predictors.
+
+\textbf{Lakes}.
+\ul{\textit{Ecosystem size}} --
+We will use \textit{lake area} as a proxy for ecosystem size.
+A lake area serves as an excellent proxy for ecosystem size because it defines the available space for aquatic organisms and has been used in previous studies.
+\ul{\textit{Productivity}} -- 
+We will use nutrient concentrations (total nitrogen and phosphorus).  
+Nutrient conditions limit lake productivity and are readily available in lakes in which time series data are available.
+\ul{\textit{Other}} -- We will consider similar environmental covariates as in streams and rivers, including land use patterns in the surrounding area (within a $5$ to $10$ km buffer) and climatic variables (temperature and precipitation).
+
+\textbf{Human Gut}: XXX
 
 \end{document}
