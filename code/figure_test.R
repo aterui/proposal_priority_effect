@@ -55,8 +55,6 @@ ggsave(g_fill,
 
 # boxplot option
 g_box <- df_plot %>%
-  # filter(a0 == 0.01,
-  #        sd_r == 0) %>% 
   ggplot(aes(x = stability,
              y = p,
              color = stability,
@@ -93,33 +91,45 @@ ggsave(g_box,
        width = 6)
 
 # scatter plot option
-# w <- df_plot %>%
-#   ggplot(aes(x = eigen_max,
-#              y = p,
-#              color = stability)) +
-#   geom_point(alpha = 0.25,
-#              size = 1) +
-#   scale_x_continuous(trans = "sqrt") +
-#   facet_grid(rows = vars(n_timestep, factor_sd_a1),
-#              cols = vars(n_species, sd_r),
-#              labeller = label_both,#as_labeller(label),
-#              scales = "free_x") +
-#   coord_cartesian(xlim = c(0.5, 10)) +
-#   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-#        y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
-#        color = "Sensitivity") +
-#   MetBrewer::scale_color_met_d("Hiroshige",
-#                                direction = -1) +
-#   theme_bw() +
-#   theme(strip.background = element_blank(),
-#         panel.grid = element_blank(),
-#         legend.position = "bottom")
-# 
-# ggsave(w,
-#        filename = "output/figure_eigen.pdf",
-#        height = 3.5,
-#        width = 3.5)
-
+w <- df_plot %>%
+  ggplot(aes(x = eigen_max,
+             y = p,
+             color = stability)) +
+  geom_point(alpha = 0.25,
+             size = 0.1) +
+  #scale_x_continuous(trans = "sqrt") +
+  #coord_cartesian(xlim = c(0, .5)) +
+  facet_grid(rows = vars(n_timestep),
+             cols = vars(n_species),
+             labeller = as_labeller(label),
+             scales = "free") +
+  labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
+       y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+       color = "Sensitivity",
+       fill = "Sensitivity") +
+  geom_vline(xintercept = 1,
+             linewidth = 0.25,
+             linetype = "dashed",
+             alpha = 0.4) +
+  geom_ysidedensity(aes(x = stat(density),
+                        fill = stability),
+                    alpha = 0.50,
+                    position = "fill") +
+  MetBrewer::scale_color_met_d("Hiroshige",
+                               direction = -1) +
+  MetBrewer::scale_fill_met_d("Hiroshige",
+                              direction = -1) +
+  theme_bw() +
+  theme(strip.background = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "bottom",
+        ggside.axis.text = element_blank(),
+        ggside.axis.ticks = element_blank())
+  
+ggsave(w,
+       filename = "output/figure_eigen_scatter.pdf",
+       height = 3.5,
+       width = 5)
 
 
 # hsu results -------------------------------------------------------------

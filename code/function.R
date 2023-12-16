@@ -1,29 +1,37 @@
 
 source("code/library.R")
 
-sim <- function(n_timestep = 10,
-                n_species = 5,
-                r = 1,
-                sd_r = 0,
-                a0 = 0.010,
-                a1 = 0.001,
-                sd_a1 = 0,
+# simulation --------------------------------------------------------------
+
+sim <- function(n_timestep,
+                n_species,
+                x0,
+                h_x0,
+                a0,
+                a1,
+                h_a1,
                 sd_env = 0.05,
-                n_rep = 100,
+                nsim = 100,
                 const = 0) {
   
-  v_r <- runif(n_species, min = r - sd_r, max = r + sd_r)
-  
-  if (sd_a1 > 0) {
+  if (h_a1 > 0) {
     v_a1 <- runif(n = n_species^2,
-                  min = max(a1 - sd_a1, 0),
-                  max = a1 + sd_a1)
+                  min = max(a1 - h_a1, 0),
+                  max = a1 + h_a1)
   } else {
     v_a1 <- rep(a1, n_species^2)
   }
   
   ma <- matrix(v_a1, n_species, n_species)
   diag(ma) <- a0
+  
+  v_x0 <- runif(n_species,
+                min = x0 - h_x0,
+                max = x0 + h_x0)
+  
+  v_x0[v_x0 < 0] <- 0
+  
+  v_r <- drop(ma %*% v_x0)
   
   list_dyn <- suppressMessages(
     cdynsim(n_timestep = n_timestep,
@@ -34,9 +42,9 @@ sim <- function(n_timestep = 10,
             alpha_scale = "unscaled",
             sd_env = sd_env,
             immigration = const)
-    )
+  )
   
-  ## format data for fitting
+  ## data for linear fitting
   df_dyn <- list_dyn$df_dyn %>% 
     group_by(timestep) %>% 
     mutate(nt1 = sum(density)) %>% 
@@ -55,19 +63,26 @@ sim <- function(n_timestep = 10,
     mutate(log_r = log(nt1 / nt0)) %>% 
     drop_na(log_r)
   
-  if (n_distinct(df_dyn$species) == n_species) {
+  if (n_distinct(df_dyn$species) != n_species) {
+    # NOTE - community grow infinitely; exclude
+    output <- list(p = NA,
+                   b = NA,
+                   b_null = NA,
+                   n = NA)
     
-    ## observation parameter
+  } else {
+    
+    ## parameter observed
     fit <- lm(log_r ~ n0 + nt0 + species, data = df_dyn)
     b <- coef(fit)[3]
     
-    ## parameters for simulated null distribution
+    ## parameter for a null model
     fit_c <- lm(log_r ~ nt0, data = df_c)
+    sd_env <- sd(resid(fit_c))
     r_hat <- coef(fit_c)[1]
     ma_hat <- matrix(-coef(fit_c)[2], n_species, n_species)
-    sd_env <- sd(resid(fit_c))
     
-    v_beta <- foreach(i = iterators::icount(n_rep),
+    v_beta <- foreach(i = iterators::icount(nsim),
                       .combine = c) %do% {
       
       list_sim <- suppressMessages(
@@ -81,52 +96,47 @@ sim <- function(n_timestep = 10,
                 immigration = const)
       )
       
-      df_sim <- list_sim$df_dyn %>% 
-        group_by(timestep) %>% 
-        mutate(nt1 = sum(density)) %>% 
-        ungroup() %>% 
-        group_by(species) %>% 
+      df_sim <- list_sim$df_dyn %>%
+        group_by(timestep) %>%
+        mutate(nt1 = sum(density)) %>%
+        ungroup() %>%
+        group_by(species) %>%
         mutate(n0 = lag(density),
                n1 = density,
                log_r = log(n1 / n0),
-               nt0 = lag(nt1)) %>% 
-        ungroup() %>% 
-        mutate(species = factor(species)) %>% 
+               nt0 = lag(nt1)) %>%
+        ungroup() %>%
+        mutate(species = factor(species)) %>%
         drop_na(log_r)
       
-      if (n_distinct(df_sim$species) == n_species) {
+      if (n_distinct(df_sim$species) != n_species) {
+        beta0 <- NA
+      } else {
         fit_sim <- lm(log_r ~ n0 + nt0 + species, data = df_sim)
         beta0 <- coef(fit_sim)[3]
-      } else {
-        beta0 <- NA
       }
       
       return(beta0)
     }
     
-    names(v_beta) <- NULL
-    
     v_beta <- na.omit(v_beta)
+    names(v_beta) <- NULL
     p <- mean(b < v_beta)
     output <- list(p = ifelse(is.nan(p), NA, p),
                    b = b,
                    b_null = v_beta,
                    n = length(v_beta))
-  } else {
-    
-    output <- list(p = NA,
-                   b = NA,
-                   b_null = NA,
-                   n = NA)
     
   }
-
+  
   attr(output, "A") <- ma  
   attr(output, "R") <- v_r  
   
   return(output)
 }
 
+
+# partial -----------------------------------------------------------------
 
 partial <- function(r, a, i, x0, model = "ricker") {
   
@@ -171,17 +181,26 @@ partial <- function(r, a, i, x0, model = "ricker") {
   return(pracma::jacobian(f, x0 = x0, r = r, a = a))
 }
 
-stability <- function(n_species, R, A, model = "ricker") {
+
+# stability ---------------------------------------------------------------
+
+stability <- function(n_species, R, x0, A, model = "ricker") {
   
   # check input -------------------------------------------------------------
   
   if (any(unique(dim(A)) != n_species))
     stop("dimension mismatch in A")
   
-  if (length(R) != n_species)
-    stop("dimension mismatch in A")
+  if (!missing(R)) {
+    if (length(R) != n_species)
+      stop("dimension mismatch in A or R")
+  }
   
-
+  if (!missing(x0)) {
+    if (length(x0) != n_species)
+      stop("dimension mismatch in A or x0")
+  }
+  
   # get maximum absolute eigen value ----------------------------------------
 
   if (det(A) == 0) {
@@ -191,7 +210,16 @@ stability <- function(n_species, R, A, model = "ricker") {
   } else {
     
     if (model == "ricker") {
-      x0 <- drop(solve(A) %*% R)
+      
+      if (missing(R)) {
+        R <- drop(A %*% x0)
+      } else {
+        if (missing(x0)) {
+          x0 <- drop(solve(A) %*% R)
+        } else {
+          stop("do not provide both R and x0")
+        }
+      }
       
       # check negative equilibrium
       if (any(x0 < 0)) {
@@ -223,7 +251,16 @@ stability <- function(n_species, R, A, model = "ricker") {
     }
     
     if (model == "bh") {
-      x0 <- drop(solve(A) %*% (exp(R) - 1))
+      
+      if (missing(R)) {
+        R <- drop(log(1 + A %*% x0))
+      } else {
+        if (missing(x0)) {
+          x0 <- drop(solve(A) %*% (exp(R) - 1))
+        } else {
+          stop("do not provide both R and x0")
+        }
+      }
 
       # check negative equilibrium
       if (any(x0 < 0)) {
@@ -255,7 +292,7 @@ stability <- function(n_species, R, A, model = "ricker") {
     }
     
     attr(max_lambda, "J") <- J
-    attr(max_lambda, "x0") <- x0
+    attr(max_lambda, "R") <- R
     
     return(max_lambda)
   }
