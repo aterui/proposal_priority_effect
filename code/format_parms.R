@@ -1,6 +1,7 @@
 
 # setup -------------------------------------------------------------------
 
+rm(list = ls())
 source("code/function.R")
 
 
@@ -9,11 +10,11 @@ source("code/function.R")
 df_param <- expand.grid(n_species = c(5, 15),
                         n_timestep = c(10, 30),
                         nsim = 100,
-                        x0 = c(1, 5),
+                        x0 = c(1, 10),
                         factor_h_x0 = c(0, 0.5, 1),
-                        a0 = c(0.01, 0.05),
-                        factor_a1 = seq(0, 1.5, by = 0.1),
-                        factor_h_a1 = c(0.01, 0.25)) %>% 
+                        a0 = c(0.01, 0.1),
+                        factor_a1 = seq(0, 2, by = 0.2),
+                        factor_h_a1 = seq(0, 0.5, by = 0.1)) %>% 
   as_tibble() %>%  
   mutate(a1 = round(a0 * factor_a1, 10),
          h_a1 = a1 * factor_h_a1,

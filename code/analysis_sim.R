@@ -1,24 +1,11 @@
 
 # setup -------------------------------------------------------------------
 
+rm(list = ls())
 source("code/library.R")
 source("code/function.R")
 
-df_param <- readRDS("data_fmt/param_set.rds") %>% 
-  expand(colnames(.))
-  
-  expand.grid(n_timestep = c(10, 30),
-                        n_species = c(5, 15),
-                        x0 = 1,
-                        h_x0 = seq(0, 1.5, by = 0.5),
-                        a0 = c(0.01, 0.05),
-                        factor_a1 = seq(0, 1.5, by = 0.25),
-                        factor_h_a1 = c(0.01, 0.25),
-                        nsim = 100) %>% 
-  as_tibble() %>% 
-  mutate(a1 = round(a0 * factor_a1, 10),
-         h_a1 = a1 * factor_h_a1) # rounded to avoid float point issue
-
+df_param <- readRDS("data_fmt/param_set.rds")
 sim_run <- purrr::possibly(sim, otherwise = NULL)
 
 # simulation --------------------------------------------------------------
@@ -31,14 +18,14 @@ fun_progress <- function(n) setTxtProgressBar(pb, n)
 opts <- list(progress = fun_progress)
 
 tictoc::tic()
-df_sim <- foreach(i = 1:2,#seq_len(nrow(df_param)),
+df_sim <- foreach(i = seq_len(nrow(df_param)),
                   .packages = c("tidyverse", "foreach", "cdyns"),
                   .combine = bind_rows,
                   .options.snow = opts) %dopar% {
                     
                     x <- df_param[i, ]
                     
-                    df_out <- foreach(k = iterators::icount(25),
+                    df_out <- foreach(k = iterators::icount(5),
                                       .combine = bind_rows) %do% {
                                         
                                         seed <- 100 * i + k
