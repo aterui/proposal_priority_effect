@@ -10,10 +10,10 @@ source("code/function.R")
 df_param <- expand.grid(n_species = c(5, 15),
                         n_timestep = c(10, 30),
                         nsim = 100,
-                        x0 = c(1, 10),
+                        x0 = c(1, 5, 10),
                         factor_h_x0 = c(0, 0.5, 1),
                         a0 = c(0.01, 0.1),
-                        factor_a1 = seq(0, 2, by = 0.2),
+                        factor_a1 = seq(0, 2, by = 0.25),
                         factor_h_a1 = seq(0, 0.5, by = 0.1)) %>% 
   as_tibble() %>%  
   mutate(a1 = round(a0 * factor_a1, 10),
@@ -85,7 +85,7 @@ df_param_set <- df_out %>%
   filter(r < 2) %>% 
   mutate(stability = ifelse(lambda > 1, 1, 0)) %>% 
   group_by(n_species, n_timestep, stability) %>% 
-  sample_n(100) %>% 
+  sample_n(150) %>% 
   ungroup()
 
 saveRDS(df_param_set, file = "data_fmt/param_set.rds")
