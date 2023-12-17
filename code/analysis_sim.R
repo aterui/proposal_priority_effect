@@ -5,7 +5,8 @@ rm(list = ls())
 source("code/library.R")
 source("code/function.R")
 
-df_param <- readRDS("data_fmt/param_set.rds")
+df_param <- readRDS("data_fmt/param_set.rds") %>% 
+  as_tibble()
 sim_run <- purrr::possibly(sim, otherwise = NULL)
 
 # simulation --------------------------------------------------------------

@@ -92,8 +92,8 @@ ggsave(g_box,
 
 # scatter plot option
 w <- df_plot %>%
-  ggplot(aes(x = eigen_max,
-             y = p,
+  ggplot(aes(y = eigen_max,
+             x = p,
              color = stability)) +
   geom_point(alpha = 0.25,
              size = 0.1) +
@@ -103,15 +103,15 @@ w <- df_plot %>%
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free") +
-  labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-       y = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+  labs(y = expression("Leading eigen value"~"|"*lambda[max]*"|"),
+       x = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
        color = "Sensitivity",
        fill = "Sensitivity") +
-  geom_vline(xintercept = 1,
+  geom_hline(yintercept = 1,
              linewidth = 0.25,
              linetype = "dashed",
              alpha = 0.4) +
-  geom_ysidedensity(aes(x = stat(density),
+  geom_xsidedensity(aes(y = stat(density),
                         fill = stability),
                     alpha = 0.50,
                     position = "fill") +
@@ -128,7 +128,7 @@ w <- df_plot %>%
   
 ggsave(w,
        filename = "output/figure_eigen_scatter.pdf",
-       height = 3.5,
+       height = 5,
        width = 5)
 
 
