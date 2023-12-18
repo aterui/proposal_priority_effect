@@ -104,7 +104,7 @@ w <- df_plot %>%
              labeller = as_labeller(label),
              scales = "free") +
   labs(y = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-       x = expression("Pr("*delta[obs]~"<"~delta[null]*")"),
+       x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
        color = "Sensitivity",
        fill = "Sensitivity") +
   geom_hline(yintercept = 1,
