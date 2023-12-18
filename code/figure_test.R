@@ -10,22 +10,15 @@ df_sim <- readRDS("output/simulation.rds") %>%
 df_plot <- df_sim %>% 
   drop_na(eigen_max, p)
 
-# df_neut <- df_sim %>% 
-#   filter(sd_r == 0,
-#          factor_sd_a1 == 0,
-#          factor_a1 == 1) %>% 
-#   group_by(n_timestep, n_species) %>% 
-#   reframe(med = median(p),
-#           up = quantile(p, 0.75),
-#           low = quantile(p, 0.25))
-
 # plot --------------------------------------------------------------------
 
+## label
 label <- c('10' = 'Time series = 10',
            '30' = 'Time series = 30',
            '5' = "Species number = 5",
            '15' = "Species number = 15")
 
+## filled frequencies
 g_fill <- df_plot %>%
   ggplot(aes(fill = stability)) +
   geom_density(aes(x = p),
@@ -53,7 +46,7 @@ ggsave(g_fill,
        height = 4.5,
        width = 4.5)
 
-# boxplot option
+# boxplot
 g_box <- df_plot %>%
   ggplot(aes(x = stability,
              y = p,
@@ -91,7 +84,7 @@ ggsave(g_box,
        width = 6)
 
 # scatter plot option
-w <- df_plot %>%
+g_scatter <- df_plot %>%
   ggplot(aes(y = eigen_max,
              x = p,
              color = stability)) +
@@ -126,7 +119,7 @@ w <- df_plot %>%
         ggside.axis.text = element_blank(),
         ggside.axis.ticks = element_blank())
   
-ggsave(w,
+ggsave(g_scatter,
        filename = "output/figure_eigen_scatter.pdf",
        height = 5,
        width = 5)
