@@ -4,13 +4,14 @@
 source("code/library.R")
 source("code/function.R")
 
+# simulation plot ---------------------------------------------------------
+
+## read data
 df_sim <- readRDS("output/simulation.rds") %>% 
   mutate(stability = ifelse(eigen_max > 1, "Sensitive", "Insensitive"))
 
 df_plot <- df_sim %>% 
   drop_na(eigen_max, p)
-
-# plot --------------------------------------------------------------------
 
 ## label
 label <- c('10' = 'Time series = 10',
@@ -46,7 +47,7 @@ ggsave(g_fill,
        height = 4.5,
        width = 4.5)
 
-# boxplot
+## boxplot
 g_box <- df_plot %>%
   ggplot(aes(x = stability,
              y = p,
@@ -83,7 +84,7 @@ ggsave(g_box,
        height = 4.5,
        width = 6)
 
-# scatter plot option
+## scatter plot option
 g_scatter <- df_plot %>%
   ggplot(aes(y = eigen_max,
              x = p,
@@ -127,9 +128,12 @@ ggsave(g_scatter,
 
 # hsu results -------------------------------------------------------------
 
+## read and format data
 df_delta <- readRDS("output/simulation_hsu.rds")
 df_hsu <- readRDS("data_fmt/data_hsu_fmt.rds")
 
+# df_x: calculate the strength of priority effects as log_rr
+#       x and y are densities of protists
 df_x <- df_hsu %>% 
   group_by(replicate, treatment, light) %>% 
   summarize(x_max = max(x),
@@ -145,9 +149,11 @@ df_x <- df_hsu %>%
             light,
             log_rr = mean(rr_x, rr_y))
 
+# merge with proposed statistic
 df_delta <- df_delta %>% 
   left_join(df_x, by = c("replicate", "light"))
 
+## box plot
 g_hsu_box <- df_delta %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
@@ -168,6 +174,7 @@ g_hsu_box <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
+## scatter plot
 g_hsu <- df_delta %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
@@ -184,7 +191,7 @@ g_hsu <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
-
+## export
 ggsave(g_hsu_box,
        filename = "output/figure_box_hsu.pdf",
        width = 4.5, height = 4)
@@ -192,3 +199,56 @@ ggsave(g_hsu_box,
 ggsave(g_hsu,
        filename = "output/figure_scatter_hsu.pdf",
        width = 6, height = 4)
+
+
+# help plot: experiment ---------------------------------------------------
+
+## time-series
+df_hsu %>% 
+  filter(predictor == "x") %>%
+  select(-species) %>%
+  group_by(replicate, treatment, light) %>% 
+  mutate(t = day - min(day0) + 1) %>% 
+  pivot_longer(cols = c("x", "y"),
+               names_to = "species",
+               values_to = "density") %>% 
+  ggplot(aes(x = t,
+             y = density,
+             color = species)) +
+  geom_point() +
+  geom_line() +
+  scale_y_continuous(trans = "sqrt") +
+  facet_grid(rows = vars(replicate, treatment),
+             cols = vars(light))
+
+
+
+## community level plot
+df_n <- df_hsu %>% 
+  group_by(day, replicate, treatment, light) %>% 
+  summarize(day0 = unique(day0),
+            n = unique(n),
+            n0 = unique(n0)) %>% 
+  ungroup() %>% 
+  #filter(n0 > 0, n > 0) %>% 
+  mutate(log_r = log(n + 1) - log(n0 + 1))
+
+g_nr <- df_n %>% 
+  mutate(key = case_when(light == 100 & treatment == "cp" & replicate %in% c("b", "c") ~ "Outlier",
+                         light == 200 & treatment == "cp" & replicate == "c" ~ "Outlier",
+                         light == 100 & treatment == "pc" & replicate == "a" ~ "Outlier",
+                         light == 100 & treatment == "cp" & replicate %in% c("a") ~ "Excluded",
+                         light == 200 & treatment == "cp" & replicate %in% c("a", "b") ~ "Excluded",
+                         light == 50 & treatment == "pc" & replicate %in% c("a") ~ "Excluded",
+                         TRUE ~ as.character("Included"))) %>% 
+  ggplot(aes(x = n0,
+             y = log_r,
+             color = key)) +
+  geom_point() +
+  facet_grid(cols = vars(light),
+             rows = vars(treatment, replicate)) +
+  theme_bw() +
+  theme(panel.grid = element_blank(),
+        strip.background = element_blank())
+
+
