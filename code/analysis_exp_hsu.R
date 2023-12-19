@@ -24,9 +24,7 @@ df0 <- read_csv("data_raw/data_hsu2021.csv",
                            light == "50" ~ 50,
                            light == "100" ~ 100,
                            light == "200" ~ 200)) %>% 
-  filter(treatment %in% c("cp", "pc"))
-
-df_m <- df0 %>% 
+  filter(treatment %in% c("cp", "pc")) %>% 
   pivot_wider(id_cols = c(day, replicate, treatment, light),
               names_from = species,
               values_from = cells) %>% 
@@ -39,8 +37,12 @@ df_m <- df0 %>%
          last_day = ifelse(any(key == 0),
                            min(day[which(key == 0)]),
                            max(day))
-         ) %>% 
+  ) %>% 
   filter(day < last_day) %>% 
+  ungroup()
+
+df_r0 <- df0 %>% 
+  group_by(replicate, treatment, light) %>% 
   arrange(day, by_group = TRUE) %>% 
   mutate(x0 = lag(x),
          y0 = lag(y),
@@ -49,7 +51,9 @@ df_m <- df0 %>%
          log_r_y = log(y + const) - log(y0 + const),
          log_r_n = log(x + const) - log(x0 + const),
          day0 = lag(day),
-         interval = day - day0) %>% 
+         interval = day - day0) %>%
+  mutate(across(.cols = starts_with("log_r"),
+                .fns = function(z) ifelse(is.nan(z) | is.infinite(z), NA, z))) %>% 
   ungroup() %>% 
   relocate(day, day0, interval) %>% 
   drop_na(day0) %>% 
@@ -68,32 +72,33 @@ df_m <- df0 %>%
   dplyr::select(-starts_with("null")) %>% 
   filter(species == predictor)
 
-df_n <- df_m %>%
+df_n <- df_r0 %>%
   filter(species == "x") %>% 
   mutate(log_r = log(n + const) - log(n0 + const)) %>% 
   select(-c(x, y, species, predictor, z0))
 
-saveRDS(df_m, file = "data_fmt/data_hsu_fmt.rds")
+df_r <- df_r0 %>% 
+  drop_na(log_r)
+
+saveRDS(df_r, file = "data_fmt/data_hsu_fmt.rds")
 
 # analysis ----------------------------------------------------------------
 
-df_i <- df_m %>% 
+df_i <- df_r %>% 
   distinct(replicate, treatment, light)
 
 df_delta <- foreach(i = seq_len(nrow(df_i)),
                     .combine = bind_rows) %do% {
                       
                       # observation
-                      df_sub <- df_m %>%
+                      df_sub <- df_r %>%
                         filter(replicate == df_i$replicate[i],
                                treatment == df_i$treatment[i],
                                light == df_i$light[i])
                       
-                      # m <- lm(log_r ~ n0 + z0 + species + log(interval),
-                      #         data = df_sub)
                       m <- MASS::rlm(log_r ~ n0 + z0 * species + log(interval),
                                      data = df_sub,
-                                     maxit = 100)
+                                     maxit = 2000)
                       
                       cout <- with(df_i,
                                    tibble(replicate = replicate[i],
@@ -107,11 +112,9 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                                treatment == df_i$treatment[i],
                                light == df_i$light[i])
 
-                      # m0 <- lm(log_r ~ n0 + log(interval),
-                      #          data = df_sub_n)
                       m0 <- MASS::rlm(log_r ~ n0 + log(interval),
                                       data = df_sub_n,
-                                      maxit = 100)
+                                      maxit = 2000)
                       
                       r_hat <- coef(m0)[1]
                       a_hat <- coef(m0)[2]
@@ -126,7 +129,7 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                                        r_hat = r_hat,
                                        a_hat = a_hat,
                                        seed = 50,
-                                       sd_env = sd(resid(m0)),#sd(resid(m0) * m0$w),
+                                       sd_env = sd(resid(m0) * m0$w),
                                        nsim = 100,
                                        const = const)
                         
@@ -151,15 +154,40 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                       return(cout)
                     }
 
+# strength of priority effects --------------------------------------------
+
+# df_x: calculate the strength of priority effects as log_rr
+#       x and y are densities of protists
+df_x <- df0 %>% 
+  group_by(replicate, treatment, light) %>% 
+  summarize(x = max(x),
+            y = max(y)) %>% 
+  pivot_wider(id_cols = c("replicate", "light"),
+              names_from = "treatment",
+              values_from = c("x", "y")) %>% 
+  ungroup() %>% 
+  mutate(rr_x = abs(log(x_cp) - log(x_pc)),
+         rr_y = abs(log(y_cp) - log(y_pc))) %>% 
+  rowwise() %>% 
+  summarize(replicate,
+            light,
+            log_rr = mean(rr_x, rr_y))
+
+# merge with proposed statistic
+df_delta <- df_delta %>% 
+  left_join(df_x, by = c("replicate", "light"))
+
 saveRDS(df_delta,
         file = "output/simulation_hsu.rds")
 
 # figure ------------------------------------------------------------------
 
-df_m %>%
+df_r %>%
+  filter(species == "y") %>% 
   ggplot(aes(x = n0,
              y = log_r,
              color = factor(species))) +
   geom_point() +
   facet_grid(rows = vars(treatment, replicate),
-             cols = vars(light))
+             cols = vars(light),
+             scales = "free")

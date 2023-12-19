@@ -1,148 +1,127 @@
 ﻿time,step,sp1,sp2,treatment,total_od,frac_sp1
-0,1,B. bifidum,B. infantis,simultaneous,0.02,0.500
-4,2,B. bifidum,B. infantis,simultaneous,0.070833333,0.580
-8,3,B. bifidum,B. infantis,simultaneous,0.689583333,0.960
-12,4,B. bifidum,B. infantis,simultaneous,0.783333333,0.930
-16,5,B. bifidum,B. infantis,simultaneous,0.764583333,0.940
-20,6,B. bifidum,B. infantis,simultaneous,0.775,0.950
-24,7,B. bifidum,B. infantis,simultaneous,0.766666667,0.890
-0,1,B. bifidum,B. infantis,sp1_first,0.02,1.000
-4,2,B. bifidum,B. infantis,sp1_first,0.027083333,1.000
-8,3,B. bifidum,B. infantis,sp1_first,0.733333333,1.000
+0,1,B. bifidum,B. infantis,simultaneous,0.02,0.5
+4,2,B. bifidum,B. infantis,simultaneous,0.070833333,0.58
+8,3,B. bifidum,B. infantis,simultaneous,0.689583333,0.96
+12,4,B. bifidum,B. infantis,simultaneous,0.783333333,0.93
+16,5,B. bifidum,B. infantis,simultaneous,0.764583333,0.94
+20,6,B. bifidum,B. infantis,simultaneous,0.775,0.95
+24,7,B. bifidum,B. infantis,simultaneous,0.766666667,0.89
+0,1,B. bifidum,B. infantis,sp1_first,0.02,1
+4,2,B. bifidum,B. infantis,sp1_first,0.027083333,1
+8,3,B. bifidum,B. infantis,sp1_first,0.733333333,1
 12,4,B. bifidum,B. infantis,sp1_first,0.85625,0.977
 16,5,B. bifidum,B. infantis,sp1_first,0.770833333,0.998
 20,6,B. bifidum,B. infantis,sp1_first,0.766666667,0.997
 24,7,B. bifidum,B. infantis,sp1_first,0.733333333,0.995
-0,1,B. bifidum,B. infantis,sp2_first,0.02,0.000
-4,2,B. bifidum,B. infantis,sp2_first,0.002083333,0.000
-8,3,B. bifidum,B. infantis,sp2_first,0.256458333,0.000
+0,1,B. bifidum,B. infantis,sp2_first,0.02,0
+4,2,B. bifidum,B. infantis,sp2_first,0.002083333,0
+8,3,B. bifidum,B. infantis,sp2_first,0.256458333,0
 12,4,B. bifidum,B. infantis,sp2_first,0.764583333,0.026
 16,5,B. bifidum,B. infantis,sp2_first,0.789583333,0.552
 20,6,B. bifidum,B. infantis,sp2_first,0.825,0.113
 24,7,B. bifidum,B. infantis,sp2_first,0.833333333,0.338
-0,1,B. bifidum,B. longum,simultaneous,0.02,0.500
+0,1,B. bifidum,B. longum,simultaneous,0.02,0.5
 4,2,B. bifidum,B. longum,simultaneous,0.058333333,0.994
 8,3,B. bifidum,B. longum,simultaneous,0.65,0.995
 12,4,B. bifidum,B. longum,simultaneous,0.785416667,0.968
-16,5,B. bifidum,B. longum,simultaneous,0.729166667,1.000
+16,5,B. bifidum,B. longum,simultaneous,0.729166667,1
 20,6,B. bifidum,B. longum,simultaneous,0.78125,0.996
 24,7,B. bifidum,B. longum,simultaneous,0.8125,0.977
-0,1,B. bifidum,B. longum,sp1_first,0.02,1.000
-4,2,B. bifidum,B. longum,sp1_first,0.035416667,1.000
-8,3,B. bifidum,B. longum,sp1_first,0.63125,1.000
+0,1,B. bifidum,B. longum,sp1_first,0.02,1
+4,2,B. bifidum,B. longum,sp1_first,0.035416667,1
+8,3,B. bifidum,B. longum,sp1_first,0.63125,1
 12,4,B. bifidum,B. longum,sp1_first,0.814583333,0.975
 16,5,B. bifidum,B. longum,sp1_first,0.679166667,0.999
-20,6,B. bifidum,B. longum,sp1_first,0.710416667,1.000
+20,6,B. bifidum,B. longum,sp1_first,0.710416667,1
 24,7,B. bifidum,B. longum,sp1_first,0.758333333,0.999
-0,1,B. bifidum,B. longum,sp2_first,0.02,0.000
-4,2,B. bifidum,B. longum,sp2_first,0.014583333,0.000
-8,3,B. bifidum,B. longum,sp2_first,0.197916667,0.000
+0,1,B. bifidum,B. longum,sp2_first,0.02,0
+4,2,B. bifidum,B. longum,sp2_first,0.014583333,0
+8,3,B. bifidum,B. longum,sp2_first,0.197916667,0
 12,4,B. bifidum,B. longum,sp2_first,0.525,0.038
 16,5,B. bifidum,B. longum,sp2_first,0.566666667,0.108
 20,6,B. bifidum,B. longum,sp2_first,0.654166667,0.589
 24,7,B. bifidum,B. longum,sp2_first,0.7375,0.549
-0,1,B. bifidum,B. breve,simultaneous,0.02,0.500
-4,2,B. bifidum,B. breve,simultaneous,0.054166667,0.500
+0,1,B. bifidum,B. breve,simultaneous,0.02,0.5
+4,2,B. bifidum,B. breve,simultaneous,0.054166667,0.5
 8,3,B. bifidum,B. breve,simultaneous,0.627083333,0.663
 12,4,B. bifidum,B. breve,simultaneous,0.74375,0.624
 16,5,B. bifidum,B. breve,simultaneous,0.89375,0.563
 20,6,B. bifidum,B. breve,simultaneous,0.914583333,0.621
 24,7,B. bifidum,B. breve,simultaneous,0.927083333,0.703
-0,1,B. bifidum,B. breve,sp1_first,0.02,1.000
-4,2,B. bifidum,B. breve,sp1_first,0.03125,1.000
-8,3,B. bifidum,B. breve,sp1_first,0.58125,1.000
+0,1,B. bifidum,B. breve,sp1_first,0.02,1
+4,2,B. bifidum,B. breve,sp1_first,0.03125,1
+8,3,B. bifidum,B. breve,sp1_first,0.58125,1
 12,4,B. bifidum,B. breve,sp1_first,0.679166667,0.971
 16,5,B. bifidum,B. breve,sp1_first,0.772916667,0.989
-20,6,B. bifidum,B. breve,sp1_first,0.797916667,0.990
-24,7,B. bifidum,B. breve,sp1_first,0.772916667,0.990
-0,1,B. bifidum,B. breve,sp2_first,0.02,0.000
-4,2,B. bifidum,B. breve,sp2_first,0.03125,0.000
-8,3,B. bifidum,B. breve,sp2_first,0.23125,0.000
+20,6,B. bifidum,B. breve,sp1_first,0.797916667,0.99
+24,7,B. bifidum,B. breve,sp1_first,0.772916667,0.99
+0,1,B. bifidum,B. breve,sp2_first,0.02,0
+4,2,B. bifidum,B. breve,sp2_first,0.03125,0
+8,3,B. bifidum,B. breve,sp2_first,0.23125,0
 12,4,B. bifidum,B. breve,sp2_first,0.28125,0.071
 16,5,B. bifidum,B. breve,sp2_first,0.602083333,0.043
 20,6,B. bifidum,B. breve,sp2_first,0.816666667,0.034
 24,7,B. bifidum,B. breve,sp2_first,0.852083333,0.037
-0,1,B. infantis,B. breve,simultaneous,0.02,0.500
+0,1,B. infantis,B. breve,simultaneous,0.02,0.5
 4,2,B. infantis,B. breve,simultaneous,0.05,0.151
 8,3,B. infantis,B. breve,simultaneous,0.44375,0.301
 12,4,B. infantis,B. breve,simultaneous,0.766666667,0.445
 16,5,B. infantis,B. breve,simultaneous,0.8375,0.522
 20,6,B. infantis,B. breve,simultaneous,0.90625,0.412
 24,7,B. infantis,B. breve,simultaneous,0.9125,0.401
-0,1,B. infantis,B. breve,sp1_first,0.02,1.000
-4,2,B. infantis,B. breve,sp1_first,0.027083333,1.000
-8,3,B. infantis,B. breve,sp1_first,0.439583333,1.000
+0,1,B. infantis,B. breve,sp1_first,0.02,1
+4,2,B. infantis,B. breve,sp1_first,0.027083333,1
+8,3,B. infantis,B. breve,sp1_first,0.439583333,1
 12,4,B. infantis,B. breve,sp1_first,0.689583333,0.971
 16,5,B. infantis,B. breve,sp1_first,0.88125,0.969
 20,6,B. infantis,B. breve,sp1_first,0.94375,0.966
 24,7,B. infantis,B. breve,sp1_first,0.941666667,0.966
-0,1,B. infantis,B. breve,sp2_first,0.02,0.000
-4,2,B. infantis,B. breve,sp2_first,0.008333333,0.000
-8,3,B. infantis,B. breve,sp2_first,0.197916667,0.000
+0,1,B. infantis,B. breve,sp2_first,0.02,0
+4,2,B. infantis,B. breve,sp2_first,0.008333333,0
+8,3,B. infantis,B. breve,sp2_first,0.197916667,0
 12,4,B. infantis,B. breve,sp2_first,0.302083333,0.066
 16,5,B. infantis,B. breve,sp2_first,0.502083333,0.008
 20,6,B. infantis,B. breve,sp2_first,0.675,0.007
 24,7,B. infantis,B. breve,sp2_first,0.822916667,0.007
-0,1,B. infantis,B. longum,simultaneous,0.02,0.500
+0,1,B. infantis,B. longum,simultaneous,0.02,0.5
 4,2,B. infantis,B. longum,simultaneous,0.064583333,0.469
 8,3,B. infantis,B. longum,simultaneous,0.45,0.322
 12,4,B. infantis,B. longum,simultaneous,0.677083333,0.479
 16,5,B. infantis,B. longum,simultaneous,0.747916667,0.939
 20,6,B. infantis,B. longum,simultaneous,0.879166667,0.552
 24,7,B. infantis,B. longum,simultaneous,0.852083333,0.459
-0,1,B. infantis,B. longum,sp1_first,0.02,1.000
-4,2,B. infantis,B. longum,sp1_first,0.0375,1.000
-8,3,B. infantis,B. longum,sp1_first,0.24375,1.000
+0,1,B. infantis,B. longum,sp1_first,0.02,1
+4,2,B. infantis,B. longum,sp1_first,0.0375,1
+8,3,B. infantis,B. longum,sp1_first,0.24375,1
 12,4,B. infantis,B. longum,sp1_first,0.722916667,0.963
-16,5,B. infantis,B. longum,sp1_first,0.71875,1.000
-20,6,B. infantis,B. longum,sp1_first,0.785416667,1.000
-24,7,B. infantis,B. longum,sp1_first,0.741666667,1.000
-0,1,B. infantis,B. longum,sp2_first,0.02,0.000
-4,2,B. infantis,B. longum,sp2_first,0.052083333,0.000
-8,3,B. infantis,B. longum,sp2_first,0.389583333,0.000
+16,5,B. infantis,B. longum,sp1_first,0.71875,1
+20,6,B. infantis,B. longum,sp1_first,0.785416667,1
+24,7,B. infantis,B. longum,sp1_first,0.741666667,1
+0,1,B. infantis,B. longum,sp2_first,0.02,0
+4,2,B. infantis,B. longum,sp2_first,0.052083333,0
+8,3,B. infantis,B. longum,sp2_first,0.389583333,0
 12,4,B. infantis,B. longum,sp2_first,0.527083333,0.038
-16,5,B. infantis,B. longum,sp2_first,0.533333333,0.600
+16,5,B. infantis,B. longum,sp2_first,0.533333333,0.6
 20,6,B. infantis,B. longum,sp2_first,0.539583333,0.618
 24,7,B. infantis,B. longum,sp2_first,0.520833333,0.626
-0,1,B. longum,B. breve,simultaneous,0.02,0.500
+0,1,B. longum,B. breve,simultaneous,0.02,0.5
 4,2,B. longum,B. breve,simultaneous,0.083333333,0.089
-8,3,B. longum,B. breve,simultaneous,0.21875,0.000
-12,4,B. longum,B. breve,simultaneous,0.208333333,0.000
-16,5,B. longum,B. breve,simultaneous,0.272916667,0.000
-20,6,B. longum,B. breve,simultaneous,0.297916667,0.000
+8,3,B. longum,B. breve,simultaneous,0.21875,0
+12,4,B. longum,B. breve,simultaneous,0.208333333,0
+16,5,B. longum,B. breve,simultaneous,0.272916667,0
+20,6,B. longum,B. breve,simultaneous,0.297916667,0
 24,7,B. longum,B. breve,simultaneous,0.304166667,0.009
-0,1,B. longum,B. breve,sp1_first,0.02,0.000
-4,2,B. longum,B. breve,sp1_first,0.058333333,0.000
-8,3,B. longum,B. breve,sp1_first,0.45625,0.000
-12,4,B. longum,B. breve,sp1_first,0.491666667,0.959
-16,5,B. longum,B. breve,sp1_first,0.53125,0.846
-20,6,B. longum,B. breve,sp1_first,0.547916667,0.868
-24,7,B. longum,B. breve,sp1_first,0.497916667,0.431
-0,1,B. longum,B. breve,sp2_first,0.02,0.000
-4,2,B. longum,B. breve,sp2_first,0.0625,0.000
-8,3,B. longum,B. breve,sp2_first,0.16875,0.000
-12,4,B. longum,B. breve,sp2_first,0.160416667,0.875
-16,5,B. longum,B. breve,sp2_first,0.202083333,1.000
-20,6,B. longum,B. breve,sp2_first,0.28125,0.915
-24,7,B. longum,B. breve,sp2_first,0.3875,0.963
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,
+0,1,B. longum,B. breve,sp1_first,0.02,1
+4,2,B. longum,B. breve,sp1_first,0.058333333,1
+8,3,B. longum,B. breve,sp1_first,0.45625,1
+12,4,B. longum,B. breve,sp1_first,0.491666667,0.041
+16,5,B. longum,B. breve,sp1_first,0.53125,0.154
+20,6,B. longum,B. breve,sp1_first,0.547916667,0.132
+24,7,B. longum,B. breve,sp1_first,0.497916667,0.569
+0,1,B. longum,B. breve,sp2_first,0.02,0
+4,2,B. longum,B. breve,sp2_first,0.0625,0
+8,3,B. longum,B. breve,sp2_first,0.16875,0
+12,4,B. longum,B. breve,sp2_first,0.160416667,0.125
+16,5,B. longum,B. breve,sp2_first,0.202083333,0
+20,6,B. longum,B. breve,sp2_first,0.28125,0.085
+24,7,B. longum,B. breve,sp2_first,0.3875,0.037

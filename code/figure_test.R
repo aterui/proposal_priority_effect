@@ -129,32 +129,19 @@ ggsave(g_scatter,
 # hsu results -------------------------------------------------------------
 
 ## read and format data
-df_delta <- readRDS("output/simulation_hsu.rds")
+df_delta_hsu <- readRDS("output/simulation_hsu.rds") %>% 
+  mutate(source = "Hsu and Moeller 2021")
+df_delta_ojima <- readRDS("output/simulation_ojima.rds") %>% 
+  mutate(source = "Ojima et al. 2022")
 df_hsu <- readRDS("data_fmt/data_hsu_fmt.rds")
 
-# df_x: calculate the strength of priority effects as log_rr
-#       x and y are densities of protists
-df_x <- df_hsu %>% 
-  group_by(replicate, treatment, light) %>% 
-  summarize(x_max = max(x),
-            y_max = max(y)) %>% 
-  pivot_wider(id_cols = c("replicate", "light"),
-              names_from = "treatment",
-              values_from = c("x_max", "y_max")) %>% 
-  ungroup() %>% 
-  mutate(rr_x = abs(log(x_max_cp) - log(x_max_pc)),
-         rr_y = abs(log(y_max_cp) - log(y_max_pc))) %>% 
-  rowwise() %>% 
-  summarize(replicate,
-            light,
-            log_rr = mean(rr_x, rr_y))
+df_delta <- df_delta_hsu %>% 
+  bind_rows(df_delta_ojima) %>% 
+  select(source, delta, nsim, n, p, n_sample, p_neg, log_rr) %>% 
+  drop_na(p)
 
-# merge with proposed statistic
-df_delta <- df_delta %>% 
-  left_join(df_x, by = c("replicate", "light"))
-
-## box plot
-g_hsu_box <- df_delta %>% 
+## hsu - box plot
+g_hsu_box <- df_delta_hsu %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
@@ -174,8 +161,8 @@ g_hsu_box <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
-## scatter plot 1
-g_hsu_light <- df_delta %>% 
+## hsu - scatter plot 1
+g_hsu_light <- df_delta_hsu %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
@@ -194,8 +181,8 @@ g_hsu_light <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
-## scatter plot 2
-g_hsu_pr <- df_delta %>% 
+## hsu - scatter plot 2
+g_hsu_pr <- df_delta_hsu %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
@@ -214,6 +201,24 @@ g_hsu_pr <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
+## combined - scatter plot
+g_pr <- df_delta %>% 
+  ggplot(aes(x = p,
+             y = log_rr,
+             color = source,
+             alpha = p_neg)) +
+  geom_point(size = 2) +
+  MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
+  #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
+  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       y = "Strength of priority effects",
+       color = "Data source",
+       alpha = "Pr(negative)") +
+  theme_bw() +
+  theme(panel.grid = element_blank()) +
+  scale_y_continuous(trans = "log10")
+
+
 ## export
 ggsave(g_hsu_box,
        filename = "output/figure_hsu_box.pdf",
@@ -227,61 +232,63 @@ ggsave(g_hsu_pr,
        filename = "output/figure_hsu_scatter_pr.pdf",
        width = 6, height = 4)
 
+ggsave(g_pr,
+       filename = "output/figure_scatter_pr.pdf",
+       width = 6, height = 4)
+
 # help plot: experiment ---------------------------------------------------
 
-## time-series
-df_t <- df_hsu %>% 
-  filter(n > 0) %>% 
-  filter(predictor == "x") %>%
-  select(-species) %>%
-  group_by(replicate, treatment, light) %>% 
-  mutate(t = day - min(day0) + 1) %>% 
-  pivot_longer(cols = c("x", "y"),
-               names_to = "species",
-               values_to = "density")
-
-df_t %>% 
-  ggplot(aes(x = t,
-             y = density,
-             color = species)) +
-  geom_point() +
-  geom_line() +
-  scale_y_continuous(trans = "sqrt") +
-  facet_grid(rows = vars(replicate, treatment),
-             cols = vars(light))
-
-
-
-## community level plot
-df_n <- df_hsu %>% 
-  #filter(x > 0 | y > 0) %>% 
-  group_by(day, replicate, treatment, light) %>% 
-  summarize(day0 = unique(day0),
-            n = unique(n),
-            n0 = unique(n0)) %>% 
-  ungroup() %>% 
-  #filter(n0 > 0, n > 0) %>% 
-  mutate(log_r = log(n + 1) - log(n0 + 1))
-
-g_nr <- df_n %>% 
-  mutate(key = case_when(light == 50 & treatment == "pc" & replicate == "c" ~ "Outlier",
-                         light == 100 & treatment == "pc" & replicate == "c" ~ "Outlier",
-                         light == 100 & treatment == "cp" & replicate %in% c("b", "c") ~ "Outlier",
-                         light == 100 & treatment == "cp" & replicate %in% c("a") ~ "Excluded",
-                         light == 200 & treatment == "cp" & replicate %in% c("a", "b", "c") ~ "Excluded",
-                         TRUE ~ as.character("Included"))) %>% 
-  ggplot(aes(x = n0,
-             y = log_r,
-             color = key)) +
-  geom_point() +
-  # facet_wrap(facets = ~treatment + light,
-  #            ncol = 4, nrow = 2,
-  #            scales = "free") +
-  facet_grid(rows = vars(light),
-             cols = vars(treatment, replicate),
-             scales = "free") +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        strip.background = element_blank())
-
-
+# ## time-series
+# df_t <- df_hsu %>% 
+#   filter(n > 0) %>% 
+#   filter(predictor == "x") %>%
+#   select(-species) %>%
+#   group_by(replicate, treatment, light) %>% 
+#   mutate(t = day - min(day0) + 1) %>% 
+#   pivot_longer(cols = c("x", "y"),
+#                names_to = "species",
+#                values_to = "density")
+# 
+# df_t %>% 
+#   ggplot(aes(x = t,
+#              y = density,
+#              color = species)) +
+#   geom_point() +
+#   geom_line() +
+#   scale_y_continuous(trans = "sqrt") +
+#   facet_grid(rows = vars(replicate, treatment),
+#              cols = vars(light))
+# 
+# 
+# 
+# ## community level plot
+# df_n <- df_hsu %>% 
+#   #filter(x > 0 | y > 0) %>% 
+#   group_by(day, replicate, treatment, light) %>% 
+#   summarize(day0 = unique(day0),
+#             n = unique(n),
+#             n0 = unique(n0)) %>% 
+#   ungroup() %>% 
+#   #filter(n0 > 0, n > 0) %>% 
+#   mutate(log_r = log(n + 1) - log(n0 + 1))
+# 
+# g_nr <- df_n %>% 
+#   mutate(key = case_when(light == 50 & treatment == "pc" & replicate == "c" ~ "Outlier",
+#                          light == 100 & treatment == "pc" & replicate == "c" ~ "Outlier",
+#                          light == 100 & treatment == "cp" & replicate %in% c("b", "c") ~ "Outlier",
+#                          light == 100 & treatment == "cp" & replicate %in% c("a") ~ "Excluded",
+#                          light == 200 & treatment == "cp" & replicate %in% c("a", "b", "c") ~ "Excluded",
+#                          TRUE ~ as.character("Included"))) %>% 
+#   ggplot(aes(x = n0,
+#              y = log_r,
+#              color = key)) +
+#   geom_point() +
+#   # facet_wrap(facets = ~treatment + light,
+#   #            ncol = 4, nrow = 2,
+#   #            scales = "free") +
+#   facet_grid(rows = vars(light),
+#              cols = vars(treatment, replicate),
+#              scales = "free") +
+#   theme_bw() +
+#   theme(panel.grid = element_blank(),
+#         strip.background = element_blank())
