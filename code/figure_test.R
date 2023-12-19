@@ -174,16 +174,19 @@ g_hsu_box <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
-## scatter plot
-g_hsu <- df_delta %>% 
+## scatter plot 1
+g_hsu_light <- df_delta %>% 
   drop_na(p) %>% 
   mutate(sensitivity = ifelse(light == 0,
                               "Insensitive",
-                              "Sensitive")) %>% 
+                              "Sensitive"),
+         neg = ifelse(p_neg < 0.9,
+                      "skeptical", "reliable")) %>% 
   ggplot(aes(x = p,
              y = log_rr,
              color = light)) +
   geom_point(size = 3) +
+  #MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
   labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
        y = "Strength of priority effects",
@@ -191,27 +194,53 @@ g_hsu <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank())
 
+## scatter plot 2
+g_hsu_pr <- df_delta %>% 
+  drop_na(p) %>% 
+  mutate(sensitivity = ifelse(light == 0,
+                              "Insensitive",
+                              "Sensitive"),
+         neg = ifelse(p_neg < 0.9,
+                      "skeptical", "reliable")) %>% 
+  ggplot(aes(x = p,
+             y = log_rr,
+             color = p_neg)) +
+  geom_point(size = 3) +
+  #MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
+  MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
+  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       y = "Strength of priority effects",
+       color = "Pr(negative)") +
+  theme_bw() +
+  theme(panel.grid = element_blank())
+
 ## export
 ggsave(g_hsu_box,
-       filename = "output/figure_box_hsu.pdf",
+       filename = "output/figure_hsu_box.pdf",
        width = 4.5, height = 4)
 
-ggsave(g_hsu,
-       filename = "output/figure_scatter_hsu.pdf",
+ggsave(g_hsu_light,
+       filename = "output/figure_hsu_scatter_light.pdf",
        width = 6, height = 4)
 
+ggsave(g_hsu_pr,
+       filename = "output/figure_hsu_scatter_pr.pdf",
+       width = 6, height = 4)
 
 # help plot: experiment ---------------------------------------------------
 
 ## time-series
-df_hsu %>% 
+df_t <- df_hsu %>% 
+  filter(n > 0) %>% 
   filter(predictor == "x") %>%
   select(-species) %>%
   group_by(replicate, treatment, light) %>% 
   mutate(t = day - min(day0) + 1) %>% 
   pivot_longer(cols = c("x", "y"),
                names_to = "species",
-               values_to = "density") %>% 
+               values_to = "density")
+
+df_t %>% 
   ggplot(aes(x = t,
              y = density,
              color = species)) +
@@ -225,6 +254,7 @@ df_hsu %>%
 
 ## community level plot
 df_n <- df_hsu %>% 
+  #filter(x > 0 | y > 0) %>% 
   group_by(day, replicate, treatment, light) %>% 
   summarize(day0 = unique(day0),
             n = unique(n),
@@ -234,19 +264,22 @@ df_n <- df_hsu %>%
   mutate(log_r = log(n + 1) - log(n0 + 1))
 
 g_nr <- df_n %>% 
-  mutate(key = case_when(light == 100 & treatment == "cp" & replicate %in% c("b", "c") ~ "Outlier",
-                         light == 200 & treatment == "cp" & replicate == "c" ~ "Outlier",
-                         light == 100 & treatment == "pc" & replicate == "a" ~ "Outlier",
+  mutate(key = case_when(light == 50 & treatment == "pc" & replicate == "c" ~ "Outlier",
+                         light == 100 & treatment == "pc" & replicate == "c" ~ "Outlier",
+                         light == 100 & treatment == "cp" & replicate %in% c("b", "c") ~ "Outlier",
                          light == 100 & treatment == "cp" & replicate %in% c("a") ~ "Excluded",
-                         light == 200 & treatment == "cp" & replicate %in% c("a", "b") ~ "Excluded",
-                         light == 50 & treatment == "pc" & replicate %in% c("a") ~ "Excluded",
+                         light == 200 & treatment == "cp" & replicate %in% c("a", "b", "c") ~ "Excluded",
                          TRUE ~ as.character("Included"))) %>% 
   ggplot(aes(x = n0,
              y = log_r,
              color = key)) +
   geom_point() +
-  facet_grid(cols = vars(light),
-             rows = vars(treatment, replicate)) +
+  # facet_wrap(facets = ~treatment + light,
+  #            ncol = 4, nrow = 2,
+  #            scales = "free") +
+  facet_grid(rows = vars(light),
+             cols = vars(treatment, replicate),
+             scales = "free") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         strip.background = element_blank())
