@@ -96,7 +96,7 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                                treatment == df_i$treatment[i],
                                light == df_i$light[i])
                       
-                      m <- MASS::rlm(log_r ~ n0 + z0 * species + log(interval),
+                      m <- MASS::rlm(log_r ~ n0 + z0 * species + offset(log(interval)),
                                      data = df_sub,
                                      maxit = 2000)
                       
@@ -112,7 +112,7 @@ df_delta <- foreach(i = seq_len(nrow(df_i)),
                                treatment == df_i$treatment[i],
                                light == df_i$light[i])
 
-                      m0 <- MASS::rlm(log_r ~ n0 + log(interval),
+                      m0 <- MASS::rlm(log_r ~ n0 + offset(log(interval)),
                                       data = df_sub_n,
                                       maxit = 2000)
                       
@@ -166,12 +166,10 @@ df_x <- df0 %>%
               names_from = "treatment",
               values_from = c("x", "y")) %>% 
   ungroup() %>% 
-  mutate(rr_x = abs(log(x_cp) - log(x_pc)),
-         rr_y = abs(log(y_cp) - log(y_pc))) %>% 
-  rowwise() %>% 
-  summarize(replicate,
-            light,
-            log_rr = mean(rr_x, rr_y))
+  mutate(rr_x = abs(log(x_pc) - log(x_cp)),
+         rr_y = abs(log(y_pc) - log(y_cp)),
+         log_rr = 0.5 * (rr_x + rr_y)) %>% 
+  arrange(light)
 
 # merge with proposed statistic
 df_delta <- df_delta %>% 

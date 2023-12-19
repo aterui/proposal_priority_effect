@@ -81,9 +81,9 @@ df_gap <- df0 %>%
   pivot_wider(id_cols = pair,
               names_from = "treatment",
               values_from = c(x1, x2)) %>% 
-  mutate(log_rr_x = log(x1_sp1_first) - log(x1_sp2_first),
-         log_rr_y = log(x2_sp2_first) - log(x2_sp1_first),
-         log_rr = 0.5 * (abs(log_rr_x) + abs(log_rr_y))) %>% 
+  mutate(rr_x = abs(log(x1_sp1_first) - log(x1_sp2_first)),
+         rr_y = abs(log(x2_sp2_first) - log(x2_sp1_first)),
+         log_rr = 0.5 * (abs(rr_x) + abs(rr_y))) %>% 
   ungroup()
 
 # analysis ----------------------------------------------------------------

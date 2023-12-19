@@ -164,11 +164,6 @@ g_hsu_box <- df_delta_hsu %>%
 ## hsu - scatter plot 1
 g_hsu_light <- df_delta_hsu %>% 
   drop_na(p) %>% 
-  mutate(sensitivity = ifelse(light == 0,
-                              "Insensitive",
-                              "Sensitive"),
-         neg = ifelse(p_neg < 0.9,
-                      "skeptical", "reliable")) %>% 
   ggplot(aes(x = p,
              y = log_rr,
              color = light)) +
@@ -184,14 +179,8 @@ g_hsu_light <- df_delta_hsu %>%
 ## hsu - scatter plot 2
 g_hsu_pr <- df_delta_hsu %>% 
   drop_na(p) %>% 
-  mutate(sensitivity = ifelse(light == 0,
-                              "Insensitive",
-                              "Sensitive"),
-         neg = ifelse(p_neg < 0.9,
-                      "skeptical", "reliable")) %>% 
   ggplot(aes(x = p,
-             y = log_rr,
-             color = p_neg)) +
+             y = log_rr)) +
   geom_point(size = 3) +
   #MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
@@ -205,8 +194,7 @@ g_hsu_pr <- df_delta_hsu %>%
 g_pr <- df_delta %>% 
   ggplot(aes(x = p,
              y = log_rr,
-             color = source,
-             alpha = p_neg)) +
+             color = source)) +
   geom_point(size = 2) +
   MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
