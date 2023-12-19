@@ -47,7 +47,7 @@
 \textbf{Background} --
 Over the past century, biologists have been intrigued by how interacting organisms are assembled in a given environment.
 This process, termed ``community assembly,'' has crucial implications for human society's public health and sustainability \citep{leibold_metacommunity_2004, palmer_ecological_2014, fukami_historical_2015, ojima_priority_2022}.
-For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion (REF).
+For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion \citep{fierer_animalcules_2012}.
 Community assembly also plays a critical role in large-scale biological outcomes, such as the environmental restoration of degraded habitats in human-dominated landscapes \citep{palmer_ecological_2014, koning_network_2020, terui_emergent_2021}.
 The effect of environmental restoration on ecological communities is contingent on how colonizing species reach the restored site, often defining the biological success of the restoration project that managers invest millions of dollars for implementation \citep{palmer_ecological_2014, weidlich_priority_2021}.
 Therefore, understanding the regulatory rules in community assembly (hereafter, ``assembly rule'') is fundamental to a broad range of biological phenomena.
@@ -55,7 +55,7 @@ Therefore, understanding the regulatory rules in community assembly (hereafter, 
 The prevailing paradigm in community assembly suggests that the interaction between the environment and species attributes determines the structure of biological communities  (e.g., the relative abundance of different species) -- if the same set of species colonizes into a given habitat, the community structure will ultimately reach the identical state of community structure at equilibrium (the ``niche'' paradigm) \citep{chase_community_2003}.
 However, biologists have begun to recognize that, in certain circumstances, community dynamics are highly sensitive to the order of species colonization, leading to the divergent equilibrium state of the community structure despite the identical source of colonizing species and the environment \citep{chase_community_2003, fukami_historical_2015}.
 This historical contingency of community state is referred to as ``priority effects,'' and their stochastic nature posed a significant challenge in predicting and maintaining community structure by conditioning the environment \citep{fukami_historical_2015}.
-For example, it is often observed that the gut microbiome deviates far from the favorable state even if its ideal environment is maintained \textit{via} treatment (REF).
+For example, the human gut microbiome shifts to an alternative state of community structure after antibiotic treatments, even if the gut environment is maintained throughout before- and after-treatment periods \citep{dominguez-bello_development_2011}.
 
 The consequences of priority effects are well understood.
 Yet, a critical question remains unsolved: \ul{``\textit{when do priority effects occur?}}'' 
@@ -63,7 +63,7 @@ Answering this question is not only critical to advancing basic science but also
 
 \textbf{Problem Statement} --
 The experimental manipulation of species' colonization order has been a common method -- perhaps \textit{the} method -- to confirm their existence; when priority effects manifest, the different colonization order of species leads to the divergent community states at the end of the experiment \citep{fukami_historical_2015, weidlich_priority_2021}.
-Over the past few decades, the results of the controlled experiments suggested the pervasiveness of priority effects across a wide variety of biological communities, including microbes \citep{fukami_historical_2015}, plants \citep{weidlich_priority_2021}, and animals (REF).
+Over the past few decades, the results of the controlled experiments suggested the pervasiveness of priority effects across a wide variety of biological communities \citep{fukami_historical_2015, weidlich_priority_2021}, including microbes \citep{fukami_productivity-biodiversity_2003, fukami_assembly_2004, jiang_community_2008, tucker_environmental_2014, ojima_interactive_2017, hsu_metabolic_2021}, plants \citep{mason_arrival_2013, wohlwend_long-term_2019}, and animals (REF).
 Even more, they spawned several influential hypotheses predicting the likely biological scenarios in which priority effects should matter.
 For example, priority effects are hypothesized to be prevalent in the environment that enhances the rapid establishment of early colonizing species \citep{fukami_historical_2015}, such as small habitat size \citep{fukami_assembly_2004}, high productivity \citep{chase_stochastic_2010}, and low environmental variability \citep{tucker_environmental_2014}, among others.
 
@@ -78,7 +78,7 @@ We are unaware of such a novel statistical method, however.
 Our method is motivated by the fact that time series data may provide deep insights into assembly rules.
 In theory, assembly rules are set by the composition of species' traits within a given community, which dictates characteristic patterns of temporal community dynamics.
 If niche-structured, species' niche differences produce the predominance of negative frequency dependence (= rarer species have greater population growth) such that rarer species can grow from small populations \citep{ke_coexistence_2018}.
-In contrast, when priority effects manifest, the positive frequency dependency of population growth (= dominant species have greater population growth) facilitates the stochastic dominance of a subset of species \citep{ke_coexistence_2018}.
+In contrast, when priority effects manifest, the positive frequency dependency of population growth (= dominant species have greater population growth) facilitates the stochastic dominance of a subset of species contingent on the colonization history \citep{ke_coexistence_2018}.
 Our method will capitalize on these characteristic dynamics of distinct assembly rules to detect a signature of priority effects from a short time series.
 To this end, our proposal is structured as follows:
 
@@ -98,7 +98,7 @@ The new method solves this critical issue with the possibility of reaching concl
 Second, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
 A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
 The proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
-Lastly, \ul{\emph{our method is applicable, in principle, to any biological systems}}.
+Lastly, \ul{\emph{our method applies, in principle, to any biological systems}}.
 This property allows for cross-taxonomic and cross-ecosystem comparisons of assembly rules.
 Hence, this proposal has three innovative qualities that meet the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
 
@@ -245,28 +245,26 @@ Hence, as in a Ricker model, a BH model can be simplified as follows: $\ln f(\ov
 This formulation indicates that the statistical inference of the key parameter ($\delta_i$) is possible through the fitting of a non-linear model.
 We will use \texttt{stats::nls()} function in \texttt{R} to fit a non-linear model to the simulated data.
 
-(ii) \ul{Broader parameter space}: we will expand the parameter space of the simulation experiment.
-Although our preliminary analysis yielded promising results, the parameter space explored is narrow.
-By expanding the parameter space for our simulation experiment,  we will confirm the applicability of our method in broader ecological scenarios (Table \ref{tab:param1}).
-We will apply this broader parameter space to Ricker and BH models to validate the performance of the proposed method.
+(ii) \ul{Broader parameter space}: We will expand the parameter space of the simulation experiment (Table \ref{tab:param1}) and increase the number of subsamples ($500~\mbox{to}~1000$ parameter combinations for each of insensitive and sensitive communities).
+This broader parameter space will be applied to the two alternative theoretical models (Ricker and BH models), a greater range of species richness ($S = \{4, 8, 16, 32, 64\}$) and time series length ($T = \{5, 10, 20, 40\}$).
+Through this extended simulation experiment,  we will confirm the applicability of our method in broader ecological scenarios.
 
 Collectively, these proposed activities will increase the credibility of our proposed method.
 
 \begin{table}
     \flushleft
-    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics.}
+    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics. Note that intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.}
     \begin{tabular}{clll}
-        Symbol           & Interpretation               & Value (proposed)                                 & Value (preliminary)\\
+        Symbol & Interpretation & Value (preliminary) & Value (proposed)\\
         \hline
-        $r_i$            & Intrinsic population growth  & $\mbox{Unif(\mu_r - h_r, \mu_r + h_r)}$          & \\
-        $\mu_r$          & Average $r_i$                & $0.50~\mbox{to}~1.50$                              & $1.00$\\
-        $h_r$            & Half range in $r_i$          & $0.10~\mbox{to}~0.50$                               & $0.00, 0.10$\\  
-        $\alpha_{i}$     & Intraspecific competition    & $0.01~\mbox{to}~0.10$                         & $0.01, 0.05$\\
-        $\beta_{ij}$     & Interspecific competition    & $\mbox{Unif(\mu_{\beta} - h_{\beta}, \mu_{\beta} + h_{\beta})}$     & \\
-        $\mu_{\beta}$    & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & $0.00~\mbox{to}~1.50$\\
-        $h_{\beta}$ & Half range in $\beta_{ij}$ & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & $0.00, 0.25$\\
-        $S$              & Number of species in a community & $2, 8, 32, 128$ & $5, 15$\\
-        $L_t$            & Length of time series            & $5, 10, 20, 40$ & $10, 30$\\
+        $x^*$ & Average equilibrium density & $2, 8, 32$ & $1~\mbox{to}~100$\\
+        $h_x$ & Half range in $x^*$ & $x^* \times 0.00~\mbox{to}~0.50$ & $x^* \times 0.00~\mbox{to}~1.00$\\
+        $x_i^*$ & Equilibrium density for species $i$ & $\mbox{Unif}(x^* - h_x, x^* + h_x)$ & --\\
+        $\alpha_{i}$ & Intraspecific competition & $1 / x^*$ & -- \\
+        $\beta_{ij}$ & Interspecific competition & $\mbox{Unif(\mu_{\beta} - h_{\beta}, \mu_{\beta} + h_{\beta})}$ & -- \\
+        $\mu_{\beta}$ & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & --\\
+        $h_{\beta}$ & Half range in $\beta_{ij}$ & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & $\mu_{\beta} \times 0.00~\mbox{to}~1.00$ \\
+        $r_i$ & Intrinsic population growth & $A \overset{\rightarrow}{x^*}$ & --\\
         \hline
     \end{tabular}
     \label{tab:param1}
@@ -313,11 +311,21 @@ Collectively, these proposed activities will increase the credibility of our pro
 While simulation experiments provide a strong test case for the model performance, empirical validation is still desired.
 We will use published time-series data for the model validation.
 
-\textit{\textbf{Method details: data source}} --
+\textit{\textbf{Method details: preliminary analysis}} --
 We identified ten papers that controlled the colonization history to determine the strength/influence of priority effects (Table \ref{tab:expdata}).
-These data are ideal for our model validation for two reasons. First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
-Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ identifies communities in which priority effects manifest.
-Second, these experiments vary in time series length and the number of species, allowing us to evaluate the sensitivity of our method to the varied data quality.
+These data are ideal for our model validation for two reasons.
+First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
+Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ identifies communities sensitive to priority effects.
+Second, these experiments vary in time series length and the number of species, allowing us to evaluate the robustness of our method to the varied data quality.
+
+We applied our method to the dataset in Hsu and Moeller \citep{hsu_metabolic_2021}, serving as a preliminary analysis of real biological data.
+In this experiment, the authors manipulated the introduction order of bacterivorous ciliate competitors,
+\textit{Paramecium bursaria} and \textit{Colpidium} sp., under different light regimes (0, 50, 100, and 200
+$\mu~\mbox{mol}~\mbox{quanta}~m^{-2} s^{-1}$).
+Since \textit{P. bursaria} is an acquired phototroph while \textit{Colpidium} sp. is a strict heterotroph, this experimental setup created differential competitive interactions between the two species with varied strength of priority effects.
+In the absence of light, \textit{P. bursaria} was always outcompeted irrespective of the order of species introduction (= no priority effects).
+However, in the presence of light, the two species community reached different community states depending on the order of species introduction (= priority effects present).
+Thus, this dataset serves as an ideal dataset for our preliminary analysis.
 
 \begin{table}
     \flushleft
@@ -339,16 +347,6 @@ Second, these experiments vary in time series length and the number of species, 
     \end{tabular}
     \label{tab:expdata}
 \end{table}
-
-\textit{\textbf{Method details: preliminary analysis}} --
-We applied our method to the dataset in Hsu and Moeller \citep{hsu_metabolic_2021}, serving as a preliminary analysis of real biological data.
-In this experiment, the authors have manipulated the introduction order of bacterivorous ciliate competitors,
-\textit{Paramecium bursaria} and \textit{Colpidium} sp., under different light regimes (0, 50, 100, and 200
-$\mu~\mbox{mol}~\mbox{quanta}~m^{-2} s^{-1}$).
-Since \textit{P. bursaria} is an acquired phototroph while \textit{Colpidium} sp. is a strict heterotroph, this experimental setup created differential competitive interactions between the two species with varied strength of priority effects.
-In the absence of light, \textit{P. bursaria} was always outcompeted irrespective of the order of species introduction (= no priority effects).
-However, in the presence of light, the two species community reached different community states depending on the order of species introduction (= priority effects present).
-Thus, this dataset serves as an ideal dataset for our preliminary analysis.
 
 Our analysis proceeded as follows:
 
@@ -374,14 +372,15 @@ As expected from our preliminary simulation experiments, sensitive communities (
 \end{SCfigure}
 
 \textit{\textbf{Method details: proposed analysis}} --
-We will repeat the procedure of the preliminary analysis for other data sources (Table \ref{tab:expdata}). 
-In doing so, we will be able to answer the following questions critical to applications in the field: (i) does our method's performance vary by time series length and/or the number of species? (ii) does our method's performance vary by taxonomic group?
+We will search for additional published experimental data in which the colonization order was manipulated to broaden the taxonomic scope of our validation (e.g., zooplankton, terrestrial plants).
+Then, we will repeat the procedure of the preliminary analysis for the identified (Table \ref{tab:expdata}) and additional data sources. 
+In doing so, we will be able to answer the following questions critical to applications in unmanipulated systems: (i) does our method's performance vary by time series length and/or the number of species? (ii) does our method's performance vary by taxonomic group?
 
 We expect our method to be robust to the challenges in questions (i) and (ii) considering the results of the preliminary simulation experiments.
 Nevertheless, it is possible to notice unforeseen issues through this activity; if this is the case, we will carefully review the cases in which the method's performance was poor, and we will explore how we can improve our method to address the issue.
 If it is deemed an unaddressable problem, we will clarify the limitation of our method.
 
-\subsection*{Specific Aim 3: Application to Field Data}
+\subsection*{Specific Aim 3: Application to Unmanipulated Systems}
 
 \textbf{\textit{Goal}} -- 
 The overarching goal of this specific aim is to ask a critical question that has never been addressed in \textit{unmanipulated} natural systems: \ul{\textit{when do priority effects occur?}} Specifically, we will test the following hypotheses using global time series data, in which the colonization history is unknown:
@@ -390,8 +389,8 @@ The overarching goal of this specific aim is to ask a critical question that has
 
 \textbf{Hypothesis 2}: Priority effects are more prevalent in productive systems.
 
-Small ecosystem size and/or high productivity have been hypothesized to increase the importance of priority effects because both factors facilitate the rapid establishment of early colonizing species.
-These hypotheses have been tested in controlled experimental systems; however, no empirical evidence exists in \textit{unmanipulated} natural systems.
+Small ecosystem size and/or high productivity have been hypothesized to increase the importance of priority effects because both factors facilitate the rapid establishment of early colonizing species \citep{fukami_historical_2015}.
+These hypotheses have been tested in controlled experimental systems \citep{fukami_assembly_2004, chase_stochastic_2010}; however, no empirical evidence exists in \textit{unmanipulated} natural systems.
 
 \textit{\textbf{Method details: data source}} --
 We identified XXX data sources of global time series data (Table XXX).
@@ -407,16 +406,17 @@ The observed abundance of species $i$ at time $t$, $A_{t,i}$, will be modeled as
 The parameter $n_{t,i}$ is the species' density (abundance per unit effort) with observation errors and $E_{t,i}$ is the sampling effort.
 We will account for stochastic observation errors by drawing $n_{t,i}$ from the latent ``true'' density $x_{t,i}$ as: $\ln n_{t,i} \sim \mbox{Normal}(\ln x_{t,i}, \sigma^2_{obs})$, where $\sigma_{obs}$ measures the degree of stochastic observation errors.
 It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID; see XXX for example); thus, this modeling framework allows for robust statistical inference.
-Either a Ricker or BH model (chosen based on the Bayes factor) will be fitted to the data to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with a SD $\sigma_{state}$, which measures the degree of stochastic environmental noise.
+
+Either a Ricker or BH model (chosen based on the Bayes factor) will be fitted to the latent density $x_{t,i}$ to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with a SD $\sigma_{state}$, which measures the degree of stochastic environmental noise.
 In a Bayesian framework, we can estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
 We will calculate the proposed statistic as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
 
 \textit{\textbf{Method details: environmental drivers}} --
 We will use spatial replicates of time series data to explore the potential drivers of priority effects.
 Our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ ($Y_k$) at site $k$ as a response variable: $Y_k &\sim \mbox{Binomial}(N_{sim}, P_k)$, where $N_{sim}$ is the number of null simulation replicates; thus, $P_k$ is identical to $\Pr(\hat{\delta}_{obs} > \delta_{null})$ at site $k$.
-Then, the $P_k$ will be related to linear predictors: $\mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k}$.
-The parameter $\theta_0$ is the intercept and $\theta_q$ is the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$.
-The predictors will include proxies for ecosystem size, productivity, taxonomic group ID (if applicable), and/or other control variables that should be accounted for given the complexity of natural systems.
+Then, the $P_k$ will be related to linear predictors: $\mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \Psi(\zeta)$.
+The parameter $\theta_0$ is the intercept, $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$, and $\Psi(\zeta)$ additional parameters to account for group structure properly (e.g., random effects of taxonomic groups, geographic regions, etc.).
+The predictors $z_{q,k}$ will include proxies for ecosystem size, productivity, and/or other control variables that should be accounted for given the complexity of natural systems.
 We will perform this analysis separately for each ecosystem type because appropriate proxies for ``ecosystem size'' and ``productivity'' will vary among these classifications.
 Below, we describe core predictors in each ecosystem type:
 
@@ -434,7 +434,7 @@ As such, we will use the \textit{WF ratio} to approximate light availability.
 Stream shading is greater when the stream size is small, but only if the riparian forest is present.
 Considering this, the \textit{WF ratio} will serve as an appropriate proxy for light availability and, therefore, productivity.
 The riparian forest area will be estimated as the area of any forest within a 500-m buffer of the sampling site.
-\ul{\textit{Other}} -- We will consider other environmental covariates that might control assembly rules, including land use variables in the upstream watershed area and climatic variables (temperature and precipitation).
+\ul{\textit{Other}} -- We will consider other environmental covariates that might control assembly rules. Those will include, but are not limited to, land use variables in the upstream watershed area and climatic variables (temperature and precipitation).
 
 In all calculations, we will use the Copernics global land cover data (100-m resolution) to estimate land use predictors.
 
