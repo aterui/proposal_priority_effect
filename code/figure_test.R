@@ -223,7 +223,7 @@ g_merge <- df_delta %>%
 
 ggsave(g_merge,
        filename = "output/figure_exp.pdf",
-       width = 5, height = 4)
+       width = 4, height = 4)
 
 # help plot: experiment ---------------------------------------------------
 
