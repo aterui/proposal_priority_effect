@@ -80,7 +80,7 @@ g_box <- df_plot %>%
                     alpha = 0.50)
 
 ggsave(g_box,
-       filename = "output/figure_eigen.pdf",
+       filename = "output/figure_eigen_box.pdf",
        height = 4.5,
        width = 6)
 
@@ -191,7 +191,7 @@ g_hsu_pr <- df_delta_hsu %>%
   theme(panel.grid = element_blank())
 
 ## combined - scatter plot
-g_pr <- df_delta %>% 
+g_merge <- df_delta %>% 
   ggplot(aes(x = p,
              y = log_rr,
              color = source)) +
@@ -203,26 +203,27 @@ g_pr <- df_delta %>%
        color = "Data source",
        alpha = "Pr(negative)") +
   theme_bw() +
-  theme(panel.grid = element_blank()) +
+  theme(panel.grid = element_blank(),
+        legend.position = "bottom") +
   scale_y_continuous(trans = "log10")
 
 
 ## export
-ggsave(g_hsu_box,
-       filename = "output/figure_hsu_box.pdf",
-       width = 4.5, height = 4)
+# ggsave(g_hsu_box,
+#        filename = "output/figure_hsu_box.pdf",
+#        width = 4.5, height = 4)
+# 
+# ggsave(g_hsu_light,
+#        filename = "output/figure_hsu_scatter_light.pdf",
+#        width = 6, height = 4)
+# 
+# ggsave(g_hsu_pr,
+#        filename = "output/figure_hsu_scatter_pr.pdf",
+#        width = 6, height = 4)
 
-ggsave(g_hsu_light,
-       filename = "output/figure_hsu_scatter_light.pdf",
-       width = 6, height = 4)
-
-ggsave(g_hsu_pr,
-       filename = "output/figure_hsu_scatter_pr.pdf",
-       width = 6, height = 4)
-
-ggsave(g_pr,
-       filename = "output/figure_scatter_pr.pdf",
-       width = 6, height = 4)
+ggsave(g_merge,
+       filename = "output/figure_exp.pdf",
+       width = 5, height = 4)
 
 # help plot: experiment ---------------------------------------------------
 
