@@ -194,7 +194,7 @@ g_hsu_pr <- df_delta_hsu %>%
 g_merge <- df_delta %>% 
   ggplot(aes(x = p,
              y = log_rr,
-             color = source)) +
+             shape = source)) +
   geom_point(size = 2) +
   MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
@@ -205,8 +205,8 @@ g_merge <- df_delta %>%
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.position = "bottom") +
-  scale_y_continuous(trans = "log10")
-
+  scale_y_continuous(trans = "log10") +
+  guides(shape = "none")
 
 ## export
 # ggsave(g_hsu_box,
