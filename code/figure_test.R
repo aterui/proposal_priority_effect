@@ -86,26 +86,26 @@ ggsave(g_box,
 
 ## scatter plot option
 g_scatter <- df_plot %>%
-  ggplot(aes(y = eigen_max,
-             x = p,
+  ggplot(aes(x = eigen_max,
+             y = p,
              color = stability)) +
-  geom_point(alpha = 0.25,
-             size = 0.1) +
+  geom_point(alpha = 0.4,
+             size = 0.25) +
   #scale_x_continuous(trans = "sqrt") +
   #coord_cartesian(xlim = c(0, .5)) +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free") +
-  labs(y = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-       x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
+       y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
        color = "Sensitivity",
        fill = "Sensitivity") +
-  geom_hline(yintercept = 1,
+  geom_vline(xintercept = 1,
              linewidth = 0.25,
              linetype = "dashed",
              alpha = 0.4) +
-  geom_xsidedensity(aes(y = stat(density),
+  geom_ysidedensity(aes(x = stat(density),
                         fill = stability),
                     alpha = 0.50,
                     position = "fill") +
@@ -123,7 +123,7 @@ g_scatter <- df_plot %>%
 ggsave(g_scatter,
        filename = "output/figure_eigen_scatter.pdf",
        height = 5,
-       width = 5)
+       width = 6)
 
 
 # hsu results -------------------------------------------------------------
@@ -223,7 +223,7 @@ g_merge <- df_delta %>%
 
 ggsave(g_merge,
        filename = "output/figure_exp.pdf",
-       width = 4, height = 4)
+       width = 4, height = 3.5)
 
 # help plot: experiment ---------------------------------------------------
 
