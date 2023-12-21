@@ -195,16 +195,20 @@ g_merge <- df_delta %>%
   ggplot(aes(x = p,
              y = log_rr)) +
   geom_point(size = 1.5,
-             alpha = 0.5) +
+             alpha = 0.5,
+             shape = "circle",
+             data = . %>% filter(source == "Hsu and Moeller 2021")) +
+  geom_point(size = 1.5,
+             alpha = 0.5,
+             shape = "triangle",
+             data = . %>% filter(source == "Ojima et al. 2022")) +
   geom_smooth(color = grey(0.25),
               method = "lm",
               alpha = 0.3) +
   MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
   labs(x = expression("Competitive exceedance"~Psi),
-       y = "Strength of priority effects",
-       color = "Data source",
-       alpha = "Pr(negative)") +
+       y = "Strength of priority effects") +
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.position = "bottom") +
