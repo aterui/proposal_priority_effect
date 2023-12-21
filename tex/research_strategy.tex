@@ -91,16 +91,17 @@ To this end, our proposal is structured as follows:
 \section{Innovation}
 Understanding assembly rules has far-reaching implications for human society's sustainability as it relates to human health, food production, and biodiversity conservation, to name just a few \citep{fukami_historical_2015}.
 We assert that our proposal will advance this research field significantly through three important breakthroughs.
-First, \ul{\emph{our proposal is conceptually innovative}} because our new method has the potential to provide a novel answer to \textit{``when do priority effects occur?''}
-As mentioned, current research in priority effects hinges on experimental manipulations of species' colonization order.
-Experimental work has spawned some key hypotheses, yet they were never tested in natural systems as the colonization history is unknown. 
-The new method solves this critical issue with the possibility of reaching conclusions that overturn the prevailing wisdom of community assembly research.
-Second, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
+First, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
 A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
 The proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
-Lastly, \ul{\emph{our method applies, in principle, to any biological systems}}.
-This property allows for cross-taxonomic and cross-ecosystem comparisons of assembly rules.
-Hence, this proposal has three innovative qualities that meet the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
+Second, \ul{\emph{our proposal is conceptually innovative}} because our new method has the potential to provide a novel answer to \textit{``when do priority effects occur?''}
+As mentioned, current research in priority effects hinges on experimental manipulations of species' colonization order.
+Experimental work has spawned some key hypotheses, yet rigorous tests of these hypotheses have been hindered in natural systems due largely to the lack of proper methodology. 
+The new method solves this critical issue and should apply, in principle, to various biological systems.
+This property allows for cross-taxonomic and cross-ecosystem comparisons of assembly rules with
+the possibility of reaching conclusions that overturn the prevailing wisdom of community assembly research.
+
+Hence, this proposal has two innovative qualities that meet the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
 
 \section{Approach}
 
@@ -155,7 +156,7 @@ Writing $g_{i} = r_i + \overline{e}_i$, this re-formulation leads to:
     f(\overset{\rightarrow}{x}_{t}) = \exp\left[g_{i} - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + \xi_{t,i} \right].
 \end{equation}
 
-The temporal variance of the stochastic term $\xi_{t,i}$ should be close to zero at equilibrium in the absence of environmental stochasticity.
+At equilibrium, the temporal variance of the stochastic term $\xi_{t,i}$ should be zero in the absence of environmental stochasticity.
 Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; the summation $\phi_i$ asymptotically follows a Normal distribution as $\phi_i \sim \mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
 
 The re-organized function (Equation \ref{eq:rickermod}) has two important implications.
@@ -178,7 +179,7 @@ As such, this modeling approach will solve the ``\textit{curse of dimensionality
 \textbf{\textit{Method detail: null model analysis}} --
 The community's sensitivity to priority effects is strongly affected by the balance between intra- and interspecific competition.
 In this context, Equation \ref{eq:rickerlog} offers a promising avenue to simplify community data analysis. 
-An intuitive statistical method would be to compare the effects of $x_i$ ($\gamma_i$) and $x_T$ ($\delta_i$) on $i$'s population growth (see Equation \ref{eq:rickerlog}).
+An intuitive statistical method would be to compare the effects of $x_{t,i}$ ($\gamma_i$) and $X_t$ ($\delta_i$) on $i$'s population growth (see Equation \ref{eq:rickerlog}).
 However, this comparison is inappropriate because we cannot statistically separate the effect of intra- and interspecific competition (see Equation \ref{eq:rickermod}).
 Consequently, we need an alternative approach to measure the balance of competition strength.
 
@@ -192,22 +193,24 @@ Our proposed method proceeds with the following procedures:
     \item Estimate $\delta_i$ using simulated dynamics of a neutral community.
     We refer to this simulated estimate as $\delta_{null}$.
     A major advantage of this neutral approach is its feasibility of estimating the model parameters to simulate neutral dynamics. 
-    Under the neutral scenario, all species obey the same recursion equation, leading to the following dynamics of the total community density $x_T$: $\ln f(X_t) &= \ln {X_{t+1}} - \ln {X_{t}} = \overline{r} - \overline{\alpha} X_{t}$.
-    As such, the key parameters for neutral simulation -- the intrinsic growth ($\bar{r}_0$) and competition strength ($\bar{\alpha}$) at the community level -- can be readily estimated with ordinary regression using the observed data of $x_T$.
+    Under the neutral scenario, all species obey the same recursion equation, leading to the following dynamics of the total community density $X_t$: $\ln f(X_t) &= \ln {X_{t+1}} - \ln {X_{t}} = \overline{r} - \overline{\alpha} X_{t}$.
+    As such, the key parameters for neutral simulation -- the intrinsic growth ($\bar{r}_0$) and competition strength ($\bar{\alpha}$) at the community level -- can be readily estimated with ordinary regression using the observed data of $X_t$.
     The simulated data will have a time series length identical to the observed data. 
     
-    \item Approximate the probability of $\delta_{obs} > \delta_{null}$ [hereafter, $\Pr(\delta_{obs} > \delta_{null})$]. To approximate the probability, we produce $100 - 500$ simulated dynamics of a neutral community and yield $100 - 500$ estimates of $\delta_{null}$. $\Pr(\delta_{obs} > \delta_{null})$ will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} > \delta_{null}$.
+    \item Approximate the probability of $\delta_{obs} > \delta_{null}$.
+    To approximate the probability, we will produce $100 - 500$ simulated dynamics of a neutral community and yield $100 - 500$ estimates of $\delta_{null}$.
+    The approximated probability will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
 \end{enumerate}
 
 \subsubsection*{Activity 1b: Simulation experiment}
 
 \textbf{\textit{Goal}} -- 
 The goal of this activity is to validate the performance of this method using simulation experiments.
-We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$.
+We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the competitive exceedance $\psi$.
 
 \textbf{\textit{Method detail: preliminary analysis}} -- 
 To validate the performance of the proposed null model analysis, we need to know whether the simulated data are generated from an insensitive or sensitive community (= the truth).
-In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}; however, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs \citep{barabas_chessons_2018}.
+In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}; however, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs \citep{carroll_niche_2011, barabas_chessons_2018}.
 
 To address this complexity, we will use the leading eigenvalue $\lambda_{max}$ of the community matrix (the Jacobian of Equation \ref{eq:m0}) to determine whether the simulated community is sensitive to priority effects \citep{otto_biologists_2011}.
 When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable and hence no priority effects.
@@ -220,14 +223,14 @@ We considered 1782 combinations of demographic parameters to yield a sufficient 
 We identified parameter combinations that generated insensitive and sensitive communities by calculating the leading eigenvalue for each parameter combination, after which 200 parameter sets were randomly subsampled to ensure that the relative frequencies of sensitive and insensitive communities were equal (100 sets have $|\lambda_{max}| < 1$ otherwise $|\lambda_{max}| > 1$).
 We crossed these parameter sets with the number of species $S$ ($S \in \{5, 15\}$) and the time series length $T$ ($T \in \{10, 30\}$) with five replicates in each, resulting in $200 \times 2 \times 2 \times 5 = 4000$ simulation runs.
 
-The results of the preliminary analysis were promising -- \ul{the estimated statistic $\Pr(\delta_{obs} > \delta_{null})$ predicted the critical transition from insensitive to sensitive communities} (Figure \ref{fig:box}). It is important to note that (i) the number of species did not affect the performance of the proposed method; (ii) the performance was reasonable with a relatively short time series ($t = 10$).
+The results of the preliminary analysis were promising -- \ul{the competitive exceedance $\Psi$ captured the critical transition from insensitive to sensitive communities} (Figure \ref{fig:box}). It is important to note that (i) the number of species did not affect the performance of the proposed method; (ii) the performance was reasonable with a relatively short time series ($t = 10$).
 These results indicate that our method can be applied to a short time series of a species-rich community. 
 
 \begin{SCfigure}
-    \caption{The proposed statistic ($x$-axis) predicts the critical transition from insensitive to sensitive communities, which are determined by the leading eigenvalue $\lambda_{max}$ ($y$-axis) of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).
+    \caption{The competitive exceedance $\Psi$ ($y$-axis) captures the critical transition from insensitive to sensitive communities, which are determined by the leading eigenvalue $\lambda_{max}$ ($x$-axis) of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).
     The rows and columns distinguish the number of species and the time series length used to generate simulated data.
     Dots are individual simulation replicates with colors distinguishing the community's sensitivity to priority effects (orange: sensitive, blue: insensitive).
-    The top side-panels are relative frequencies of sensitive and insensitive communities with a value of $\Pr(\delta_{obs} > \delta_{null})$ on the $x$-axis.}
+    The side panels are relative frequencies of sensitive and insensitive communities with a value of $\Psi$ on the $y$-axis.}
     \includegraphics[scale=0.7]{output/figure_eigen_scatter.pdf}
     \label{fig:box}
 \end{SCfigure}
@@ -246,8 +249,8 @@ This formulation indicates that the statistical inference of the key parameter (
 We will use \texttt{stats::nls()} function in \texttt{R} or Bayesian models (e.g., Just Another Gibbs Sampler \citep{plummer_jags_2003}) to fit a non-linear model to the simulated data.
 
 (ii) \ul{Broader parameter space}: We will expand the parameter space of the simulation experiment (Table \ref{tab:param1}) and increase the number of subsamples ($500~\mbox{to}~1000$ parameter combinations for each of insensitive and sensitive communities).
-This broader parameter space will be applied to the two alternative theoretical models (Ricker and BH models), a greater range of species richness ($S \in \{4, 8, 16, 32, 64\}$) and time series length ($T \in \{5, 10, 20, 40\}$).
-Through this extended simulation experiment,  we will confirm the usefulness of our method in broader ecological scenarios.
+This broader parameter space will be applied to the two alternative theoretical models (Ricker and BH models) and a greater range of species richness ($S \in \{4, 8, 16, 32, 64\}$) and time series length ($T \in \{5, 10, 20, 40\}$).
+Through this extended simulation experiment, we will confirm the usefulness of our method in broader ecological scenarios.
 
 Collectively, these proposed activities will increase the credibility of our proposed method.
 
@@ -271,40 +274,6 @@ Collectively, these proposed activities will increase the credibility of our pro
     \label{tab:param1}
 \end{table}
 
-% \begin{tcolorbox}[{
-%   breakable,
-%   colback=white,
-%   colframe=gray,
-%   coltext=black,
-%   parbox=false,
-%   boxsep=5pt,
-%   arc=1pt}]
-%     Box 1: Approximation of the Beverton-Holt model
-%     \hline
-%     In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$ (Equation \ref{eq:bh}).
-%     After the transformation outlined in the main text, this formula takes the following form $\ln(1 + \gamma_i x_{t,i} + \delta_i X_t + e_{t,i})$.
-%     Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_{t,i} + \delta_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
-
-%     \begin{equation}
-%         \label{eq:bhtaylor}
-%         w(e_i) = \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + O(e_{t,i}),
-%     \end{equation}
-
-%     where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $w(e_{t,i}) \approx \ln(c) + e_{t,i} c^{-1}$.
-%     As a result, after accounting for environmental noise, the BH model can be approximated as:
-
-%     \begin{align}
-%     \begin{split}
-%         \ln f(\overset{\rightarrow}{x}_{t}) 
-%             &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
-%             &= r_i - \ln(1 + \gamma_i x_{t,i} + \delta_{i} X_t + e_{t,j})\\
-%             &\approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_{t,i},
-%     \end{split}
-%     \end{align}
-
-%     where $g'_{i} = r_i + \overline{e_{t,i} c^{-1}}$. This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
-% \end{tcolorbox}
-
 \subsection*{Specific Aim 2: Experimental Validation}
 
 \textbf{\textit{Goal}} -- 
@@ -316,7 +285,7 @@ We will use published time-series data for the model validation.
 We identified ten papers that controlled the colonization history to determine the strength of priority effects (Table \ref{tab:expdata}).
 These data are ideal for our model validation for two reasons.
 First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
-Therefore, we can assess whether the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ predicts the strength of priority effects.
+Therefore, we can assess whether the competitive exceedance $\Psi$ predicts the strength of priority effects.
 Second, these experiments vary in time series length and the number of species, allowing us to evaluate the robustness of our method to the varied data quality.
 
 We applied our method to the dataset in Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima \textit{et al.} \citep{ojima_priority_2022}, serving as a preliminary application to real biological data.
@@ -352,15 +321,15 @@ Our analysis proceeded as follows:
     \item Select the appropriate ecological model.
     We fitted Ricker and BH models to the empirical time series and estimated AIC values for each model.
     In the following analysis, we used the model assumption that yielded a lower AIC value (a Ricker model, in this case).
-    \item Perform the null model analysis to yield the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
+    \item Perform the null model analysis to yield the test statistic $\Psi$.
     We analyzed time series data after both species were introduced -- thus \textit{no information on the colonization history was given to the analysis}.
-    \item Validate the relationship between the true sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Pr(\delta_{obs} > \delta_{null})$.
+    \item Validate the relationship between the true sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Psi$.
     We quantified the ``true'' strength of priority effects as the absolute log-response ratio $R = |\ln (D_{1, max} / D_{2, max})|$, where $D_{1, max}$ and $D_{2, max}$ are the maximum species density when they were introduced first and second, respectively.
     The greater values of $R$ indicate stronger priority effects (either inhibitory or facilitative), but this metric cannot be estimated unless we manipulate the order of species introduction.
-    Thus, we examined if our proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ -- which can be estimated without the colonization manipulation -- can predict this metric of priority effects.
+    Thus, we examined if our competitive exceedance $\Psi$ -- which can be estimated without colonization manipulation -- can predict this metric of priority effects.
 \end{enumerate}
 
-As expected from our preliminary simulation experiments, the proposed statistic $\Pr(\delta_{obs} > \delta_{null})$ predicted the strength of priority effects.
+As expected from our preliminary simulation experiments, the competitive exceedance $\Psi$ predicted the strength of priority effects.
 This result of the preliminary analysis indicates that our method applies to real biological data with a short time series.
 
 
@@ -375,7 +344,7 @@ If it is deemed an unaddressable problem, we will clarify the limitation of our 
 
 \begin{SCfigure}
     \includegraphics[scale=0.7]{output/figure_exp.pdf}
-    \caption{The proposed statistic $\Pr({\delta_{obs} > \delta_{null}})$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
+    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
     Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
     \label{fig:experiment}
 \end{SCfigure}
@@ -409,13 +378,13 @@ It is important to note that we will also be able to account for systematic obse
 
 Either a Ricker or BH model (chosen based on the Bayes factor) will be fitted to the latent density $x_{t,i}$ to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with a SD $\sigma_{state}$, which measures the degree of stochastic environmental noise.
 In a Bayesian framework, we can estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
-We will calculate the proposed statistic as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
+We will calculate the competitive exceedance as $\Psi$.
 
 \textit{\textbf{Method details: environmental drivers}} --
 We will use spatial replicates of time series data to explore the potential drivers of priority effects.
 Our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ ($Y_k$) at site $k$ as a response variable: $Y_k &\sim \mbox{Binomial}(N_{sim}, P_k)$, where $N_{sim}$ is the number of null simulation replicates; thus, $P_k$ is identical to $\Pr(\hat{\delta}_{obs} > \delta_{null})$ at site $k$.
-Then, the $P_k$ will be related to linear predictors: $\mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \Psi(\zeta)$.
-The parameter $\theta_0$ is the intercept, $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$, and $\Psi(\zeta)$ additional parameters to account for group structure properly (e.g., random effects of taxonomic groups, geographic regions, etc.).
+Then, the $P_k$ will be related to linear predictors: $\mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \zeta$.
+The parameter $\theta_0$ is the intercept, $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$, and $\zeta$ additional parameters to account for group structure properly (e.g., random effects of taxonomic groups, geographic regions, etc.).
 The predictors $z_{q,k}$ will include proxies for ecosystem size, productivity, and/or other control variables that should be accounted for given the complexity of natural systems.
 We will perform this analysis separately for each ecosystem type because appropriate proxies for ``ecosystem size'' and ``productivity'' will vary among these classifications.
 Below, we describe core predictors in each ecosystem type:
@@ -454,3 +423,37 @@ Nutrient conditions limit lake productivity and are readily available in lakes i
 \bibliography{references}
 
 \end{document}
+
+% \begin{tcolorbox}[{
+%   breakable,
+%   colback=white,
+%   colframe=gray,
+%   coltext=black,
+%   parbox=false,
+%   boxsep=5pt,
+%   arc=1pt}]
+%     Box 1: Approximation of the Beverton-Holt model
+%     \hline
+%     In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$ (Equation \ref{eq:bh}).
+%     After the transformation outlined in the main text, this formula takes the following form $\ln(1 + \gamma_i x_{t,i} + \delta_i X_t + e_{t,i})$.
+%     Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma_i x_{t,i} + \delta_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
+
+%     \begin{equation}
+%         \label{eq:bhtaylor}
+%         w(e_i) = \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + O(e_{t,i}),
+%     \end{equation}
+
+%     where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series. If $c \gg 1$ (very likely in empirical data), the higher-order terms may be ignored as $w(e_{t,i}) \approx \ln(c) + e_{t,i} c^{-1}$.
+%     As a result, after accounting for environmental noise, the BH model can be approximated as:
+
+%     \begin{align}
+%     \begin{split}
+%         \ln f(\overset{\rightarrow}{x}_{t}) 
+%             &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
+%             &= r_i - \ln(1 + \gamma_i x_{t,i} + \delta_{i} X_t + e_{t,j})\\
+%             &\approx g'_{i} - \ln(1 + \gamma_i x_{t,i} + \delta_i X_t) + \varepsilon_{t,i},
+%     \end{split}
+%     \end{align}
+
+%     where $g'_{i} = r_i + \overline{e_{t,i} c^{-1}}$. This form allows us to estimate the key parameter $\delta_i$ through simple statistical inference.
+% \end{tcolorbox}
