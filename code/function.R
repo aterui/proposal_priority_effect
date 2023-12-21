@@ -211,14 +211,12 @@ stability <- function(n_species, R, x0, A, model = "ricker") {
     
     if (model == "ricker") {
       
-      if (missing(R)) {
+      if (missing(R) & !missing(x0)) {
         R <- drop(A %*% x0)
-      } else {
-        if (missing(x0)) {
-          x0 <- drop(solve(A) %*% R)
-        } else {
-          stop("do not provide both R and x0")
-        }
+      }
+      
+      if (!missing(R) & missing(x0)) {
+        x0 <- drop(solve(A) %*% R)
       }
       
       # check negative equilibrium
@@ -252,14 +250,12 @@ stability <- function(n_species, R, x0, A, model = "ricker") {
     
     if (model == "bh") {
       
-      if (missing(R)) {
+      if (missing(R) & !missing(x0)) {
         R <- drop(log(1 + A %*% x0))
-      } else {
-        if (missing(x0)) {
-          x0 <- drop(solve(A) %*% (exp(R) - 1))
-        } else {
-          stop("do not provide both R and x0")
-        }
+      }
+      
+      if (!missing(R) & missing(x0)) {
+        x0 <- drop(solve(A) %*% (exp(R) - 1))
       }
 
       # check negative equilibrium
@@ -293,6 +289,7 @@ stability <- function(n_species, R, x0, A, model = "ricker") {
     
     attr(max_lambda, "J") <- J
     attr(max_lambda, "R") <- R
+    attr(max_lambda, "x0") <- x0
     
     return(max_lambda)
   }
