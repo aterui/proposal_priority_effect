@@ -30,8 +30,8 @@ g_fill <- df_plot %>%
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free_x") +
-  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
-       y = "Relative Frequency",
+  labs(x = expression("Competitive exceedance"~Psi),
+       y = "Relative frequency",
        fill = "Sensitivity") +
   MetBrewer::scale_color_met_d("Hiroshige",
                                direction = -1) +
@@ -62,7 +62,7 @@ g_box <- df_plot %>%
              cols = vars(n_species),
              labeller = as_labeller(label),
              scales = "free_x") +
-  labs(y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(y = expression("Competitive exceedance"~Psi),
        x = "True sensitivity",
        color = "Sensitivity",
        fill = "Sensitivity") +
@@ -98,7 +98,7 @@ g_scatter <- df_plot %>%
              labeller = as_labeller(label),
              scales = "free") +
   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
-       y = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+       y = expression("Competitive exceedance"~Psi),
        color = "Sensitivity",
        fill = "Sensitivity") +
   geom_vline(xintercept = 1,
@@ -156,7 +156,7 @@ g_hsu_box <- df_delta_hsu %>%
              alpha = 0.5) +
   MetBrewer::scale_fill_met_d("Hiroshige", direction = -1) +
   labs(x = "Sensitivity",
-       y = expression("Pr("*delta[obs]~">"~delta[null]*")")) +
+       y = expression("Competitive exceedance"~Psi)) +
   guides(fill = "none") + 
   theme_bw() +
   theme(panel.grid = element_blank())
@@ -170,7 +170,7 @@ g_hsu_light <- df_delta_hsu %>%
   geom_point(size = 3) +
   #MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
-  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(x = "Competitive exceedance Q",#expression("Pr("*delta[obs]~">"~delta[null]*")"),
        y = "Strength of priority effects",
        color = "Light") +
   theme_bw() +
@@ -184,7 +184,7 @@ g_hsu_pr <- df_delta_hsu %>%
   geom_point(size = 3) +
   #MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
-  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(x = expression("Competitive exceedance"~Psi),
        y = "Strength of priority effects",
        color = "Pr(negative)") +
   theme_bw() +
@@ -198,7 +198,7 @@ g_merge <- df_delta %>%
   geom_point(size = 2) +
   MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
-  labs(x = expression("Pr("*delta[obs]~">"~delta[null]*")"),
+  labs(x = expression("Competitive exceedance"~Psi),
        y = "Strength of priority effects",
        color = "Data source",
        alpha = "Pr(negative)") +
