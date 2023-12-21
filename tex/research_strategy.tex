@@ -366,16 +366,16 @@ These databases include various taxonomic groups and ecosystems, including fish,
 We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four generations (typical unit would be \texttt{year}); (ii) the entire community of the focal taxon is collected; (iii) quantitative abundance data are available; (iv) the sampling method is consistent across the time series; (v) sampling efforts (e.g., area or time sampled) are known.
 
 \textit{\textbf{Method details: time series analysis}} --
-Unlike simulated and experimental time series data, field data contain many observation errors; for example, even if a sampling method is consistent within a given time series, it is common that the sampling crew changes over time, causing unintentional noises in the data.
-To confront such difficulties, we will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
+Unlike simulated and experimental time series data, field data contain substantial observation errors; for example, even if a sampling method is consistent within a given time series, it is common that the sampling crew changes over time, causing unintentional noises in the data.
+We will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
 The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}; in our case, the competition parameter $\delta_i$.
 
 The observed abundance of species $i$ at time $t$, $A_{t,i}$, will be modeled as random draws from a Poisson distribution: $A_{t,i} \sim \mbox{Poisson}(n_{t,i} E_{t,i}).$
 The parameter $n_{t,i}$ is the species' density (abundance per unit effort) with observation errors and $E_{t,i}$ is the sampling effort.
 We will account for stochastic observation errors by drawing $n_{t,i}$ from the latent ``true'' density $x_{t,i}$ as: $\ln n_{t,i} \sim \mbox{Normal}(\ln x_{t,i}, \sigma^2_{obs})$, where $\sigma_{obs}$ measures the degree of stochastic observation errors.
-It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID); thus, this modeling framework allows for robust statistical inference.
+It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID); thus, this modeling framework allows for robust statistical inference \citep{kery_bayesian_2012}.
 
-Either a Ricker or BH model (chosen based on the Bayes factor) will be fitted to the latent density $x_{t,i}$ to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with a SD $\sigma_{state}$, which measures the degree of stochastic environmental noise.
+Either a Ricker or BH model will be fitted to the latent density $x_{t,i}$ to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with an SD $\sigma_{state}$ measuring the degree of stochastic environmental noise.
 In a Bayesian framework, we can estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
 We will calculate the competitive exceedance as $\Psi$.
 
