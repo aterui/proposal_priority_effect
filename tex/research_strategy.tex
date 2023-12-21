@@ -199,14 +199,14 @@ Our proposed method proceeds with the following procedures:
     
     \item Approximate the probability of $\delta_{obs} > \delta_{null}$.
     To approximate the probability, we will produce $100 - 500$ simulated dynamics of a neutral community and yield $100 - 500$ estimates of $\delta_{null}$.
-    The approximated probability will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
+    The approximated probability will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\Psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
 \end{enumerate}
 
 \subsubsection*{Activity 1b: Simulation experiment}
 
 \textbf{\textit{Goal}} -- 
 The goal of this activity is to validate the performance of this method using simulation experiments.
-We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the competitive exceedance $\psi$.
+We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the competitive exceedance $\Psi$.
 
 \textbf{\textit{Method detail: preliminary analysis}} -- 
 To validate the performance of the proposed null model analysis, we need to know whether the simulated data are generated from an insensitive or sensitive community (= the truth).
@@ -321,17 +321,23 @@ Our analysis proceeded as follows:
     \item Select the appropriate ecological model.
     We fitted Ricker and BH models to the empirical time series and estimated AIC values for each model.
     In the following analysis, we used the model assumption that yielded a lower AIC value (a Ricker model, in this case).
-    \item Perform the null model analysis to yield the test statistic $\Psi$.
+    \item Perform the null model analysis to yield the competitive exceedance $\Psi$.
     We analyzed time series data after both species were introduced -- thus \textit{no information on the colonization history was given to the analysis}.
-    \item Validate the relationship between the true sensitivity to priority effects (known as the experiment outcome) and the test statistic $\Psi$.
+    \item Validate the relationship between the strength of priority effects (known as the experiment outcome) and the competitive exceedance $\Psi$.
     We quantified the ``true'' strength of priority effects as the absolute log-response ratio $R = |\ln (D_{1, max} / D_{2, max})|$, where $D_{1, max}$ and $D_{2, max}$ are the maximum species density when they were introduced first and second, respectively.
-    The greater values of $R$ indicate stronger priority effects (either inhibitory or facilitative), but this metric cannot be estimated unless we manipulate the order of species introduction.
-    Thus, we examined if our competitive exceedance $\Psi$ -- which can be estimated without colonization manipulation -- can predict this metric of priority effects.
+    The greater values of $R$ indicate stronger priority effects (either inhibitory or facilitative), but \textit{this metric cannot be estimated unless we manipulate the order of species introduction}.
+    Thus, we examined if the competitive exceedance $\Psi$ -- which can be estimated without colonization manipulation -- can predict the log-response ratio $R$.
 \end{enumerate}
 
-As expected from our preliminary simulation experiments, the competitive exceedance $\Psi$ predicted the strength of priority effects.
+As expected from our preliminary simulation experiments, the competitive exceedance $\Psi$ predicted the strength of priority effects $R$ (Figure \ref{fig:experiment}).
 This result of the preliminary analysis indicates that our method applies to real biological data with a short time series.
 
+\begin{SCfigure}
+    \includegraphics[scale=0.7]{output/figure_exp.pdf}
+    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
+    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
+    \label{fig:experiment}
+\end{SCfigure}
 
 \textit{\textbf{Method details: proposed analysis}} --
 We will search for additional published experimental data in which the colonization order was manipulated to broaden the taxonomic scope of our validation (e.g., zooplankton and terrestrial plants).
@@ -341,13 +347,6 @@ In doing so, we will be able to answer the following questions critical to appli
 We expect our method to be robust to the challenges in questions (i) and (ii) considering the results of the preliminary simulation experiments.
 Nevertheless, it is possible to notice unforeseen issues through this activity; if this is the case, we will carefully review the cases in which the method's performance was poor, and we will explore how we can improve our method to address the issue.
 If it is deemed an unaddressable problem, we will clarify the limitation of our method.
-
-\begin{SCfigure}
-    \includegraphics[scale=0.7]{output/figure_exp.pdf}
-    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
-    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
-    \label{fig:experiment}
-\end{SCfigure}
 
 \subsection*{Specific Aim 3: Application to Unmanipulated Systems}
 
