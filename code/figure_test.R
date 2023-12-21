@@ -193,9 +193,12 @@ g_hsu_pr <- df_delta_hsu %>%
 ## combined - scatter plot
 g_merge <- df_delta %>% 
   ggplot(aes(x = p,
-             y = log_rr,
-             shape = source)) +
-  geom_point(size = 2) +
+             y = log_rr)) +
+  geom_point(size = 1.5,
+             alpha = 0.5) +
+  geom_smooth(color = grey(0.25),
+              method = "lm",
+              alpha = 0.3) +
   MetBrewer::scale_color_met_d("Hiroshige", direction = -1) +
   #MetBrewer::scale_color_met_c("Hiroshige", direction = -1) +
   labs(x = expression("Competitive exceedance"~Psi),
