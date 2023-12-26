@@ -90,7 +90,7 @@ To this end, our proposal is structured as follows:
 
 \section{Innovation}
 Understanding assembly rules has far-reaching implications for human society's sustainability as it relates to human health, food production, and biodiversity conservation, to name just a few \citep{fukami_historical_2015}.
-We assert that our proposal will advance this research field significantly through three important breakthroughs.
+We assert that our proposal will advance this research field significantly through two important breakthroughs.
 First, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
 A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
 The proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
@@ -119,7 +119,7 @@ Our goal in this activity is to derive a theoretical backbone for a statistical 
 In competitive communities, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time \citep{chesson_mechanisms_2000, barabas_chessons_2018, ke_coexistence_2018, terui_intentional_2023}.
 Therefore, a critical first step is obtaining reliable competition estimates from an empirical time series.
 However, in empirical settings, it is often infeasible to directly estimate those parameters because of the ``\textit{curse of dimensionality}:'' as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
-Here, we propose a robust statistical method that solves this issue -- \ul{our method can estimate the balance of intra- and interspecific competition, regardless of the number of species, by capitalizing the fact that species-level competition can be condensed into an aggregate effect of the total community density}.
+Here, we propose a robust statistical method that solves this issue -- \ul{our method can estimate the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density}.
 
 \textbf{\textit{Method detail: theoretical backbone}} -- 
 As a true state of community dynamics over time, we consider a discrete recursion equation. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
@@ -146,9 +146,8 @@ Denoting the total community density as $X_t$ ($X_t = \sum_i x_{t,i}$), Equation
 f(\overset{\rightarrow}{x}_{t}) = \exp\left[r_i - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + e_{t,i} \right],
 \end{equation}
 
-where $e_{t,i} = \sigma_{\beta} \sum_{j} b_{ij} x_{t,-ij}$ ($x_{t,-ij}$ equals $X_t - x_{t,i} - x_{t,j}$) and $\phi_i = \sum_{j \ne i} b_{ij}$.
-In Equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$.
-With $S$ denoting the number of species, the parameter $e_i$ becomes $\sigma_{\beta}(S - 1) \times \mbox{cov} (b_{ij}, x_{t,-ij})$ [$\mbox{cov}(\cdot)$ is the covariance] and may have a non-zero mean over time depending on the covariance.
+In Equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$, and the parameters $\phi_{i}$ and $e_{t,i}$ are the functions of $b_{ij}$: $\phi_i = (S-1)^{-1}\sum_{j \ne i} b_{ij}$ and $e_{t,i} = \sigma_{\beta} (S - 1) \mbox{cov}(b_{ij}, x_{t,j})$ [$\mbox{cov}(\cdot)$ denotes covariance].
+The parameter $e_i$ may have a non-zero mean over time depending on the covariance.
 Thus, it can be decomposed into the constant ($\overline{e}_i$) and stochastic components ($\xi_{t,i}$) as $e_{t,i} = \overline{e}_i + \xi_{t,i}$.
 Writing $g_{i} = r_i + \overline{e}_i$, this re-formulation leads to:
 
@@ -157,14 +156,11 @@ Writing $g_{i} = r_i + \overline{e}_i$, this re-formulation leads to:
 \end{equation}
 
 At equilibrium, the temporal variance of the stochastic term $\xi_{t,i}$ should be zero in the absence of environmental stochasticity.
-Notice that $b_{ij}$ is a random variable with a mean $0$ and SD $1$; the summation $\phi_i$ asymptotically follows a Normal distribution as $\phi_i \sim \mbox{Normal}(0, S - 1)$ regardless of the original distribution of $\beta_{ij}$ (the central limit theorem).
 
-The re-organized function (Equation \ref{eq:rickermod}) has two important implications.
-First, \ul{the function can be expressed as a function of two variables (species $i$'s density $x_i$ and the total community density $x_T$), substantially reducing the parameter dimension of the model.}
-The original function (Equation \ref{eq:ricker}) parameterized competition effects by species, resulting in $S$ parameters of competition.
-In contrast, in the re-organized equation, the competition effects are condensed into the aggregate effects of species $i$'s density ($\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$) and the total community density ($\mu_{\beta} + \sigma_{\beta} \phi_i$).
-
-Second, \ul{the re-parameterization enables statistical inference of interspecific competition with relatively short time series data}.
+The re-organized function (Equation \ref{eq:rickermod}) has important implications. 
+The original function (Equation \ref{eq:ricker}) parameterized competition effects by species and, therefore, requires $S$ parameters of competition.
+In contrast, \ul{the re-organized function has only two variables ($x_{t,i}$ and $X_t$)}, and the competition effects are condensed into the aggregate parameters of species $i$'s density ($\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$) and the total community density ($\mu_{\beta} + \sigma_{\beta} \phi_i$).
+\ul{This re-parameterization enables statistical inference of interspecific competition with relatively short time series data}.
 Let $\gamma_i$ and $\delta_i$ be the effects of $i$'s population density and the total community density, respectively ($\gamma_i = \alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$ and $\delta_i = \mu_{\beta} + \sigma_{\beta} \phi_i$).
 Then, the log-transformed per-capita growth rate $\ln f(\overset{\rightarrow}{x}_{t})$ becomes the following linear model:
 
@@ -198,7 +194,7 @@ Our proposed method proceeds with the following procedures:
     The simulated data will have a time series length identical to the observed data. 
     
     \item Approximate the probability of $\delta_{obs} > \delta_{null}$.
-    To approximate the probability, we will produce $100 - 500$ simulated dynamics of a neutral community and yield $100 - 500$ estimates of $\delta_{null}$.
+    To approximate the probability, we will produce $100 - 500$ simulated dynamics of a neutral community to yield corresponding estimates of $\delta_{null}$.
     The approximated probability will be calculated as the proportion of simulation replicates satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\Psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
 \end{enumerate}
 
@@ -249,7 +245,7 @@ This formulation indicates that the statistical inference of the key parameter (
 We will use \texttt{stats::nls()} function in \texttt{R} or Bayesian models (e.g., Just Another Gibbs Sampler \citep{plummer_jags_2003}) to fit a non-linear model to the simulated data.
 
 (ii) \ul{Broader parameter space}: We will expand the parameter space of the simulation experiment (Table \ref{tab:param1}) and increase the number of subsamples ($500~\mbox{to}~1000$ parameter combinations for each of insensitive and sensitive communities).
-This broader parameter space will be applied to the two alternative theoretical models (Ricker and BH models) and a greater range of species richness ($S \in \{4, 8, 16, 32, 64\}$) and time series length ($T \in \{5, 10, 20, 40\}$).
+This broader parameter space will be crossed with two alternative theoretical models (Ricker and BH models) and a greater range of species richness ($S \in \{4, 8, 16, 32, 64\}$) and time series length ($T \in \{5, 10, 20, 40\}$).
 Through this extended simulation experiment, we will confirm the usefulness of our method in broader ecological scenarios.
 
 Collectively, these proposed activities will increase the credibility of our proposed method.
@@ -300,13 +296,13 @@ Hence, these data are an ideal test case for our proposed method.
     \begin{tabular}{llll}
          Source & Study system & Time series length & \# species in a community\\
          \hline
-         Fukami and Morin \citep{fukami_productivity-biodiversity_2003} & Protist & add later & 18\\
-         Fukami \citep{fukami_assembly_2004} & Protist & add later & 14\\
+         Fukami and Morin \citep{fukami_productivity-biodiversity_2003} & Protist & $6$ & $18$\\
+         Fukami \citep{fukami_assembly_2004} & Protist & $10$ & $14$\\
          Price and Morin \citep{price_colonization_2004} & Protist & $\ge 20$ & $2$ or $3$ \\
          Zhang and Zhang \citep{zhang_colonization_2007} & Algae & $13$ & $2$\\
-         Jiang and Patel \citep{jiang_community_2008} & Protist & add later & $10$\\
+         Jiang and Patel \citep{jiang_community_2008} & Protist & $7$ & $10$\\
          Tucker and Fukami \citep{tucker_environmental_2014} & Bacteria and yeasts & $9$ & $4$\\
-         Pu and Jiang \citep{pu_dispersal_2015} & Protist & add later & $10$\\
+         Pu and Jiang \citep{pu_dispersal_2015} & Protist & $13$ & $10$\\
          Ojima and Jiang \citep{ojima_interactive_2017} & Protist & $23$ & $5$\\
          Hsu and Moeller \citep{hsu_metabolic_2021} & Protist & $13~\mbox{to}~22$ & $2$\\
          Ojima et al. \citep{ojima_priority_2022} & Bacteria & $7$ & $2$ or $4$\\
@@ -332,13 +328,6 @@ Our analysis proceeded as follows:
 As expected from our preliminary simulation experiments, the competitive exceedance $\Psi$ predicted the strength of priority effects $R$ (Figure \ref{fig:experiment}).
 This result of the preliminary analysis indicates that our method applies to real biological data with a short time series.
 
-\begin{SCfigure}
-    \includegraphics[scale=0.7]{output/figure_exp.pdf}
-    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
-    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
-    \label{fig:experiment}
-\end{SCfigure}
-
 \textit{\textbf{Method details: proposed analysis}} --
 We will search for additional published experimental data in which the colonization order was manipulated to broaden the taxonomic scope of our validation (e.g., zooplankton and terrestrial plants).
 Then, we will repeat the procedure of the preliminary analysis for the identified (Table \ref{tab:expdata}) and additional data sources. 
@@ -348,74 +337,112 @@ We expect our method to be robust to the challenges in questions (i) and (ii) co
 Nevertheless, it is possible to notice unforeseen issues through this activity; if this is the case, we will carefully review the cases in which the method's performance was poor, and we will explore how we can improve our method to address the issue.
 If it is deemed an unaddressable problem, we will clarify the limitation of our method.
 
+\begin{SCfigure}
+    \includegraphics[scale=0.6]{output/figure_exp.pdf}
+    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
+    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
+    \label{fig:experiment}
+\end{SCfigure}
+
 \subsection*{Specific Aim 3: Application to Unmanipulated Systems}
 
 \textbf{\textit{Goal}} -- 
-The overarching goal of this specific aim is to ask a critical question that has never been addressed in \textit{unmanipulated} natural systems: \ul{\textit{when do priority effects occur?}} Specifically, we will test the following hypotheses using global time series data, in which the colonization history is unknown:
+The overarching goal of this specific aim is to ask a critical question that has never been addressed in \textit{unmanipulated} natural systems: \ul{\textit{when do priority effects occur?}}
+To this end, we will capitalize on the global time series databases that have emerged over the past decade.
+These datasets will allow us to yield the competitive exceedance $\Psi$ by site and to test the following hypotheses.
 
-\textbf{Hypothesis 1}: Priority effects are more prevalent in small ecosystems.
+\textbf{Hypothesis 1}: \ul{Priority effects are more prevalent in small ecosystems}.
 
-\textbf{Hypothesis 2}: Priority effects are more prevalent in productive systems.
+\textbf{Hypothesis 2}: \ul{Priority effects are more prevalent in productive ecosystems}.
 
 Small ecosystem size and/or high productivity have been hypothesized to increase the importance of priority effects because both factors facilitate the rapid establishment of early colonizing species \citep{fukami_historical_2015}.
 These hypotheses have been tested in controlled experimental systems \citep{fukami_assembly_2004, chase_stochastic_2010}; however, no empirical evidence exists in \textit{unmanipulated} natural systems.
+We will test these hypotheses using time series data from terrestrial and aquatic ecosystems.
+
+% \textbf{Hypothesis 2}: \ul{Priority effects are more prevalent in infant gut microbial communities}.
+% Observational evidence suggests that the gut microbiota of healthy human adults are stable while babies have distinct community structures according to delivery modes \citep{dominguez-bello_delivery_2010, dominguez-bello_development_2011}.
+% These observations suggest that gut microbiota may shift their assembly rules from priority-driven to niche-driven.
+% We will test this hypothesis using time series data across individuals of different ages.
 
 \textit{\textbf{Method details: data source}} --
-We identified XXX data sources of global time series data (Table XXX).
-These databases include various taxonomic groups and ecosystems, including fish, plankton, and plants.
-We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four generations (typical unit would be \texttt{year}); (ii) the entire community of the focal taxon is collected; (iii) quantitative abundance data are available; (iv) the sampling method is consistent across the time series; (v) sampling efforts (e.g., area or time sampled) are known.
+We identified three major databases that recorded time series data across the globe: Biotime \citep{dornelas_biotime_2018}, RivFishTIME \citep{comte_rivfishtime_2021}, and the Zooplankton as Indicators Group (ZIG) \citep{figary_building_2022}. 
+These databases include various taxonomic groups and ecosystems, encompassing plants, fish, plankton, and microbes.
+We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four time points (time unit will vary by taxa); (ii) the entire community of the focal taxon is collected; (iii) quantitative abundance/density data are available; (iv) the sampling method is consistent across the time series; (v) sampling efforts (e.g., area or time sampled) are known.
+For those that meet the inclusion criteria, we will apply the following time-series analysis to yield the competition parameter $\delta_{obs}$.
 
 \textit{\textbf{Method details: time series analysis}} --
+In this section, we detail the method to account for observation errors when estimating the competitive exceedance $\Psi$.
 Unlike simulated and experimental time series data, field data contain substantial observation errors; for example, even if a sampling method is consistent within a given time series, it is common that the sampling crew changes over time, causing unintentional noises in the data.
 We will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
-The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}; in our case, the competition parameter $\delta_i$.
+The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}; in our case, the competition parameter $\delta_{obs}$.
 
-The observed abundance of species $i$ at time $t$, $A_{t,i}$, will be modeled as random draws from a Poisson distribution: $A_{t,i} \sim \mbox{Poisson}(n_{t,i} E_{t,i}).$
-The parameter $n_{t,i}$ is the species' density (abundance per unit effort) with observation errors and $E_{t,i}$ is the sampling effort.
-We will account for stochastic observation errors by drawing $n_{t,i}$ from the latent ``true'' density $x_{t,i}$ as: $\ln n_{t,i} \sim \mbox{Normal}(\ln x_{t,i}, \sigma^2_{obs})$, where $\sigma_{obs}$ measures the degree of stochastic observation errors.
+The observed density of species $i$ at time $t$, $N_{t,i}$, will be modeled as random draws from a log-Normal distribution: $\ln N_{t,i} \sim \mbox{Normal}(x_{t,i}, \sigma_{obs}^2).$
+The mean parameter $x_{t,i}$ is the latent variable that represents ``true'' species' density (abundance per unit effort) and the SD $\sigma_{obs}$ measures stochastic observation errors.
 It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID); thus, this modeling framework allows for robust statistical inference \citep{kery_bayesian_2012}.
 
-Either a Ricker or BH model will be fitted to the latent density $x_{t,i}$ to estimate $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with an SD $\sigma_{state}$ measuring the degree of stochastic environmental noise.
-In a Bayesian framework, we can estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
-We will calculate the competitive exceedance as $\Psi$.
+Either a Ricker or BH model will be fitted to the latent density $x_{t,i}$ to estimate species-specific $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with an SD $\sigma_{state}$ measuring the degree of stochastic environmental noise.
+Hierarchical modeling allows us to estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
+We will calculate the competitive exceedance $\Psi$ as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
 
-\textit{\textbf{Method details: environmental drivers}} --
-We will use spatial replicates of time series data to explore the potential drivers of priority effects.
-Our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ ($Y_k$) at site $k$ as a response variable: $Y_k &\sim \mbox{Binomial}(N_{sim}, P_k)$, where $N_{sim}$ is the number of null simulation replicates; thus, $P_k$ is identical to $\Pr(\hat{\delta}_{obs} > \delta_{null})$ at site $k$.
-Then, the $P_k$ will be related to linear predictors: $\mbox{logit}(P_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \zeta$.
+\textit{\textbf{Method details: drivers of priority effects}} --
+We will analyze factors influencing the competitive exceedance $\Psi$ in terrestrial and aquatic ecosystems.
+Target taxa will include, but are not limited to, terrestrial plants, riverine fish, pond/lake zooplankton, and microbes.
+To this end, we will leverage the spatial replicates of $\Psi$.
+To properly model $\Psi_k$, our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ at site $k$ ($Y_k$) as a response variable: $Y_k &\sim \mbox{Binomial}(N_{sim}, P_k)$, where $N_{sim}$ is the number of null simulation replicates.
+Thus, the success probability of the Binomial distribution $P_k$ is identical to the competitive exceedance $\Psi_k$.
+The $\Psi_k$ will be related to linear predictors: $\mbox{logit}(\Psi_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \zeta$.
 The parameter $\theta_0$ is the intercept, $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$, and $\zeta$ additional parameters to account for group structure properly (e.g., random effects of taxonomic groups, geographic regions, etc.).
-The predictors $z_{q,k}$ will include proxies for ecosystem size, productivity, and/or other control variables that should be accounted for given the complexity of natural systems.
-We will perform this analysis separately for each ecosystem type because appropriate proxies for ``ecosystem size'' and ``productivity'' will vary among these classifications.
-Below, we describe core predictors in each ecosystem type:
+The predictors $z_{q,k}$ will vary by ecosystem type and/or target taxa, as detailed below. 
 
-\textbf{Streams \& Rivers}.
-\ul{\textit{Ecosystem size}} --
-We will use \textit{watershed area} as a proxy for ecosystem size.
-A watershed area is defined as the land area draining into a specific point of a stream and a larger watershed area has greater water discharge.
-Therefore, a watershed area serves as an excellent proxy for ecosystem size.
-We will estimate the watershed area at each site using a global digital elevation map (available at a global scale; REF).
-\ul{\textit{Productivity}} -- 
-We will use the ratio of the watershed area to the riparian forest area (hereafter, the \textit{WF ratio}) as a proxy for productivity.
-Light availability is a critical determinant of stream productivity.
+\ul{\textit{Ecosystem size} (Hypothesis 1)} --
+We will assess the influence of ecosystem size on aquatic communities in rivers and lakes.
+\textbf{River}: \textit{Watershed area} serves as a proxy for ecosystem size because a site with a larger watershed area has greater water discharge \citep{sabo_role_2010, altermatt_diversity_2013, terui_emergent_2021}.
+We will estimate the watershed area at each site using a global digital elevation map (available at a global scale \citep{yamazaki_merit_2019}).
+\textbf{Lake}: We will use \textit{lake area} as a proxy following previous studies \citep{post_ecosystem_2000}.
+A lake area serves as an excellent proxy for ecosystem size because it defines the available space for aquatic organisms.
+
+\ul{\textit{Productivity} (Hypothesis 2)} -- 
+We will assess the influence of productivity on terrestrial and aquatic communities.
+\textbf{Terrestrial}: Multiple factors may influence the productivity of terrestrial communities.
+We will consider annual temperature,  precipitation, and nutrient conditions (total nitrogen and phosphorus) as proxies for the system's productivity (REF).
+\textbf{River}: We will use the ratio of the watershed area to the riparian forest area (hereafter, the \textit{WF ratio}).
+Light availability is a critical determinant of stream productivity \citep{finlay_human_2013}.
 The direct measure of light availability, however, is rarely available at sites where time series data are available.
 As such, we will use the \textit{WF ratio} to approximate light availability.
 Stream shading is greater when the stream size is small, but only if the riparian forest is present.
 Considering this, the \textit{WF ratio} will serve as an appropriate proxy for light availability and, therefore, productivity.
-The riparian forest area will be estimated as the area of any forest within a 500-m buffer of the sampling site.
-\ul{\textit{Other}} -- We will consider other environmental covariates that might control assembly rules. Those will include, but are not limited to, land use variables in the upstream watershed area and climatic variables (temperature and precipitation).
+\textbf{Lake}: We will use nutrient concentrations (total nitrogen and phosphorus).  
+Nutrient conditions limit lake productivity \citep{post_ecosystem_2000} and are readily available in lakes in which time series data are available.
 
-In all calculations, we will use the Copernics global land cover data (100-m resolution) to estimate land use predictors.
+% \ul{\textit{Age} (Hypothesis 2)} --
+% We will assess the influence of host age on human gut microbes.
+% We will obtain the age information -- if detailed information is not available in the 
 
-\textbf{Lakes}.
-\ul{\textit{Ecosystem size}} --
-We will use \textit{lake area} as a proxy for ecosystem size.
-A lake area serves as an excellent proxy for ecosystem size because it defines the available space for aquatic organisms and has been used in previous studies.
-\ul{\textit{Productivity}} -- 
-We will use nutrient concentrations (total nitrogen and phosphorus).  
-Nutrient conditions limit lake productivity and are readily available in lakes in which time series data are available.
-\ul{\textit{Other}} -- We will consider similar environmental covariates as in streams and rivers, including land use patterns in the surrounding area (within a $5$ to $10$ km buffer) and climatic variables (temperature and precipitation).
+\ul{\textit{Other}} -- 
+While our primary focus is to test the \textbf{Hypotheses 1 -- 2}, it is crucial to account for potential covariates for robust analysis.
+As such, we will include climatic and land use variables because these factors could influence the strength of priority effects.
+These data are publicly available at CHELSA \citep{karger_climatologies_2017} (climate data) and Copernicus global land service \citep{marcel_buchhorn_copernicus_2020} (land use) across the globe.
+% For human gut microbes, we will consider XXX.
 
-\textbf{Human Gut}: XXX
+\subsection*{Outlook}
+
+One foreseeable concern is that the completion of this project is strongly dependent on the successful performance of the new statistic ``\textit{competitive exceedance $\Psi$}.''
+We have addressed this concern using simulation and laboratory experiments; the results were very promising (\textbf{Specific Aim 1}), and it is highly probable that our proposed methodology will provide much-needed resources to advance community assembly research.
+Further, we have already identified sufficient data sources for experimental validation (\textbf{Specific Aim 2}) and field applications (\textbf{Specific Aim 3}), enhancing the feasibility of the current proposal.
+Therefore, we are confident on the successful completion of the project.
+
+\begin{table}
+    \centering
+    \caption{Project time table}
+    \begin{tabular}{lccccc}
+         & Y1 &  Y2 & Y3 & Y4 & Y5\\
+         \hline
+         Aim 1 & Method refinement & Package development & & & \\
+         Aim 2 & Assemble data & Experimental validation (EV) & EV &  & \\
+         Aim 3 & & Data quality check (DQC) & DQC & Data analysis (DA) & DA \\
+    \end{tabular}
+    \label{tab:tt}
+\end{table}
 
 \newpage
 
