@@ -7,7 +7,7 @@ source("code/function.R")
 
 # get lambda --------------------------------------------------------------
 
-df_param <- expand.grid(n_species = c(5, 15),
+df_param <- expand.grid(n_species = c(2, 5, 10),
                         nsim = 100,
                         x0 = c(2, 8, 32),
                         a0 = 1 / c(2, 8, 32),

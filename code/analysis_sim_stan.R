@@ -19,7 +19,7 @@ opts <- list(progress = fun_progress)
 # run simulation ----------------------------------------------------------
 
 tictoc::tic()
-df_sim <- foreach(i = 1,#seq_len(nrow(df_param)),
+df_sim <- foreach(i = seq_len(nrow(df_param)),
                   .packages = c("tidyverse", "foreach", "cdyns"),
                   .combine = bind_rows,
                   .options.snow = opts) %dopar% {
@@ -71,12 +71,16 @@ df_sim <- foreach(i = 1,#seq_len(nrow(df_param)),
                                         # binary indicator s(b) vs. s(b0)
                                         # s(.) denotes scaled beta
                                         # repeat across mcmc samples
-                                        binary <- sapply(1:nrow(b_scale),
-                                                         function(i) sum(b_scale[i, ] < b0_scale) > 1)
+                                        n_exceed <- sapply(1:nrow(b_scale),
+                                                           function(i) sum(b_scale[i, ] < b0_scale))
+                                        
+                                        p <- mean(n_exceed > 1)
+                                        mu_n_exceed <- mean(n_exceed)
                                         
                                         return(tibble(replicate = k,
                                                       x,
-                                                      p = mean(binary),
+                                                      n_exceed = mu_n_exceed,
+                                                      p = p,
                                                       b = fit$coefficients["nt0"],
                                                       eigen_max = eigen_max,
                                                       seed = seed))
