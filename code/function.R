@@ -136,6 +136,73 @@ sim <- function(n_timestep,
 }
 
 
+# data simulation ---------------------------------------------------------
+
+simdata <- function(n_timestep,
+                    n_species,
+                    x0,
+                    h_x0,
+                    a0,
+                    a1,
+                    h_a1,
+                    sd_env = 0.05,
+                    const = 0) {
+  
+  if (h_a1 > 0) {
+    v_a1 <- runif(n = n_species^2,
+                  min = max(a1 - h_a1, 0),
+                  max = a1 + h_a1)
+  } else {
+    v_a1 <- rep(a1, n_species^2)
+  }
+  
+  ma <- matrix(v_a1, n_species, n_species)
+  diag(ma) <- a0
+  
+  v_x0 <- runif(n_species,
+                min = x0 - h_x0,
+                max = x0 + h_x0)
+  
+  v_x0[v_x0 < 0] <- 0
+  
+  v_r <- drop(ma %*% v_x0)
+  
+  list_dyn <- suppressMessages(
+    cdynsim(n_timestep = n_timestep,
+            n_species = n_species,
+            r = v_r,
+            alpha = ma,
+            int_type = "manual",
+            alpha_scale = "unscaled",
+            sd_env = sd_env,
+            immigration = const)
+  )
+  
+  ## data for linear fitting
+  df_dyn <- list_dyn$df_dyn %>% 
+    group_by(timestep) %>% 
+    mutate(nt1 = sum(density)) %>% 
+    ungroup() %>% 
+    group_by(species) %>% 
+    mutate(n0 = lag(density),
+           n1 = density,
+           log_r = log(n1 / n0),
+           nt0 = lag(nt1)) %>% 
+    ungroup() %>% 
+    mutate(species = factor(species)) %>% 
+    drop_na(log_r)
+  
+  df_c <- df_dyn %>% 
+    distinct(timestep, nt0, nt1) %>% 
+    mutate(log_r = log(nt1 / nt0)) %>% 
+    drop_na(log_r)
+  
+  return(list(data_i = df_dyn,
+              data_c = df_c,
+              A = ma,
+              r = v_r))  
+}
+
 # partial -----------------------------------------------------------------
 
 partial <- function(r, a, i, x0, model = "ricker") {
