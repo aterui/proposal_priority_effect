@@ -7,17 +7,19 @@ source("code/function.R")
 # simulation plot ---------------------------------------------------------
 
 ## read data
-df_sim <- readRDS("output/simulation.rds") %>% 
+df_sim <- readRDS("output/simulation_stan.rds") %>% 
   mutate(stability = ifelse(eigen_max > 1, "Sensitive", "Insensitive"))
 
 df_plot <- df_sim %>% 
   drop_na(eigen_max, p)
 
 ## label
-label <- c('10' = 'Time series = 10',
-           '30' = 'Time series = 30',
-           '5' = "Species number = 5",
-           '15' = "Species number = 15")
+label_t <- c('10' = 'Time series = 10',
+             '30' = 'Time series = 30')
+
+label_s <- c('2' = "Species number = 2",
+             '5' = "Species number = 5",
+             '10' = "Species number = 10")
 
 ## filled frequencies
 g_fill <- df_plot %>%
@@ -28,7 +30,8 @@ g_fill <- df_plot %>%
                position = "fill") +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
-             labeller = as_labeller(label),
+             labeller = labeller(n_timestep = label_t,
+                                 n_species = label_s),
              scales = "free_x") +
   labs(x = expression("Competitive exceedance"~Psi),
        y = "Relative frequency",
@@ -45,7 +48,7 @@ g_fill <- df_plot %>%
 ggsave(g_fill,
        filename = "output/figure_prop.pdf",
        height = 4.5,
-       width = 4.5)
+       width = 6)
 
 ## boxplot
 g_box <- df_plot %>%
@@ -60,7 +63,8 @@ g_box <- df_plot %>%
                outlier.color = NA) +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
-             labeller = as_labeller(label),
+             labeller = labeller(n_timestep = label_t,
+                                 n_species = label_s),
              scales = "free_x") +
   labs(y = expression("Competitive exceedance"~Psi),
        x = "True sensitivity",
@@ -95,13 +99,18 @@ g_scatter <- df_plot %>%
   #coord_cartesian(xlim = c(0, .5)) +
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
-             labeller = as_labeller(label),
+             labeller = labeller(n_timestep = label_t,
+                                 n_species = label_s),
              scales = "free") +
   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
        y = expression("Competitive exceedance"~Psi),
        color = "Sensitivity",
        fill = "Sensitivity") +
   geom_vline(xintercept = 1,
+             linewidth = 0.25,
+             linetype = "dashed",
+             alpha = 0.4) +
+  geom_hline(yintercept = 0.5,
              linewidth = 0.25,
              linetype = "dashed",
              alpha = 0.4) +
@@ -123,7 +132,7 @@ g_scatter <- df_plot %>%
 ggsave(g_scatter,
        filename = "output/figure_eigen_scatter.pdf",
        height = 5,
-       width = 6)
+       width = 7)
 
 
 # hsu results -------------------------------------------------------------

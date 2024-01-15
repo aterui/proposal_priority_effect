@@ -56,7 +56,7 @@ df_out <- foreach(i = seq_len(nrow(df_param)),
                                    NA,
                                    mean(attr(lambda, "R")))
                     
-                    r_max <- ifelse(is.na(lambda),
+                    max_r <- ifelse(is.na(lambda),
                                    NA,
                                    max(attr(lambda, "R")))
                     
@@ -66,8 +66,8 @@ df_out <- foreach(i = seq_len(nrow(df_param)),
                                    
                     xout <- x %>% 
                       mutate(lambda = lambda,
-                             r = mu_r,
-                             r_max = r_max,
+                             mu_r = mu_r,
+                             max_r = max_r,
                              sd_r = sd_r,
                              n_persist = length(x0_prime[x0_prime > 0]))
                   }
@@ -75,7 +75,7 @@ df_out <- foreach(i = seq_len(nrow(df_param)),
 
 set.seed(10)
 df_set0 <- df_out %>% 
-  filter(r < 2) %>% 
+  filter(mu_r < 2) %>% 
   mutate(stability = ifelse(lambda < 1,
                             "insensitive",
                             "sensitive")) %>% 

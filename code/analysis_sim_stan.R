@@ -26,7 +26,7 @@ df_sim <- foreach(i = seq_len(nrow(df_param)),
                     
                     x <- df_param[i, ]
                     
-                    df_out <- foreach(k = iterators::icount(3),
+                    df_out <- foreach(k = iterators::icount(5),
                                       .combine = bind_rows) %do% {
                                         
                                         seed <- 100 * i + k
