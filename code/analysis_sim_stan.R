@@ -56,9 +56,8 @@ df_sim <- foreach(i = seq_len(nrow(df_param)),
                                         # get scaled beta = beta / r by species
                                         mcmc <- as.matrix(fit)
                                         mu <- mcmc[, str_detect(colnames(mcmc), "^\\(Intercept\\)$")]
-                                        eps <- mcmc[, str_detect(colnames(mcmc), "b\\[\\(Intercept\\).{1,}\\]")]
                                         b <- mcmc[, "nt0"]
-                                        b_scale <- b / (mu + eps)
+                                        b_scale <- b / mu
                                         
                                         # get scaled beta for community
                                         fit0 <- with(cdata,
@@ -71,15 +70,12 @@ df_sim <- foreach(i = seq_len(nrow(df_param)),
                                         # binary indicator s(b) vs. s(b0)
                                         # s(.) denotes scaled beta
                                         # repeat across mcmc samples
-                                        n_exceed <- sapply(1:nrow(b_scale),
-                                                           function(i) sum(b_scale[i, ] < b0_scale))
-                                        
-                                        p <- mean(n_exceed > 1)
-                                        mu_n_exceed <- mean(n_exceed)
+                                        n_exceed <- sum(b_scale < b0_scale)
+                                        p <- mean(b_scale < b0_scale)
                                         
                                         return(tibble(replicate = k,
                                                       x,
-                                                      n_exceed = mu_n_exceed,
+                                                      n_exceed = n_exceed,
                                                       p = p,
                                                       b = fit$coefficients["nt0"],
                                                       eigen_max = eigen_max,
@@ -90,10 +86,9 @@ df_sim <- foreach(i = seq_len(nrow(df_param)),
                   }
 
 tictoc::toc()
-
+stopCluster(cl); gc()
 
 # export ------------------------------------------------------------------
 
-stopCluster(cl); gc()
 saveRDS(df_sim, "output/simulation_stan.rds")
 
