@@ -1,0 +1,49 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+\begin{document}
+
+\section*{Resource Sharing Plan(s)}
+
+One of the primary purposes of this project is the development of a new statistical tool.
+Following the Research Tools Policy on the NIH Scientific Data Sharing Website, we plan to share the developed tool as an R package, which will be hosted on GitHub and version-controlled on Zenodo.
+Additional details are described in the section Other Plan(s).
+
+\end{document}

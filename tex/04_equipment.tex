@@ -1,0 +1,49 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+% suppress page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+\section*{Equipment}
+
+The high-performance computing facilities described in the Facilities and Other Resources section are sufficient for performing the research described in the Research Strategy.
+\end{document}

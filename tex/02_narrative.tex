@@ -1,0 +1,51 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+% suppress page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+\section*{Project Narrative}
+
+A persistent debate surrounds the assembly mechanisms shaping the human gut microbiota, with considerations of the niche paradigm versus priority effects significantly influencing optimal clinical treatment practices.
+The objective of this proposed study is to develop a new statistical method capable of discerning between these distinct assembly processes, aiming to unveil deep insights into assembly mechanisms within unmanipulated gut systems.
+Successful completion of this project will furnish a crucial statistical resource, offering the ability to identify assembly rules in the human gut microbiota and beyond.
+\end{document}

@@ -1,0 +1,82 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+% suppress page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+\section*{Specific Aims}
+
+Gut microbiomes are crucial in immune system development and pathogen defense.
+Evidence suggests that the abnormal state of gut microbial communities, termed ``dysbiosis,'' is common in patients with inflammatory bowel diseases and obesity.
+As such, elucidating the causes and consequences of dysbiosis has become the major focus of clinical research.
+Clinical studies often view dysbiosis as a result of undesired gut environments, emphasizing the role of ecological niches available for beneficial and/or harmful taxa (the niche paradigm).
+Meanwhile, microbiologists have begun to recognize the importance of \textit{priority effects}, which can lead to dysbiosis even when the optimal environment for healthy microbiota is maintained.
+Distinguishing these assembly rules is therefore vital for informing clinical treatments effectively.
+Despite this understanding, a fundamental challenge remains unresolved: a common method to confirm priority effects is the experimental manipulation of species colonization order \textit{in vitro}.
+In real gut systems, controlling the order of species' arrival is impossible.
+Consequently, we know little about when priority effects are strong in the human microbiota.
+In this proposal, \ul{we will fill this knowledge gap by developing a statistical method capable of identifying priority effects \textit{without knowledge of colonization history}.}
+The method will enable us to address questions concerning the prevalence and contributing factors of priority effects, with crucial implications for enhancing the effectiveness of clinical treatments.
+Our proposal constitutes three specific aims outlined below.
+
+\textbf{Specific Aim 1: Development of a New Modeling Approach} --
+The primary objective of this aim is to devise an innovative modeling approach capable of identifying communities sensitive to priority effects.
+To accomplish this, we will initially establish a theoretical foundation for a statistical method tailored to detect such sensitive communities.
+A pivotal initial step involves acquiring reliable competition estimates from empirical time series. However, practical challenges arise in directly estimating these parameters, especially in hyper-diverse microbial communities, due to the ``curse of dimensionality:'' as the number of species increases, the time series length required for estimation grows exponentially.
+We aim to tackle this challenge by devising a novel approach to reduce the parameter dimension of our statistical model.
+The effectiveness of our proposed method will be validated through simulation experiments.
+
+\textbf{Specific Aim 2: Experimental Validation} --
+While simulation experiments in Specific Aim 1 provide initial credibility to our method, it is imperative to validate its ability to predict priority effects when applied to real biological data.
+In this aim, we will evaluate the performance of the proposed method using real experimental data extracted from published literature, where colonization history was experimentally manipulated.
+These experimental datasets have known outcomes (e.g., priority effects vs. no priority effects), thereby providing suitable data for validating the prediction of our method.
+
+\textbf{Specific Aim 3: Application to Unmanipulated Gut Systems} --
+This aim involves applying our method to unmanipulated gut systems to explore when priority effects are strong in the human gut microbiota.
+We will curate and analyze published time-series data of human gut microbiota, posing several key questions:
+(i) Does the strength of priority effects vary among geographic regions?
+(ii) Do Western-style diets influence the strength of priority effects?
+(iii) Are priority effects stronger at younger ages?
+(iv) Are priority effects stronger in individuals with unhealthy states?
+The application of our method will provide insights into these questions that have been hypothesized yet never tested, carrying significant implications for human health and the development of effective clinical treatments.
+
+\end{document}

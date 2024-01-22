@@ -1,0 +1,660 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+\begin{document}
+
+\textbf{Research Strategy}
+
+\section{Significance}
+
+\textbf{Background} --
+It is well known that humans harbor a large number of microorganisms in the gut, playing diverse roles in the host immune system and protection against pathogen invasion \citep{fierer_animalcules_2012, petersen_defining_2014, turroni_infant_2020}.
+Our current understanding of the healthy microbiota is based on individuals who show no apparent signs of illness \citep{petersen_defining_2014}.
+For example, the dominant bacterial phyla in stool samples of healthy individuals are \textit{Bacteoidetes} and \textit{Firmicutes}, although some other phyla are also consistently present in healthy people \citep{petersen_defining_2014}.
+Evidence suggests that changes in the gut microbiota occur in patients with inflammatory bowel diseases (IBD) \citep{frank_molecular-phylogenetic_2007, karlsson_gut_2013, abrahamsson_low_2014, parracho_differences_2005} and obesity \citep{costello_application_2012, ley_obesity_2005, turnbaugh_diet-induced_2008}, for which annual U.S. medical costs exceed \$150 billion \citep{singh_trends_2022, cawley_medical_2012}.
+As such, it is speculated that the changes in microbial community structure -- termed ``\textit{dysbiosis}'' -- are factors causing the initiation and persistence of these diseases.
+
+While human gut microbiota is clinically important, it can also be viewed as a nexus of human health and \textit{community assembly} \citep{costello_application_2012}, a branch of ecology aimed to understand how interacting species are assembled into a community in a given environment \citep{fukami_historical_2015, sprockett_role_2018}.
+Clinical studies often assume that dysbiosis is caused by different gut environments between healthy and unhealthy people, with particular attention to beneficial or harmful taxa \citep{petersen_defining_2014}.
+In community ecology, this perspective is sometimes referred to as the niche paradigm.
+If the same set of species colonizes into a given environment (= the gut), the community structure will ultimately reach the identical state at equilibrium regardless of the history of community assembly \citep{chase_community_2003}.
+Under this condition, improving the gut environment (e.g., changing dietary habits) should lead to the community structure associated with a healthy state \citep{chase_community_2003, leibold_metacommunity_2004, fukami_historical_2015, hooper_how_2002, reese_thinking_2019}.
+
+However, in certain circumstances, the structure of human gut microbiota is highly sensitive to the order of species colonization, leading to divergent equilibrium states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
+\ul{This historical contingency in community assembly is referred to as priority effects,} which can occur when early arrival species preempt or modify available resources for later arrival species due to high niche overlap among the potential colonists \citep{ke_coexistence_2018}.
+The stochastic nature of priority effects presents a significant challenge in predicting and maintaining community structure by conditioning the gut environment \citep{fukami_historical_2015}.
+For example, the gut microbiome may shift to an alternative state of community structure after an antibiotic treatment, even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
+If priority effects predominate, clinical treatments focusing on the gut environment could cause unexpected sustained changes in the gut microbiota with limited or unintended consequences for human health \citep{fierer_animalcules_2012}. 
+Hence, understanding the assembly mechanisms of the gut microbiota has practical implications.
+
+\textbf{Problem Statement} --
+Evidence for priority effects is increasing.
+Yet, a fundamental problem remains unsolved.
+\ul{Experimental manipulation of species's colonization order has been a common method to test priority effects.}
+When priority effects manifest, different colonization orders of species lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
+While experiments are powerful in inferring causal relationships, they are often too simplified, focusing on a few species, or otherwise logically or ethically impractical.
+Meanwhile, knowing the order of microbial species' arrival in human-associated communities is virtually impossible \citep{sprockett_role_2018}.
+\ul{Resolving this fundamental problem requires a statistical method that captures the signature of priority effects \textit{without knowing the colonization history}}.
+We lack such a novel statistical method, hindering progress in understanding the conditions under which priority effects strongly affect the human microbiome.
+
+\textbf{Solution} --
+\ul{The goal of the proposed research is to fill this knowledge gap by developing a new statistical method that identifies biological communities sensitive to priority effects}.
+This research is motivated by our belief that time series data provide untapped opportunities to quantify priority effects.
+In theory, assembly rules are set by the composition of species traits within a given community, which dictates characteristic patterns of temporal community dynamics.
+Ecological theory suggests that, if niche-structured, species' niche differences produce the predominance of negative frequency dependence (= rarer species have greater population growth) such that rarer species can grow from small populations \citep{loreau_does_2004, carroll_niche_2011, ke_coexistence_2018}.
+In contrast, when priority effects manifest, the positive frequency dependency of population growth (= dominant species have greater population growth) facilitates the stochastic dominance of a subset of species contingent on the colonization history \citep{ke_coexistence_2018}.
+Our method will capitalize on these characteristic temporal dynamics of distinct assembly rules to detect a signature of priority effects from a short time series.
+To this end, our proposal is structured as follows:
+
+\begin{itemize}
+    \item \textbf{Specific Aim 1}: We will develop a theoretical framework for the method.
+    \item \textbf{Specific Aim 2}: We will assess the performance of the developed method using data from experimental communities, in which the order of species arrival was manipulated.
+    \item \textbf{Specific Aim 3}: We will apply the developed method to time series data on the human gut microbiota.
+    In doing so, we will ask \textit{when priority effects are strong in the human microbiota.}
+\end{itemize}
+
+\section{Innovation}
+Our proposed work will advance the fundamental understanding of the microbiota and its relation to human health by integrating clinical and ecological research.
+We believe this work is innovative both methodologically and conceptually.
+
+First, \ul{\emph{it is methodologically innovative}} because the proposed method will be highly robust to the inherent complexity of the microbiota.
+A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
+This problem is particularly serious in microbiota because the taxonomic diversity is far beyond that of plants and animals: they harbor dozens of bacterial phyla and hundreds of bacterial phylotypes, referred to as Operational Taxonomic Units (OTUs) \citep{fierer_animalcules_2012}.
+Thus, common time-series analyses in community ecology are rarely applicable.
+To confront this challenge, the proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
+
+Second, \ul{\emph{it is conceptually innovative}} because our method will enable us to provide a novel answer to \textit{when priority effects are strong in the human microbiota.}
+Much of the research in priority effects has relied on experimental manipulations of species colonization order, with limited scope due to logistical and ethical challenges.
+Some hypotheses have been proposed regarding the potential role of priority effects in the human microbiome.
+For example, the gut microbial communities of obese, undernourished, and healthy people are hypothesized to represent alternative stable states resulting from priority effects \citep{fierer_animalcules_2012}.
+Yet rigorous tests of these hypotheses have been difficult. 
+The new method we will develop will provide a way to infer priority effects using existing time series data, allowing for comparison across individuals of different  states and facilitating synthesis of human health and ecological research.
+
+Hence, we suggest that this proposal has two innovative qualities meeting the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
+
+% Over the past century, biologists have been intrigued by how interacting organisms are assembled in a given environment.
+% This process, termed ``community assembly,'' has crucial implications for human society's public health and sustainability \citep{leibold_metacommunity_2004, palmer_ecological_2014, fukami_historical_2015, ojima_priority_2022}.
+% For example, the community structure of human gut microbes impacts the development of the host immune system and protection against pathogen invasion \citep{fierer_animalcules_2012}.
+% Community assembly also plays a critical role in large-scale biological outcomes, such as the environmental restoration of degraded habitats in human-dominated landscapes \citep{palmer_ecological_2014, koning_network_2020, terui_emergent_2021}.
+% The effect of environmental restoration on ecological communities is contingent on how colonizing species reach the restored site, often defining the biological success of the restoration project that managers invest millions of dollars for implementation \citep{palmer_ecological_2014, weidlich_priority_2021}.
+% Therefore, understanding the regulatory rules in community assembly (hereafter, ``assembly rule'') is fundamental to a broad range of biological phenomena.
+
+% The prevailing paradigm in community assembly suggests that the interaction between the environment and species attributes determines the structure of biological communities  (e.g., the relative abundance of different species) -- if the same set of species colonizes into a given habitat, the community structure will ultimately reach the identical state of community structure at equilibrium (the ``niche'' paradigm) \citep{chase_community_2003}.
+% However, biologists have begun to recognize that, in certain circumstances, community dynamics are highly sensitive to the order of species colonization, leading to the divergent equilibrium state of the community structure despite the identical source of colonizing species and the environment \citep{chase_community_2003, fukami_historical_2015}.
+% This historical contingency of community state is referred to as ``priority effects,'' and their stochastic nature posed a significant challenge in predicting and maintaining community structure by conditioning the environment \citep{fukami_historical_2015}.
+% For example, the human gut microbiome shifts to an alternative state of community structure after antibiotic treatments, even if the gut environment remains similar throughout before- and after-treatment periods \citep{dominguez-bello_development_2011}.
+
+% The consequences of priority effects are well understood.
+% Yet, a critical question remains unsolved: \ul{``\textit{when do priority effects occur?}}'' 
+% Answering this question is not only critical to advancing basic science but also helps solve issues concerning public health and the sustainability of natural resources.
+
+% \textbf{Problem Statement} --
+% The experimental manipulation of species' colonization order has been a common method -- perhaps \textit{the} method -- to confirm their existence; when priority effects manifest, the different colonization order of species leads to the divergent community states at the end of the experiment \citep{fukami_historical_2015, weidlich_priority_2021}.
+% Over the past few decades, the results of the controlled experiments suggested the pervasiveness of priority effects across a wide variety of biological communities \citep{fukami_historical_2015, weidlich_priority_2021}, including microbes \citep{fukami_productivity-biodiversity_2003, fukami_assembly_2004, jiang_community_2008, tucker_environmental_2014, ojima_interactive_2017, hsu_metabolic_2021}, plants \citep{mason_arrival_2013, young_introduced_2017, weidlich_priority_2018, wohlwend_long-term_2019}, and animals \citep{louette_predation_2007, viana_disentangling_2016, symons_timing_2014}.
+% Even more, they spawned several influential hypotheses predicting the likely biological scenarios in which priority effects should matter.
+% For example, priority effects are hypothesized to be prevalent in the environment that enhances the rapid establishment of early colonizing species \citep{fukami_historical_2015}, such as small habitat size \citep{fukami_assembly_2004}, high productivity \citep{chase_stochastic_2010}, and low environmental variability \citep{tucker_environmental_2014}, among others.
+
+% Nonetheless, some experts remain concerned about the prevalence and importance of priority effects because they have rarely been confirmed \textit{in unmanipulated natural systems}.
+% Often, controlled experiments are too small in scale and too simplified to be meaningful in the real world \citep{weidlich_priority_2021}.
+% But, in natural systems, knowing the order of species' arrival is virtually impossible.
+% \ul{As such, resolving this fundamental problem requires a statistical method that captures the signature of priority effects \textit{without knowing the colonization history}}.
+% We are unaware of such a novel statistical method, however. 
+
+% \textbf{Solution} --
+% \ul{We propose to fill this knowledge gap by developing a new statistical method that identifies biological communities sensitive to priority effects}.
+% Our method is motivated by the fact that time series data may provide deep insights into assembly rules.
+% In theory, assembly rules are set by the composition of species' traits within a given community, which dictates characteristic patterns of temporal community dynamics.
+% If niche-structured, species' niche differences produce the predominance of negative frequency dependence (= rarer species have greater population growth) such that rarer species can grow from small populations \citep{loreau_does_2004, carroll_niche_2011, ke_coexistence_2018}.
+% In contrast, when priority effects manifest, the positive frequency dependency of population growth (= dominant species have greater population growth) facilitates the stochastic dominance of a subset of species contingent on the colonization history \citep{ke_coexistence_2018}.
+% Our method will capitalize on these characteristic dynamics of distinct assembly rules to detect a signature of priority effects from a short time series.
+% To this end, our proposal is structured as follows:
+
+% \begin{itemize}
+%     \item \textbf{Specific Aim 1}: We will derive a theoretical backbone of this novel method.
+%     \item \textbf{Specific Aim 2}: We will assess the performance of the developed method using experimental biological communities, in which the order of species' arrival is manipulated.
+%     \item \textbf{Specific Aim 3}: We will apply the developed method to accumulating global time series data of biological communities. In doing so, we will ask: ``\textit{When are priority effects more likely to occur in natural systems?}''
+% \end{itemize}
+
+% \section{Innovation}
+% Understanding assembly rules has far-reaching implications for human society's sustainability as it relates to human health, food production, and biodiversity conservation, to name just a few \citep{fukami_historical_2015}.
+% We assert that our proposal will advance this research field significantly through two important breakthroughs.
+% First, \ul{\emph{our proposal is methodologically innovative}} because the proposed method is highly robust to the inherent complexity of community data.
+% A major challenge in community assembly research is the ``\textit{curse of dimensionality}'' -- as the number of species increases, the non-linear system dynamics become so complicated that traditional statistical approaches are unhelpful.
+% The proposed method derives analytically that community-wide information can be condensed into a manageable number of parameters; this unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
+% Second, \ul{\emph{our proposal is conceptually innovative}} because our new method has the potential to provide a novel answer to \textit{``when do priority effects occur?''}
+% As mentioned, current research in priority effects hinges on experimental manipulations of species' colonization order.
+% Experimental work has spawned some key hypotheses, yet rigorous tests of these hypotheses have been hindered in natural systems due largely to the lack of proper methodology. 
+% The new method solves this critical issue and should apply, in principle, to various biological systems.
+% This property allows for cross-taxonomic and cross-ecosystem comparisons of assembly rules with
+% the possibility of reaching conclusions that overturn the prevailing wisdom of community assembly research.
+
+% Hence, this proposal has two innovative qualities that meet the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
+
+\section{Approach}
+
+\subsection*{Specific Aim 1: Development of a New Modeling Approach}
+
+To develop a new modeling approach that identifies communities sensitive to priority effects, we will perform two activities:
+[1a] derive a theoretical foundation for a statistical method that identifies sensitive communities, and [1b] validate the performance of the proposed method with simulation experiments.
+
+\subsubsection*{Activity 1a: Derive a theoretical foundation}
+
+\textbf{\textit{Goal}} -- 
+Our goal in this activity is to develop a theoretical foundation for a statistical method that identifies sensitive communities.
+In competitive communities, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time \citep{chesson_mechanisms_2000, barabas_chessons_2018, ke_coexistence_2018, terui_intentional_2023}.
+For example, in two-species communities, the community is highly sensitive to priority effects if interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
+Therefore, an important first step is obtaining reliable estimates of competition from an empirical time series.
+However, in empirical settings, it is often infeasible to estimate those parameters because of the ``\textit{curse of dimensionality}:'' as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
+Here, we propose a robust statistical method that solves this issue -- \ul{our method can estimate the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density}.
+
+\textbf{\textit{Method detail: theoretical backbone}} -- 
+As a true state of community dynamics over time, we consider a discrete recursion equation. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
+
+\begin{equation}
+\label{eq:m0}
+x_{t + 1, i} = x_{t, i} f(\overset{\rightarrow}{x}_{t}).
+\end{equation}
+
+$f(\cdot)$ is the function defining the per-capita population growth rate, and $\overset{\rightarrow}{x}_{t}$ means a vector of population densities of potential competitors ($\overset{\rightarrow}{x}_{t} = \{x_{t,1}, x_{t,2}...x_{t,i},...,x_{t,S}\}$, where $S$ is the number of species).
+Although the method we propose here applies to any functions that assume linear combinations of species interaction terms, let us use a Ricker model as an example \citep{ricker_stock_1954, fowler_species_2012, terui_intentional_2023}:
+
+\begin{equation}
+\label{eq:ricker}
+f(\overset{\rightarrow}{x}_{t}) = \exp(r_i - \alpha_i x_{t,i} - \sum_{j \ne i} \beta_{ij} x_{t,j}),
+\end{equation}
+
+where $r_i$ is the intrinsic population growth, and $\alpha_{i}$ and $\beta_{ij}$ the intra- and interspecific competition coefficients.
+The parameter $\beta_{ij}$ has a sample mean ($\mu_{\beta}$) and SD ($\sigma_{\beta}$), assuming that they are drawn from a given probability distribution. 
+Denoting the total community density as $X_t$ ($X_t = \sum_i x_{t,i}$), Equation \ref{eq:m0} can be reorganized to:
+
+\begin{equation}
+\label{eq:rickermod0}
+f(\overset{\rightarrow}{x}_{t}) = \exp\left[r_i - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + e_{t,i} \right],
+\end{equation}
+
+In Equation \ref{eq:rickermod}, the interspecific competition $\beta_{ij}$ is re-parameterized as $b_{ij} = (\beta_{ij} - \mu_{\beta}) \sigma_{\beta}^{-1}$, and the parameters $\phi_{i}$ and $e_{t,i}$ are the functions of $b_{ij}$: $\phi_i = (S-1)^{-1}\sum_{j \ne i} b_{ij}$ and $e_{t,i} = \sigma_{\beta} (S - 1) \mbox{cov}(b_{ij}, x_{t,j})$ [$\mbox{cov}(\cdot)$ denotes covariance].
+The parameter $e_i$ may have a non-zero mean over time depending on the covariance.
+Thus, it can be decomposed into the constant ($\overline{e}_i$) and stochastic components ($\xi_{t,i}$) as $e_{t,i} = \overline{e}_i + \xi_{t,i}$.
+Writing $g_{i} = r_i + \overline{e}_i$, this re-formulation leads to:
+
+\begin{equation}
+\label{eq:rickermod}
+    f(\overset{\rightarrow}{x}_{t}) = \exp\left[g_{i} - (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i) x_{t,i} - (\mu_{\beta} +  \sigma_{\beta} \phi_i) X_t + \xi_{t,i} \right].
+\end{equation}
+
+The re-organized function (Equation \ref{eq:rickermod}) has important implications. 
+The original function (Equation \ref{eq:ricker}) parameterized competition effects by species and, therefore, requires $S$ parameters of competition.
+In contrast, \ul{the re-organized function has only two variables ($x_{t,i}$ and $X_t$)}, and the competition effects are condensed into the aggregate parameters of species $i$'s density ($\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$) and the total community density ($\mu_{\beta} + \sigma_{\beta} \phi_i$).
+\ul{This re-parameterization enables statistical inference of interspecific competition with relatively short time series data}.
+Let $\gamma_i$ and $\delta_i$ be the standardized effects of $i$'s population density and the total community density, respectively ($\gamma_i = (\alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i)g_i^{-1}$ and $\delta_i = (\mu_{\beta} + \sigma_{\beta} \phi_i)g_i^{-1}$).
+Then, the log-transformed per-capita growth rate $\ln f(\overset{\rightarrow}{x}_{t})$ becomes the following linear model:
+
+\begin{equation}
+\label{eq:rickerlog}
+    \ln f(\overset{\rightarrow}{x}_{t}) = g_i (1 - \gamma_i x_{t,i} - \delta_i X_t) + \varepsilon_{t,i},
+\end{equation}
+
+where $\varepsilon_{t,i}$ is random environmental noise plus $\xi_{t,i}$, which can be modeled as a stochastic term in statistical inference. Thus, this re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), \ul{regardless of the number of species in the community}.
+As such, this modeling approach will solve the ``\textit{curse of dimensionality}'' hindering the empirical time series analysis of species-rich community data.
+
+\textbf{\textit{Method detail: null model analysis}} --
+The community's sensitivity to priority effects is strongly affected by the balance between intra- and interspecific competition; when interspecific competition exceeds intraspecific competition, the community is highly sensitive to priority effects \citep{ke_coexistence_2018}.
+In this context, Equation \ref{eq:rickerlog} offers a promising avenue to simplify community data analysis. 
+An intuitive statistical method would be to compare the effects of $x_{t,i}$ ($\gamma_i$) and $X_t$ ($\delta_i$) on $i$'s population growth (see Equation \ref{eq:rickerlog}).
+However, this comparison is inappropriate because we cannot statistically separate the effect of intra- and interspecific competition (see Equation \ref{eq:rickermod}).
+Consequently, we need an alternative approach to measure the balance of competition strength.
+
+Here, \ul{we propose to use a neutral community to measure the sensitivity to priority effects.} 
+A neutral community is comprised of ecologically identical species (intraspecific competition = interspecific competition) \citep{hubbell_unified_2001, loreau_species_2008}; therefore, if the observed effect of $\delta_i$ is stronger than what would be expected from the ``hypothetical'' neutral dynamics, the community should be sensitive to priority effects.
+Our proposed method proceeds with the following procedures:
+
+\begin{enumerate}
+    \item Estimate $\delta_i$ by fitting a linear statistical model to the observed population growth (see Equation \ref{eq:rickerlog}). We refer to this observed estimate as $\delta_{obs}$. While $\delta_{obs}$ can be estimated by species, we will average across species to reduce the uncertainty of parameter estimate.
+    
+    \item Estimate $\delta_i$ using a hypothetical neutral community, which we refer to as $\delta_{null}$.
+    Under the hypothetical neutral scenario, all species obey the same recursion equation with identical parameters ($g_i = \mbox{const.}$, $\alpha_i = \beta_{ij} = \mbox{const.}$), leading to the following dynamics of the total community density $X_t$: 
+
+    \begin{equation}
+    \label{eq:neutral}
+        \ln f(X_t) &= \ln {X_{t+1}} - \ln {X_{t}} = g'(1 - \delta_{null} X_{t})        
+    \end{equation}
+    
+    As such, $\delta_{null}$ can be readily estimated with ordinary regression using the observed data of $X_t$.
+    
+    \item Approximate the probability of $\delta_{obs} > \delta_{null}$.
+    We will employ a Bayesian approach to yield a posterior distribution of $\delta_{obs}$.
+    The approximated probability will be calculated as the proportion of posterior samples satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\Psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
+\end{enumerate}
+
+Our method can also be viewed as a variant of invasion analysis \citep{otto_biologists_2011}, with which ecologists studied the coexistence of competing species \citep{chesson_mechanisms_2000, adler_niche_2007, barabas_chessons_2018}.
+When multiple species satisfy the condition of $\delta_i > \delta_{null}$, one cannot invade the community when the other competitor(s) are already present.
+Thus, priority effects should emerge (the invasion criterion $\delta_i > \delta_{null}$ can be derived from the Jacobian of Equations \ref{eq:rickermod} and \ref{eq:neutral}).
+
+\subsubsection*{Activity 1b: Simulation experiment}
+
+\textbf{\textit{Goal}} -- 
+The goal of this activity is to validate the performance of this method using simulation experiments.
+We will use time series data simulated with known competition and other parameters so that we can validate the relationship between the true sensitivity to priority effects and the competitive exceedance $\Psi$.
+
+\textbf{\textit{Method detail: preliminary analysis}} -- 
+To validate the performance of the proposed null model analysis, we need to know whether the simulated data are generated from an insensitive or sensitive community (= the truth).
+In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
+However, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs \citep{carroll_niche_2011, barabas_chessons_2018}.
+
+To address this complexity, we will use the leading eigenvalue $\lambda_{max}$ of the community matrix (the Jacobian of Equation \ref{eq:m0}) to determine whether the simulated community is sensitive to priority effects \citep{otto_biologists_2011}.
+When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable and hence no priority effects.
+Otherwise ($|\lambda_{max}| > 1$), the community's equilibrium is locally unstable with the possibility of priority effects.
+We acknowledge that the criterion of $|\lambda_{max}| > 1$ is a necessary, not sufficient, condition for a priority effect to emerge.
+Yet, it is reasonable to assume that such communities are highly sensitive to priority effects as the equilibrium condition is locally unstable  \citep{otto_biologists_2011}. 
+
+Using this sensitivity criterion, we performed a preliminary analysis of the method's performance.
+We used the model formula presented in Equation \ref{eq:ricker} (a Ricker model) to produce simulated time series data.
+We considered 1782 combinations of demographic parameters to yield a sufficient variation in the leading eigenvalue $|\lambda_{max}|$ (Table \ref{tab:param1}).
+We identified parameter combinations that generated insensitive and sensitive communities by calculating the leading eigenvalue for each parameter combination, after which 200 parameter sets were randomly subsampled to ensure that the relative frequencies of sensitive and insensitive communities were equal (100 sets have $|\lambda_{max}| < 1$ otherwise $|\lambda_{max}| > 1$).
+We crossed these parameter sets with the number of species $S$ ($S \in \{2, 5, 10\}$) and the time series length $T$ ($T \in \{10, 30\}$) with five replicates in each, resulting in $200 \times 3 \times 2 \times 5 = 6000$ simulation runs.
+
+\begin{SCfigure}
+    \caption{The competitive exceedance $\Psi$ ($y$-axis) captures the critical transition from insensitive to sensitive communities, which are determined by the leading eigenvalue $\lambda_{max}$ ($x$-axis) of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).
+    The rows and columns distinguish the number of species and the time series length used to generate simulated data.
+    Dots are individual simulation replicates with colors distinguishing the community's sensitivity to priority effects (orange: sensitive, blue: insensitive).
+    The side panels are relative frequencies of sensitive and insensitive communities with a value of $\Psi$ on the $y$-axis.}
+    \includegraphics[scale=0.65]{output/figure_eigen_scatter.pdf}
+    \label{fig:box}
+\end{SCfigure}
+
+The results of the preliminary analysis were promising -- \ul{the competitive exceedance $\Psi$ captured the critical transition from insensitive to sensitive communities} (Figure \ref{fig:box}). It is important to note that (i) the number of species did not affect the performance of the proposed method; (ii) the performance was reasonable with a relatively short time series ($t = 10$).
+These results indicate that our method can be applied to a short time series of a species-rich community. 
+
+
+\begin{table}
+    \flushleft
+    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics. Note that intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
+    The notation ``--'' means that we will use the same parameter setup in the proposed work.}
+    \begin{tabular}{clll}
+        Symbol & Interpretation & Value (preliminary) & Value (proposed)\\
+        \hline
+        $x^*$ & Average equilibrium density & $2, 8, 32$ & $1~\mbox{to}~100$\\
+        $h_x$ & Half range in $x^*$ & $x^* \times 0.00~\mbox{to}~0.50$ & $x^* \times 0.00~\mbox{to}~1.00$\\
+        $x_i^*$ & Equilibrium density for species $i$ & $\mbox{Unif}(x^* - h_x, x^* + h_x)$ & --\\
+        $\alpha_{i}$ & Intraspecific competition & $1 / x^*$ & -- \\
+        $\beta_{ij}$ & Interspecific competition & $\mbox{Unif(\mu_{\beta} - h_{\beta}, \mu_{\beta} + h_{\beta})}$ & -- \\
+        $\mu_{\beta}$ & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & --\\
+        $h_{\beta}$ & Half range in $\beta_{ij}$ & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & $\mu_{\beta} \times 0.00~\mbox{to}~1.00$ \\
+        $r_i$ & Intrinsic population growth & $A \overset{\rightarrow}{x^*}$ & --\\
+        \hline
+    \end{tabular}
+    \label{tab:param1}
+\end{table}
+
+\textbf{\textit{Method detail: proposed analysis}} -- 
+The preliminary analysis ensured that our method has the potential to unveil the sensitivity to priority effects.
+Moving forward, we will expand the scope of simulation experiments to increase the credibility of our method in broader ecological situations.
+We will extend our analysis in two important ways.
+
+(i) \ul{Alternative theoretical model}:
+Ecological systems can exhibit a diversity of competitive interactions.
+Thus, it is important to consider alternative community models describing competitive community dynamics. 
+A Beverton-Holt (BH) model is another model widely used in ecology \citep{otto_biologists_2011}, describing the temporal dynamics of competitive communities: $\ln f(\overset{\rightarrow}{x}_{t}) = r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$. 
+While the model formula is different, a BH model shares an important feature with a Ricker model: the linear combination of competitive interaction terms.
+Hence, as in a Ricker model, a BH model can be simplified as follows: $\ln f(\overset{\rightarrow}{x}_{t}) \approx g'_{i} - \ln(1 + \gamma'_i x_{t,i} + \delta'_i X_t) + \varepsilon_{t,i}$ (see Box 1 for derivation).
+This formulation indicates that the statistical inference of the key parameter ($\delta_i$) is possible through the fitting of a non-linear model.
+We will use \texttt{stats::nls()} function in \texttt{R} or Bayesian models (e.g., Just Another Gibbs Sampler \citep{plummer_jags_2003}) to fit a non-linear model to the simulated data.
+
+\begin{tcolorbox}[{
+  breakable,
+  colback=white,
+  colframe=gray,
+  coltext=black,
+  parbox=false,
+  boxsep=5pt,
+  arc=1pt}]
+    Box 1: Approximation of the Beverton-Holt model
+    \hline
+    In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$.
+    After the transformation outlined in the main text, this formula takes the form $\ln(1 + \gamma'_i x_{t,i} + \delta'_i X_t + e_{t,i})$, where $\gamma'_i = \alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$ and $\delta'_i = \mu_{\beta} + \sigma_{\beta} \phi_i$.
+    Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma'_i x_{t,i} + \delta'_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
+
+    \begin{align}
+        \begin{split}
+        \label{eq:bhtaylor}
+        w(e_i) &= \ln(c) + \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + ...\\
+        &\approx \ln(c) + O(e_{t,i}),
+        \end{split}
+    \end{align}
+
+    where $O(e_{t,i})$ denotes the necessary terms of the Taylor series for proper approximation ($O(e_{t,i}) = \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + ...$). 
+    As a result, after accounting for environmental noise, the BH model can be approximated as:
+
+    \begin{align}
+    \begin{split}
+        \ln f(\overset{\rightarrow}{x}_{t}) 
+            &= r_i - \ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})\\
+            &= r_i - \ln(1 + \gamma'_i x_{t,i} + \delta'_{i} X_t + e_{t,j})\\
+            &\approx g'_{i} - \ln(1 + \gamma'_i x_{t,i} + \delta'_i X_t) + \varepsilon_{t,i},
+    \end{split}
+    \end{align}
+
+    where $g'_{i} = r_i + \overline{O(e_{t,i})}$.
+    This form allows us to estimate the key parameter $\delta'_i$ through simple statistical inference.
+\end{tcolorbox}
+
+(ii) \ul{Broader parameter space}: We will expand the parameter space of the simulation experiment (Table \ref{tab:param1}) and increase the number of subsamples ($500~\mbox{to}~1000$ parameter combinations for each of insensitive and sensitive communities).
+This broader parameter space will be crossed with two alternative theoretical models (Ricker and BH models) and a greater range of species richness ($S \in \{4, 8, 16, 32, 64\}$) and time series length ($T \in \{5, 10, 20, 40\}$).
+Through this extended simulation experiment, we will confirm the usefulness of our method in broader ecological scenarios.
+
+Collectively, these proposed activities will increase the credibility of our proposed method.
+
+\subsection*{Specific Aim 2: Experimental Validation}
+
+\textbf{\textit{Goal}} -- 
+We aim to assess the performance of the proposed method using experimental data, in which the colonization history was manipulated.
+While simulation experiments in Specific Aim 1 provide initial credibility to our method, it is imperative to validate its ability to predict priority effects when applied to real biological data.
+We will use published time-series data for the model validation.
+
+\textit{\textbf{Method details: preliminary analysis}} --
+We identified ten papers that controlled the colonization history to determine the strength of priority effects (Table \ref{tab:expdata}).
+These data are ideal for our model validation for two reasons.
+First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
+Therefore, we can assess whether the competitive exceedance $\Psi$ predicts the strength of priority effects.
+Second, these experiments vary in time series length and the number of species, allowing us to evaluate the robustness of our method to the varied data quality.
+
+\begin{table}
+    \flushleft
+    \caption{Published time series data of experimental communities.}
+    \begin{tabular}{llll}
+         Source & Study system & Time series length & \# species in a community\\
+         \hline
+         Fukami and Morin \citep{fukami_productivity-biodiversity_2003} & Protists & $6$ & $18$\\
+         Fukami \citep{fukami_assembly_2004} & Protists & $10$ & $14$\\
+         Price and Morin \citep{price_colonization_2004} & Protists & $\ge 20$ & $2$ or $3$ \\
+         Zhang and Zhang \citep{zhang_colonization_2007} & Algae & $13$ & $2$\\
+         Jiang and Patel \citep{jiang_community_2008} & Protists & $7$ & $10$\\
+         Tucker and Fukami \citep{tucker_environmental_2014} & Bacteria and yeasts & $9$ & $4$\\
+         Pu and Jiang \citep{pu_dispersal_2015} & Protists & $13$ & $10$\\
+         Ojima and Jiang \citep{ojima_interactive_2017} & Protists & $23$ & $5$\\
+         Hsu and Moeller \citep{hsu_metabolic_2021} & Protists & $13~\mbox{to}~22$ & $2$\\
+         Ojima et al. \citep{ojima_priority_2022} & Bacteria & $7$ & $2$ or $4$\\
+         \hline
+    \end{tabular}
+    \label{tab:expdata}
+\end{table}
+
+We applied our method to the datasets in Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima \textit{et al.} \citep{ojima_priority_2022}, serving as a preliminary application to real biological data.
+In their experiments, the authors manipulated the introduction order of competing species (two species of bacterivorous ciliates in Hsu and Moeller \citep{hsu_metabolic_2021} and four species of bifidobacteria in Ojima \textit{et al.} \citep{ojima_priority_2022}) to quantify the strength of priority effects.
+A pair of species were introduced into an experimental medium with different colonization timings (simultaneous, species 1 first, or species 2 first), and temporal changes of species densities were measured at multiple time points (seven to 22 time points).
+Their results indicated that the strength of priority effects varied with light conditions \citep{hsu_metabolic_2021} or species combinations \citep{ojima_priority_2022}.
+Hence, these data are an ideal test case for our proposed method.
+
+Our analysis proceeded as follows:
+
+\begin{enumerate}
+    \item Select the appropriate ecological model.
+    We fitted Ricker and BH models to the empirical time series and estimated Akaike's Information Criterion (AIC) \citep{burnham_model_2002} for each model.
+    In the following analysis, we used the model with a lower AIC value (a Ricker model, in this case).
+    \item Perform the null model analysis to yield the competitive exceedance $\Psi$.
+    We analyzed time series data after both species were introduced.
+    Thus \textit{no information on the colonization history was given to the analysis}.
+    \item Validate the relationship between the strength of priority effects (known as the experiment outcome) and the competitive exceedance $\Psi$.
+    We quantified the ``true'' strength of priority effects as the absolute log-response ratio $R = |\ln (D_{1, max} / D_{2, max})|$, where $D_{1, max}$ and $D_{2, max}$ are the maximum species density when they were introduced first and second, respectively \citep{hsu_metabolic_2021}.
+    The greater values of $R$ indicate stronger priority effects (either inhibitory or facilitative), but \textit{this metric cannot be estimated unless we manipulate the order of species introduction}.
+    Thus, we examined if the competitive exceedance $\Psi$ can predict the log-response ratio $R$.
+\end{enumerate}
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+    \includegraphics[scale=0.6]{output/figure_exp.pdf}
+    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
+    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
+    \label{fig:experiment}
+\end{wrapfigure}
+
+As expected from our preliminary simulation experiments, the competitive exceedance $\Psi$ predicted the strength of priority effects $R$ (Figure \ref{fig:experiment}).
+This preliminary result suggests that our method applies to biological data.
+
+\textit{\textbf{Method details: proposed analysis}} --
+We will search for additional published experimental data to broaden the taxonomic scope of our validation.
+We will repeat the procedure of the preliminary analysis for the identified (Table \ref{tab:expdata}) and additional data sources.
+
+However, we will use the community dissimilarity between treatments with different colonization orders to quantify the strength of priority effects because our preliminary approach (log-response ratio $R$ in step 3) does not apply to communities with more than two species.
+Typically, multiple sequences of colonization order ($> 2$) were considered when more than two species were used in the experiment \citep{fukami_productivity-biodiversity_2003, fukami_assembly_2004, price_colonization_2004, jiang_community_2008, tucker_environmental_2014, pu_dispersal_2015, ojima_interactive_2017}.
+We will estimate values of community dissimilarity for all pairs of colonization history and will yield the average of those values as the strength of priority effects. 
+We will employ the Morisita-Horn index of community dissimilarity.
+This measure of community dissimilarity is suitable for our analysis since it quantifies community dissimilarity based on the relative abundance \citep{magurran_biological_2011}.
+The Bray-Curtis index is another common measure of community dissimilarity.
+However, this metric is inappropriate because it is sensitive to the absolute abundance and cannot be used to compare across different taxa and experimental methods \citep{magurran_biological_2011}.
+
+Our proposed analysis will allow us to answer the following questions critical to applications in unmanipulated systems: (i) does our method's performance vary by time series length and/or the number of species? (ii) does our method's performance vary by taxonomic group?
+We expect our method to be robust to the challenges (i) and (ii) considering the results of the preliminary simulation experiments.
+Nevertheless, it is possible to notice unforeseen issues through this activity; if this is the case, we will carefully review the cases in which the method's performance was poor, and we will explore how we can improve our method to address the issue.
+% If it is deemed an unaddressable problem, we will clarify the limitation of our method.
+
+\subsection*{Specific Aim 3: Application to Unmanipulated Systems}
+
+\textbf{\textit{Goal}} -- 
+We aim to (i) assess the prevalence of priority effects in human gut microbes and (ii) identify factors that contribute to priority effects.
+
+Until recently, it was believed that healthy adults support a stable climax microbiome \citep{hooper_how_2002, fierer_animalcules_2012}, which is shaped largely by the gut environment.
+Several research supports this niche assembly in gut microbiomes, showing either the temporal compositional stability \citep{costello_bacterial_2009} or the return to the prior state of community structure following disturbance events \citep{dethlefsen_incomplete_2011, young_antibiotic-associated_2004, dethlefsen_pervasive_2008, david_host_2014}.
+In the meantime, more recent work suggests the manifestation of priority effects leading to alternative stable states \citep{dominguez-bello_delivery_2010, sprockett_role_2018, ojima_priority_2022}, which are possibly associated with obese and undernourished states \citep{fierer_animalcules_2012}.
+Distinguishing these assembly rules is crucial because it alters the best practice of clinical treatments.
+If niche assembly dominates, a healthy gut microbiome would re-establish after the recovery of desired environments.
+Alternatively, if priority effects manifest, re-introduction order of core gut microbes would be more important.
+Our analysis will provide important insights into when priority effects are strong, with important implications for human health.
+
+\textit{\textbf{Method details: data source}} --
+We will use published time series data of human gut microbiomes.
+The following keywords will be used to search the literature (title, abstract, or keywords fields) that may contain the time series data: ``\textit{human* gut* microb* `time series' OR `longitudinal'.}''
+Our preliminary search in SCOPUS identified 202 articles (as of 1/10/24), serveral of which contained promising data.
+For example, Vandeputte et al. 2021 \citep{vandeputte_temporal_2021} performed daily quantitative microbiome profiling on 713 fecal samples from 20 Belgian women over six weeks, combined with extensive anthropometric measurements, blood panels, dietary data, and stool characteristics. 
+We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four-time points; (ii) the entire community of the focal taxon is collected; (iii) absolute quantitative data are available; (iv) the sampling method is consistent across the time series.
+For those that meet the inclusion criteria, we will apply the following time-series analysis to yield the competition parameter $\delta_{obs}$.
+
+\textit{\textbf{Method details: time series analysis}} --
+In this section, we detail the method to account for observation errors when estimating the competitive exceedance $\Psi$.
+Unlike simulated and experimental time series data, observational data may contain substantial observation errors.
+We will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
+The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}; in our case, the competition parameter $\delta_{obs}$.
+
+The observed density of species $i$ at time $t$, $N_{t,i}$, will be modeled as random draws from a log-Normal distribution: $\ln N_{t,i} \sim \mbox{Normal}(x_{t,i}, \sigma_{obs}^2).$
+The mean parameter $x_{t,i}$ is the latent variable that represents ``true'' species' density (abundance per unit effort) and the SD $\sigma_{obs}$ measures stochastic observation errors.
+It is important to note that we will also be able to account for systematic observation errors if the information is available as covariates (e.g., sampling protocol).
+Thus, this modeling framework allows for robust statistical inference \citep{kery_bayesian_2012}.
+
+Either a Ricker or BH model will be fitted to the latent density $x_{t,i}$ to estimate species-specific $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with an SD $\sigma_{state}$ measuring the degree of stochastic environmental noise.
+Hierarchical modeling allows us to estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
+We will calculate the competitive exceedance $\Psi$ as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
+
+\textit{\textbf{Method details: drivers of priority effects}} --
+We will analyze factors influencing the competitive exceedance $\Psi$ in human gut microbiomes to yield insights into the prevalence of gut microbial communities sensitive to priority effects and individual attributes contributing to the sensitivity to priority effects.
+To this end, we will leverage the individual replicates of $\Psi$.
+To properly model $\Psi_k$ for individual $k$, our basic model will take the number of posterior samples that satisfy $\hat{\delta}_{k,obs} > \delta_{null}$ for individual $k$ ($Y_k$) as a response variable: $Y_k &\sim \mbox{Binomial}(N_{post}, P_k)$, where $N_{post}$ is the total number of posterior samples.
+Thus, the success probability of the Binomial distribution $P_k$ is identical to the competitive exceedance $\Psi_k$.
+
+The $\Psi_k$ will be related to linear predictors: $\mbox{logit}(\Psi_k) &= \theta_0 + \sum_q \theta_q z_{q,k}$.
+The parameter $\theta_0$ is the intercept, and $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$.
+The predictors $z_{q,k}$ will include individual attributes that could contribute to the sensitivity to priority effects. 
+Using this modeling framework, we will address four hypotheses: (i) Does the strength of priority effects vary across geographic regions?
+(ii) Do Western-style diets influence the strength of priority effects?
+(iii) Are priority effects stronger at younger ages?
+(iv) Are priority effects stronger in individuals with unhealthy states?
+
+
+\ul{[Hypothesis \textit{i}] \textit{Does the strength of priority effects vary across geographic regions?}} 
+The likelihood of priority effects may depend on potential colonists in the environment since priority effects stem from mutual non-invasibility between certain combinations of species \citep{fukami_historical_2015}.
+Cultural habits differ substantially across geographic regions, and such differences are thought to create variation in the species pool of microbial communities \citep{de_filippo_impact_2010, yatsunenko_human_2012, david_host_2014}.
+Therefore, different geographic regions may experience varied strengths of priority effects.
+We will evaluate the difference in the competitive exceedance $\Psi$ by country because it is linked to cultural differences \citep{yatsunenko_human_2012}.
+
+\ul{[Hypothesis \textit{ii}] \textit{Do Western-style diets influence the strength of priority effects?}}
+Diet is an important determinant of gut microbial communities \citep{de_filippo_impact_2010, yatsunenko_human_2012, schnorr_gut_2014, zimmer_vegan_2012, smits_seasonal_2017}.
+In particular, many studies found shifts in gut microbiota between Western and non-Western populations with health outcomes, and these shifts were attributable to changes in dietary fat \citep{reese_thinking_2019}.
+Different sets of species may be prevalent between populations with Western and non-Western dietary habits, likely leading to varied strengths of priority effects. 
+We will assess the difference in $\Psi$ between populations with Western and non-Western diets by re-classifying countries based on dietary habits \citep{kariel_proposed_1966}.
+
+\ul{[Hypothesis \textit{iii}] \textit{Are priority effects stronger at younger ages?}}
+Anecdotal evidence suggests that priority effects are stronger at younger ages.
+For example, an infant's gut microbiota is strongly influenced by delivery mode (vaginal vs caesarean section) and feeding regime (formula vs breastmilk) \citep{bokulich_antibiotics_2016, akagawa_effect_2019, dominguez-bello_delivery_2010}, implying the manifestation of priority effects.
+In contrast, adult gut microbiota has been hypothesized to be in a stable climax state \citep{fierer_animalcules_2012, costello_application_2012}, although supporting evidence for this claim is limited \citep{fierer_animalcules_2012}.
+We therefore hypothesize that priority effects are stronger at younger ages.
+We will yield the subject's age or age-class information from data sources and examine whether the competitive exceedance $\Psi$ changes with age.
+
+\ul{[Hypothesis \textit{iv}] \textit{Are priority effects stronger in individuals with unhealthy states?}}
+Dysbiosis is often associated with unhealthy states \citep{petersen_defining_2014, fierer_animalcules_2012}, and it was hypothesized that these reflect alternative stable states resulting from priority effects \citep{fierer_animalcules_2012}.
+However, this hypothesis has not been tested because of the lack of proper statistical methods.
+Here, we will utilize the competitive exceedance $\Psi$ as a proxy for priority effects and will compare this value between healthy and unhealthy people (IBD and/or obesity).
+If unhealthy people harbor microbial communities sensitive to priority effects, they should show higher values of $\Psi$.
+
+When we test these hypotheses, we will include potential covariates in the model to statistically control influences of possible confounding factors.
+Such factors may include, but are not limited to, sex, sampling methods (if multiple methods are employed), time-series length, and/or study ID.
+The inclusion of covariates is necessary to yield less biased estimates of the primary factor's effects.
+
+\subsection*{Outlook}
+While our focus in this proposal is the gut system, our proposed method will open valuable opportunities to understand the assembly rules of microbial communities in or on other parts of our bodies, such as the skin and oral cavity.
+These microbial communities also play important roles in mediating human health \citep{fierer_animalcules_2012}.
+The increasing attention to their health consequences stimulated researchers to study the underlying mechanisms of community assembly \citep{grice_topographical_2009, jakobsson_short-term_2010, costello_bacterial_2009, caporaso_moving_2011}.
+They share some important characteristics with gut microbial communities, although constituent species differ substantially among body sites \citep{costello_bacterial_2009}.
+For example, inter-personal differences in community structure are generally higher than intra-personal differences, highlighting the existence of personalized microbiota \citep{costello_bacterial_2009}.
+In the meantime, microbes inhabiting different parts of bodies show contrasting patterns in temporal compositional changes \citep{costello_bacterial_2009, caporaso_moving_2011, fierer_animalcules_2012, jakobsson_short-term_2010}.
+Oral cavity communities show greater stability in community structure over time with persistent core species, while the skin harbors more transient species with frequent changes in species composition \citep{costello_bacterial_2009}.
+These observations suggest that different assembly rules operate between persons as well as among body sites, likely with varied strengths of priority effects.
+Over the last two decades, significant efforts in these research areas have spawned a rich amount of time-series community data.
+Our method should also apply to such time-series data and would help yield deeper insights into the assembly mechanisms.
+
+One foreseeable concern is that the completion of this project is strongly dependent on the successful performance of the competitive exceedance $\Psi$.
+We have addressed this concern using simulations and laboratory experiments  (\textbf{Specific Aims 1 and 2}).
+The results were promising, and our proposed methodology will probably provide a much-needed resource to advance community assembly research in the human microbiota.
+Further, we have already identified sufficient data sources for experimental validation (\textbf{Specific Aim 2}), increasing the feasibility of the proposed work.
+Therefore, we are confident on the successful completion of the project.
+
+\begin{table}
+    \centering
+    \caption{Project time table}
+    \begin{tabular}{lccccc}
+         & Y1 &  Y2 & Y3 & Y4 & Y5\\
+         \hline
+         Aim 1 & Method refinement & Package development & & & \\
+         Aim 2 & Assemble data & Experimental validation (EV) & EV &  & \\
+         Aim 3 & & Data compilation (DC) & DC & Data analysis (DA) & DA \\
+    \end{tabular}
+    \label{tab:tt}
+\end{table}
+
+% \textbf{\textit{Goal}} -- 
+% The overarching goal of this specific aim is to ask a critical question that has never been addressed in \textit{unmanipulated} natural systems: \ul{\textit{when do priority effects occur?}}
+% To this end, we will capitalize on the global time series databases that have emerged over the past decade.
+% These datasets will allow us to yield the competitive exceedance $\Psi$ by site and to test the following hypotheses.
+
+% \textbf{Hypothesis 1}: \ul{Priority effects are more prevalent in small ecosystems}.
+
+% \textbf{Hypothesis 2}: \ul{Priority effects are more prevalent in productive ecosystems}.
+
+% Small ecosystem size and/or high productivity have been hypothesized to increase the importance of priority effects because both factors facilitate the rapid establishment of early colonizing species \citep{fukami_historical_2015}.
+% These hypotheses have been tested in controlled experimental systems \citep{fukami_assembly_2004, chase_stochastic_2010}; however, no empirical evidence exists in \textit{unmanipulated} natural systems.
+% We will test these hypotheses using time series data from terrestrial and aquatic ecosystems.
+
+% % \textbf{Hypothesis 2}: \ul{Priority effects are more prevalent in infant gut microbial communities}.
+% % Observational evidence suggests that the gut microbiota of healthy human adults are stable while babies have distinct community structures according to delivery modes \citep{dominguez-bello_delivery_2010, dominguez-bello_development_2011}.
+% % These observations suggest that gut microbiota may shift their assembly rules from priority-driven to niche-driven.
+% % We will test this hypothesis using time series data across individuals of different ages.
+
+% \textit{\textbf{Method details: data source}} --
+% We identified three major databases that recorded time series data across the globe: Biotime \citep{dornelas_biotime_2018}, RivFishTIME \citep{comte_rivfishtime_2021}, and the Zooplankton as Indicators Group (ZIG) \citep{figary_building_2022}. 
+% These databases include various taxonomic groups and ecosystems, encompassing plants, fish, plankton, and microbes.
+% We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four time points (time unit will vary by taxa); (ii) the entire community of the focal taxon is collected; (iii) quantitative abundance/density data are available; (iv) the sampling method is consistent across the time series; (v) sampling efforts (e.g., area or time sampled) are known.
+% For those that meet the inclusion criteria, we will apply the following time-series analysis to yield the competition parameter $\delta_{obs}$.
+
+% \textit{\textbf{Method details: time series analysis}} --
+% In this section, we detail the method to account for observation errors when estimating the competitive exceedance $\Psi$.
+% Unlike simulated and experimental time series data, field data contain substantial observation errors; for example, even if a sampling method is consistent within a given time series, it is common that the sampling crew changes over time, causing unintentional noises in the data.
+% We will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
+% The Bayesian state-space model is one of the time series models and has been proven to yield less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}; in our case, the competition parameter $\delta_{obs}$.
+
+% The observed density of species $i$ at time $t$, $N_{t,i}$, will be modeled as random draws from a log-Normal distribution: $\ln N_{t,i} \sim \mbox{Normal}(x_{t,i}, \sigma_{obs}^2).$
+% The mean parameter $x_{t,i}$ is the latent variable that represents ``true'' species' density (abundance per unit effort) and the SD $\sigma_{obs}$ measures stochastic observation errors.
+% It is important to note that we will also be able to account for systematic observation errors if information is available as covariates (e.g., observer ID); thus, this modeling framework allows for robust statistical inference \citep{kery_bayesian_2012}.
+
+% Either a Ricker or BH model will be fitted to the latent density $x_{t,i}$ to estimate species-specific $\delta_i$: $\ln x_{t + 1,i} &= \ln x_{t,i} + \ln f(\overset{\rightarrow}{x}_{t}) + \varepsilon_{t,i}$, where $\varepsilon_{t,i}$ is a normal error term with an SD $\sigma_{state}$ measuring the degree of stochastic environmental noise.
+% Hierarchical modeling allows us to estimate the mean competition parameter averaged across species ($\hat{\delta}_{obs}$) as a hyper-parameter of $\delta_i$: i.e., $\delta_i \sim \mbox{Normal}(\hat{\delta}_{obs}, \sigma^2_{\delta})$.
+% We will calculate the competitive exceedance $\Psi$ as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
+
+% \textit{\textbf{Method details: drivers of priority effects}} --
+% We will analyze factors influencing the competitive exceedance $\Psi$ in terrestrial and aquatic ecosystems.
+% Target taxa will include, but are not limited to, terrestrial plants, riverine fish, pond/lake zooplankton, and microbes.
+% To this end, we will leverage the spatial replicates of $\Psi$.
+% To properly model $\Psi_k$ at site $k$, our basic model will take the number of null simulation replicates that satisfies $\hat{\delta}_{k,obs} > \delta_{null}$ at site $k$ ($Y_k$) as a response variable: $Y_k &\sim \mbox{Binomial}(N_{sim}, P_k)$, where $N_{sim}$ is the number of null simulation replicates.
+% Thus, the success probability of the Binomial distribution $P_k$ is identical to the competitive exceedance $\Psi_k$.
+% The $\Psi_k$ will be related to linear predictors: $\mbox{logit}(\Psi_k) &= \theta_0 + \sum_q \theta_q z_{q,k} + \zeta$.
+% The parameter $\theta_0$ is the intercept, $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$, and $\zeta$ additional parameters to account for group structure properly (e.g., random effects of taxonomic groups, geographic regions, etc.).
+% The predictors $z_{q,k}$ will vary by ecosystem type and/or target taxa, as detailed below. 
+
+% \ul{\textit{Ecosystem size} (Hypothesis 1)} --
+% We will assess the influence of ecosystem size on aquatic communities in rivers and lakes.
+% \textbf{River}: \textit{Watershed area} serves as a proxy for ecosystem size because a site with a larger watershed area has greater water discharge \citep{sabo_role_2010, altermatt_diversity_2013, terui_emergent_2021}.
+% We will estimate the watershed area at each site using a global digital elevation map (available at a global scale \citep{yamazaki_merit_2019}).
+% \textbf{Lake}: We will use \textit{lake area} as a proxy following previous studies \citep{post_ecosystem_2000}.
+% A lake area serves as an excellent proxy for ecosystem size because it defines the available space for aquatic organisms.
+
+% \ul{\textit{Productivity} (Hypothesis 2)} -- 
+% We will assess the influence of productivity on terrestrial and aquatic communities.
+% \textbf{Terrestrial}: Multiple factors may influence the productivity of terrestrial communities.
+% We will consider annual temperature,  precipitation, and nutrient conditions (total nitrogen and phosphorus) as proxies for the system's productivity (REF).
+% \textbf{River}: We will use the ratio of the watershed area to the riparian forest area (hereafter, the \textit{WF ratio}).
+% Light availability is a critical determinant of stream productivity \citep{finlay_human_2013}.
+% The direct measure of light availability, however, is rarely available at sites where time series data are available.
+% As such, we will use the \textit{WF ratio} to approximate light availability.
+% Stream shading is greater when the stream size is small, but only if the riparian forest is present.
+% Considering this, the \textit{WF ratio} will serve as an appropriate proxy for light availability and, therefore, productivity.
+% \textbf{Lake}: We will use nutrient concentrations (total nitrogen and phosphorus).  
+% Nutrient conditions limit lake productivity \citep{post_ecosystem_2000} and are readily available in lakes in which time series data are available.
+
+% % \ul{\textit{Age} (Hypothesis 2)} --
+% % We will assess the influence of host age on human gut microbes.
+% % We will obtain the age information -- if detailed information is not available in the 
+
+% \ul{\textit{Other}} -- 
+% While our primary focus is to test the \textbf{Hypotheses 1 -- 2}, it is crucial to account for potential covariates for robust analysis.
+% As such, we will include climatic and land use variables because these factors could influence the strength of priority effects.
+% These data are publicly available at CHELSA \citep{karger_climatologies_2017} (climate data) and Copernicus global land service \citep{marcel_buchhorn_copernicus_2020} (land use) across the globe.
+% For human gut microbes, we will consider XXX.
+
+\newpage
+
+\bibliography{references}
+
+\end{document}

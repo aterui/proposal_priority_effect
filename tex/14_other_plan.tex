@@ -1,0 +1,84 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+\begin{document}
+
+\section*{Other Plan(s)}
+
+\subsubsection*{Data/Code Management}
+
+\textbf{Data}: While we do not collect data, we use experimental/observational data available in public data repositories and/or publications.
+Data and metadata content and format will adhere to established standards, ensuring that the data are Findable, Accessible, Interoperable, and Reproducible (FAIR).
+
+Throughout the project, data will exist in three forms.
+\textit{Raw data}: This data is acquired immediately after collection from data repositories/pubcations, prior to quality control and assurance checks.
+\textit{Intermediate data}: Raw data that has undergone quality assurance checks.
+It lists all raw data and flags data that did not pass quality checks, providing justification for exclusion.
+\textit{Final data}: This is a subset of raw data considered of high enough quality for analysis.
+
+The original data sourced from data repositories will be saved as spreadsheet (.csv) or R files (.rds) with ``raw'' in the filename.
+Metadata from corresponding data repositories or through communications with data providers will be saved as a "README" markdown file (.md) in the same repository, allowing users to seamlessly access that information as needed.
+All data will be hosted in Github along with source codes for analysis so readers can reproduce research findings.
+We will track any changes to data using Github's version control system.
+
+\textbf{Source Code}: We will develop and store our source codes for data formatting and statistical analysis in either R or Python scripts.
+These scripts will be hosted on GitHub, ensuring version control and collaboration among project team members. 
+GitHub's version control system will enable us to track changes, collaborate seamlessly, and maintain a historical record of code modifications throughout the project's duration.
+To ensure that our research is accessible to the wider community, we commit to sharing our source codes as open-source. These codes will be made available under permissive licenses such as MIT or BSD. This allows others to use, modify, and build upon our work.
+
+\subsubsection*{Policy for Product Access and Sharing}
+
+\textbf{Repositories}: All project products will be publicly accessible through either Zenodo.
+
+Zenodo, a public repository that issues DOIs (Digital Object Identifiers) (https://zenodo.org/), provides a stable and citable location for data.
+It also seamlessly integrates with GitHub, facilitating easy access to linked source code.
+Additionally, Zenodo offers a version control system, enabling us to effectively manage any potential updates or modifications to published datasets as needed. Zenodo boasts a rich history of utilization in ecology and various other scientific domains.
+
+\textbf{Publication and Timing}: We will share our data and source codes following the publication of major findings from our project or, at the latest, within two years after the project's completion, whichever comes first.
+This timeline ensures that our work remains accessible to the public and can benefit the research community promptly.
+
+We acknowledge that most of the datasets we will utilize are publicly available.
+However, for any data that is author-owned/confidential and cannot be shared with the public, we will adhere to ethical and legal guidelines.
+We will provide references to the appropriate contacts, data archives, or publications that can guide readers on how to access or request the restricted data.
+
+By adhering to these data management and sharing practices, our project aims to promote transparency, reproducibility, and open access to our computational resources and geospatial data.
+This approach ensures that our research can be leveraged by the broader scientific community and facilitates the validation and extension of our findings.
+
+\end{document}

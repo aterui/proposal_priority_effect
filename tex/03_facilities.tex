@@ -1,0 +1,79 @@
+\documentclass[12pt, class=article, crop=false]{standalone}
+\usepackage[subpreambles=true]{standalone}
+
+% general use packages
+\usepackage{import,
+            graphicx,
+            parskip,
+            url,
+            amsmath,
+            wrapfig,
+            soul}
+
+% box setup
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+% margin setup
+\usepackage[includeheadfoot,
+            top=1.27cm,
+            bottom=1.27cm,
+            left=2cm,
+            right=2cm]{geometry}%set margin
+
+% maintext font
+\usepackage[T1]{fontenc}
+\usepackage{tgtermes}
+
+% side caption figure
+\usepackage{sidecap}
+\sidecaptionvpos{figure}{t}
+
+% citation style
+\usepackage[sort&compress]{natbib}
+\setcitestyle{square}
+\setcitestyle{comma}
+\bibliographystyle{bibstyle}
+
+% caption setup
+\usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
+
+% suppress page numbers
+\pagenumbering{gobble}
+
+\begin{document}
+
+\section*{Facilities \& Other Resources}
+
+\subsection*{University of North Carolina at Greensboro (Terui)}
+
+\textit{Laboratory facilities}: Terui has ca. 1850 square feet of laboratory space.
+This space includes work areas for lab members (students and postdocs) and general wet/dry lab (sample sorting, sample processing etc.).
+This laboratory space is entirely devoted to Terui's research and is not shared.
+
+Office \textit{facilities}: Terui's office is located close to the laboratory.
+The space is adequate and is equipped with a desktop computer, printer, phone, etc and consulting space to meet with students, colleagues, and collaborators.
+
+\textit{Computer facilities}: The desktop computers in the Terui lab are equipped with standard Microsoft programs
+(WORD, EXCEL, POWERPOINT, ACCESS).
+Software includes the latest version of R, JAGS, ArcGIS, ArcCatalog and QGIS.
+All databases will be managed in spreadsheets/R files and will be shared via online drive (OneDrive and Google Drive) to increase accessibility for team members.
+The University of North Carolina at Greensboro (UNCG) provides 1 TB online storage space for OneDrive as well as unlimited space for Google Drive, which facilities effective communications among team members.
+The desktop computers in the Terui lab have 64 GB of available RAM and a high-performance processor (Core i-7 8700 CPU, 3.2 GHz) with suitable computational capacity for the proposed project.
+In addition, UNCG partners with UNC-Chapel Hill and NC State University to provide access to their Computing Clusters, technical support, and training for High Performance Computing (HPC).
+Through this partnership, Terui can access cluster computing resources.
+We will use these cluster computing resources should that be necessary for the statistical analysis.
+
+\textit{Communication}: UNCG has unlimited access to the teleconferencing software (Zoom or Teams), which will allow us to communicate frequently.
+
+\textit{Diversity}: UNCG is home to an integrative, diverse group of faculty, research scientists, and students who work together to advance basic understanding of ecosystems and solve environmental issues. The UNCG is designated as a minority-serving institution and saves a diverse student body.
+The Biology department is housed in the Eberhart and Sullivan building
+and supports active research in the fields of ecology, physiology, molecular biology, and cell biology among others.
+In 2008, the Biology department initiated the Environmental Health Sciences (EHS) Ph.D program, in addition to the Master's program.
+These programs create opportunities for Terui's lab group to interact with other cell biologists, physiologists, toxicologists, bioinformaticians, and ecologists.
+
+\textit{Library Resources}: The Jackson Library at UNCG provides over 1.2 million physical items in its collections and access to millions of digital items. The library has more than 300 computers for students, staff, and faculty. The UNCG library subscribes to most ecological journals electronically and provides access to the latest scientific articles.
+Furthermore, faculty members and graduate students can borrow books from the libraries of the University of North Carolina system and Duke University via a cooperative leading agreement.
+
+
+\end{document}
