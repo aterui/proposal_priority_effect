@@ -100,8 +100,7 @@ g_scatter <- df_plot %>%
   facet_grid(rows = vars(n_timestep),
              cols = vars(n_species),
              labeller = labeller(n_timestep = label_t,
-                                 n_species = label_s),
-             scales = "free") +
+                                 n_species = label_s)) +
   labs(x = expression("Leading eigen value"~"|"*lambda[max]*"|"),
        y = expression("Competitive exceedance"~Psi),
        color = "Sensitivity",
@@ -114,10 +113,10 @@ g_scatter <- df_plot %>%
              linewidth = 0.25,
              linetype = "dashed",
              alpha = 0.4) +
-  geom_ysidedensity(aes(x = stat(density),
-                        fill = stability),
-                    alpha = 0.50,
-                    position = "fill") +
+  # geom_ysidedensity(aes(x = stat(density),
+  #                       fill = stability),
+  #                   alpha = 0.50,
+  #                   position = "fill") +
   MetBrewer::scale_color_met_d("Hiroshige",
                                direction = -1) +
   MetBrewer::scale_fill_met_d("Hiroshige",
