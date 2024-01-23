@@ -47,9 +47,9 @@
 Decades of research have shown that many microorganisms found in the human gut can play critical roles in the host's immune system and protection against pathogen invasion \citep{fierer_animalcules_2012, petersen_defining_2014, turroni_infant_2020}.
 For example, mounting evidence suggests that changes in microbial community structure -- termed ``dysbiosis'' -- occur in patients with inflammatory bowel diseases \citep{frank_molecular-phylogenetic_2007, karlsson_gut_2013, abrahamsson_low_2014, parracho_differences_2005} and obesity \citep{costello_application_2012, ley_obesity_2005, turnbaugh_diet-induced_2008}, for which annual U.S. medical costs exceed \$150 billion \citep{singh_trends_2022, cawley_medical_2012}.
 These studies often assume that dysbiosis is caused by different gut environments between healthy and unhealthy people \citep{fierer_animalcules_2012, petersen_defining_2014}.
-If the gut environment is the master variable dictating the microbial community structure, it should then only require the improvement of the gut environment (e.g., changing dietary habits) to restore the microbial structure characteristic of a healthy person \citep{chase_community_2003, leibold_metacommunity_2004, fukami_historical_2015, hooper_how_2002, reese_thinking_2019}.
+If the gut environment is prominent in dictating the microbial community structure, it should then only require environmental improvement (e.g., changing dietary habits) to restore the microbial structure characteristic of a healthy person \citep{chase_community_2003, leibold_metacommunity_2004, fukami_historical_2015, hooper_how_2002, reese_thinking_2019}.
 
-Ecological theory predicts, however, the structure of the gut microbiota can be sensitive to the order of species arrival, leading to divergent states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
+Ecological theory predicts, however, that the structure of the gut microbiota can be sensitive to the order of species arrival, leading to divergent states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
 \ul{This historical contingency in community assembly is referred to as priority effects,} which can occur when early-arriving species preempt available resources or modify the environment for later-arriving species \citep{fukami_historical_2015, ke_coexistence_2018}.
 The stochastic nature of priority effects presents a significant challenge in predicting and maintaining community structure \citep{fukami_historical_2015}.
 For example, the gut microbiome may shift to an alternative state of community structure after an antibiotic treatment, even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
@@ -78,6 +78,13 @@ To this end, our proposed research consists of three specific aims:
     \item \textbf{Specific Aim 3}: Apply the developed method to existing time series data on the human gut microbiota to investigate \textit{when priority effects are strong in the human microbiota}
 \end{itemize}
 
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:enter-label}
+\end{figure}
+
 \section{Innovation}
 Our proposed work will advance the fundamental understanding of the human microbiota and its relation to human health through a novel application of ecological theory to existing clinical data.
 We believe this work is innovative both methodologically and conceptually for the following reasons.
@@ -87,7 +94,7 @@ A major challenge in community assembly research is the ``\textit{curse of dimen
 Namely, as the number of species increases, the non-linear system dynamics quickly become so complicated that traditional statistical approaches are no longer applicable.
 This problem is particularly serious in microbial systems because the taxonomic diversity is far beyond that of plants and animals.
 To confront this challenge, the proposed method condenses community information into a manageable number of parameters, as detailed in Specific Aim 1 below. 
-This unique simplification allows us to use ordinary statistics to quantify priority effects (see \textit{Approach -- Specific Aim 1}).
+This unique simplification allows us to use ordinary statistics to quantify priority effects.
 
 Second, \ul{\emph{our work is also conceptually innovative}} because our method will enable us to provide a novel answer to \textit{when priority effects are strong on the human microbiota.}
 Much of the research in priority effects has relied on experimental manipulations of species arrival order, with limited scope due to logistical and ethical challenges.
@@ -295,7 +302,7 @@ We will use \texttt{stats::nls()} function in \texttt{R} or Bayesian models (e.g
         \end{split}
     \end{align}
 
-    where $O(e_{t,i})$ denotes the necessary terms of the Taylor series for proper approximation ($O(e_{t,i}) = \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + ...$). 
+    where $O(e_{t,i})$ denotes the higher-order terms of the Taylor series necessary for proper approximation ($O(e_{t,i}) = \frac{e_{t,i}}{c} - \frac{e_{t,i}^2}{2 c^2} + ...$). 
     As a result, after accounting for environmental noise, the BH model can be approximated as:
 
     \begin{align}
