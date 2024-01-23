@@ -16,9 +16,8 @@
 \tcbuselibrary{breakable}
 
 % margin setup
-\usepackage[includeheadfoot,
-            top=1.27cm,
-            bottom=1.27cm,
+\usepackage[top=2cm,
+            bottom=2cm,
             left=2cm,
             right=2cm]{geometry}%set margin
 
@@ -46,25 +45,25 @@
 
 \section*{Abstract}
 
-\linenumbers
+% \linenumbers
 Humans host a vast array of microorganisms in the gut, serving diverse roles in the development of the host immune system and protection against pathogen invasion.
-It is suggested that alterations in the structure of microbial communities, referred to as ``dysbiosis,'' are contributing factors to the onset and persistence of conditions such as Inflammatory Bowel Disease and obesity.
-A comprehensive understanding of the relationship between gut microbiota and human health is crucial, as it directly influences the optimal approach to clinical treatments.
-Clinical studies interpret dysbiosis through the lens of niche paradigm, assuming that distinct microbial communities in healthy and unhealthy individuals arise from different gut environments.
-However, microbiologists now acknowledge that the human gut microbiota is highly responsive to the order of species colonization in certain circumstances.
-This phenomenon, known as priority effects, occurs when early-arriving species influence available resources for later-arriving species due to high niche overlap.
-Distinguishing these assembly rules is vital for informing clinical treatments effectively.
-Despite this understanding, a significant challenge remains unresolved: a common method to confirm priority effects is the experimental manipulation of species' colonization order \textit{in vitro}.
-In real gut systems, knowing the order of microbial species' arrival is practically impossible.
+It is suggested that alterations in the structure of microbial communities, referred to as dysbiosis, are contributing factors to the onset and persistence of conditions such as Inflammatory Bowel Disease and obesity.
+Clinical studies often assume that dysbiosis arises from undesired gut environments.
+In certain circumstances, however, human gut microbiota is highly responsive to the order of species arrival, potentially leading to dysbiosis even when the optimal environment for healthy microbial communities is maintained.
+This phenomenon, known as priority effects, occurs when early-arriving species preempt available resources or modify the environment for later-arriving species.
+Distinguishing these assembly processes is vital for informing clinical treatments effectively.
+Despite this understanding, a fundamental problem remains unresolved: a common method to confirm priority effects is the experimental manipulation of species introduction order \textit{in vitro}.
+In real gut systems, knowing the order of microbial species' arrival is impractical.
 Consequently, we know little about when priority effects are strong in unmanipulated gut systems.
-Addressing this fundamental issue necessitates the development of a statistical method capable of identifying priority effects without knowledge of colonization history.
-To bridge this knowledge gap, we propose to develop a new statistical method that identifies biological communities sensitive to priority effects.
+Addressing this fundamental issue necessitates the development of a statistical method capable of identifying priority effects without knowledge of arrival history.
+Here, we propose to develop a new statistical method that identifies biological communities sensitive to priority effects, aiming to provide insights into the conditions under which priority effects strongly affect the human microbiome.
 Our proposal is structured as follows.
-First, we will establish a theoretical foundation for the methodology with performance validation through simulation experiments.
-Our method will leverage time-series data to unveil insights into community assembly rules. Importantly, it will be applicable to species-rich communities, a characteristic hindering the use of conventional methods in community ecology.
-Second, our project will assess the method's ability to predict priority effects in experimental biological communities with manipulated colonization orders.
-These experimental data have known outcomes (priority effects vs. no priority effects); thus, this activity can validate the credibility of our method when applied to real biological data.
-Lastly, we will apply the method to unmanipulated gut systems, exploring the prevalence of priority effects and assessing potential contributing factors, such as geographic regions, age, diet, and health status.
-Collectively, our proposed project will fill a crucial gap in understanding assembly rules in human gut microbiota and beyond, with profound implications for human health.
+First, we will develop a mathematical foundation for the methodology with performance validation through numerical simulation experiments.
+Our method will leverage existing time-series data of microbial communities that have accumulated over the last two decades.
+Importantly, the method will be applicable to species-rich microbial communities, a characteristic hindering the use of conventional methods in community ecology.
+Second, our project will assess the method's ability to predict priority effects in experimental biological communities with manipulated introduction orders.
+The manipulation of introduction orders allows for the experimental estimation of the strength of priority effects, which will be used to evaluate the predictability of our method when applied to biological data.
+Lastly, we will apply the method to unmanipulated gut systems and will explore the potential drivers of priority effects, such as geographic regions, age, diet, and health status.
+Collectively, our proposed project will fill an important gap in understanding assembly rules in the human gut microbiome, with practical implications for human health.
 
 \end{document}
