@@ -63,7 +63,7 @@ However, even though experiments are powerful in inferring causal relationships,
 This oversimplification limits our ability to understand the behavior and assembly processes of species-rich communities like the human gut microbiota \citep{fierer_animalcules_2012}. 
 In addition, experiments are ethically impractical in many cases, particularly when the focus is on human-associated microbes. 
 These challenges with experimental approaches create a need for the use of observational data to study priority effects, but knowing the arrival order of microbial species in non-experimental systems is virtually impossible  \citep{sprockett_role_2018}.
-The inference of priority effects from observational data is difficult in the absence of appropriate statistical methods.
+% The inference of priority effects from observational data is difficult in the absence of appropriate statistical methods.
 \ul{Resolving this fundamental problem requires the development of a statistical method that can quantify the strength of priority effects \textit{without knowing the history of species arrival}}.
 We lack such a novel statistical method, hindering progress in understanding the conditions under which priority effects strongly affect the human microbiome.
 
@@ -112,21 +112,35 @@ Hence, we suggest that this proposal has two innovative qualities meeting the NI
 To develop a new modeling approach that identifies communities sensitive to priority effects, we will perform two activities:
 [1a] derive a mathematical foundation for a statistical method that identifies sensitive communities and [1b] validate the performance of the proposed method with numerical simulation experiments.
 
-\subsubsection*{Activity 1a: Derive a theoretical foundation}
+\subsubsection*{Activity 1a: Mathematical foundation}
+
+\begin{wrapfigure}{r}{0.45\textwidth}
+    \includegraphics[scale = 0.7]{output/figure_model.pdf}
+    \caption{
+    Graphical comparison of traditional and proposed approaches.
+    $\alpha$ and $\gamma$ denote intraspecific competition effects, and $\beta$ and $\delta$ interspecific competition effects.
+    In our framework, competition is defined and treated broadly, encompassing any net negative interaction between species.
+    (A) A traditional approach models an entire network of species interactions.
+    The number of interspecific competition parameters (arrows in the figure) increases exponentially as the number of species increases.
+    (B) In contrast, our new approach condenses species-level information into aggregate effects ($\delta$) of total community density (the circle at the center).
+    This unique simplification greatly simplifies the statistical modeling with minimal loss of species-specific information.
+    }
+    \label{fig:model_concept}
+\end{wrapfigure}
 
 \textbf{\textit{Goal}} -- 
 Our goal in this activity is to develop a mathematical foundation for a statistical method that identifies sensitive communities.
 In communities of interacting species, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time \citep{chesson_mechanisms_2000, barabas_chessons_2018, ke_coexistence_2018, terui_intentional_2023}.
 For example, in two-species communities, the community is sensitive to priority effects if interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
 Therefore, the first step is to obtain reliable estimates of competition from an empirical time series.
-However, in empirical settings, it is often infeasible to estimate those parameters because of the ``\textit{curse of dimensionality}:'' as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
-Here, we propose a robust statistical method that bypasses the curse of dimensionality. Specifically, \ul{our proposed method estimates the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density}.
+However, in empirical settings, it is often infeasible to estimate those parameters because of the ``\textit{curse of dimensionality}.'' That is, as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
+Here, we propose a robust statistical method that bypasses the curse of dimensionality. Specifically, \ul{our proposed method estimates the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density} (Figure \ref{fig:model_concept}).
 
-Importantly, the application of this framework focusing on competitive interactions is not limited to communities where species interact only via resource competition.
+Importantly, \ul{the application of this framework focusing on competitive interactions is not limited to communities where species interact only via resource competition.}
 In the following theoretical analysis, competition is defined and treated broadly, encompassing any net negative interaction between species.
 Negative interactions can come not just from resource competition as strictly defined, but also from other types of interactions that characterize human-associated microbial communities, such as competition for space, interference via toxin production, and interspecific quorum sensing.
 
-\textbf{\textit{Method detail: theoretical backbone}} -- 
+\textbf{\textit{Method detail: mathematical backbone}} -- 
 We consider a discrete recursion equation to describe community dynamics over time. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
 
 \begin{equation}
@@ -290,9 +304,9 @@ We will use \texttt{stats::nls()} function in \texttt{R} or Bayesian models (e.g
   parbox=false,
   boxsep=5pt,
   arc=1pt}]
-    Box 1: Approximation of the Beverton-Holt model
+    Box 1: Approximation of a Beverton-Holt model
     \hline
-    In the Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$.
+    In a Beverton-Holt (BH) model, the competition terms are modeled in a logarithmic scale as $\ln(1 + \alpha_i x_{t,i} + \sum_j \beta_{ij} x_{t,j})$.
     After the transformation outlined in the main text, this formula takes the form $\ln(1 + \gamma'_i x_{t,i} + \delta'_i X_t + e_{t,i})$, where $\gamma'_i = \alpha_i - \mu_{\beta} - \sigma_{\beta} \phi_i$ and $\delta'_i = \mu_{\beta} + \sigma_{\beta} \phi_i$.
     Here, to separate the nuisance term $e_{t,i}$ as an additive term in an ordinary scale, let us denote $c = 1 + \gamma'_i x_{t,i} + \delta'_i X_t$ and consider the Taylor series of $w(e_{t,i}) = \ln(c + e_{t,i})$ around $e_{t,i} = 0$:
 
@@ -340,6 +354,12 @@ Therefore, we can assess whether the competitive exceedance $\Psi$ predicts the 
 Second, these experiments vary in time series length and the number of species, allowing us to evaluate the robustness of our method. 
 Most of the experiments listed in Table \ref{tab:expdata} involved free-living microbial systems consisting of freshwater bacteria, protists, and algae, but one of the experiments, Ojima et al. [21], used common species of \textit{Bifidobacterium} isolated from the human infant gut. 
 
+We applied our method to the datasets in Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima \textit{et al.} \citep{ojima_priority_2022}, serving as a preliminary application to real biological data.
+In their experiments, the authors manipulated the introduction order of competing species (two species of bacterivorous ciliates in Hsu and Moeller \citep{hsu_metabolic_2021} and four species of bifidobacteria in Ojima \textit{et al.} \citep{ojima_priority_2022}) to quantify the strength of priority effects.
+A pair of species were introduced into an experimental medium with different introduction timings (simultaneous, species 1 first, or species 2 first), and temporal changes of species densities were measured at multiple time points (seven to 22 time points).
+Their results indicated that the strength of priority effects, as quantified by the method proposed by Vannette and Fukami \citep{vannette_historical_2014}, varied with light conditions \citep{hsu_metabolic_2021} or species combinations \citep{ojima_priority_2022}.
+Hence, these data are an ideal test case for our proposed method.
+
 \begin{table}
     \flushleft
     \caption{Published time series data of experimental communities.}
@@ -361,18 +381,19 @@ Most of the experiments listed in Table \ref{tab:expdata} involved free-living m
     \label{tab:expdata}
 \end{table}
 
-We applied our method to the datasets in Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima \textit{et al.} \citep{ojima_priority_2022}, serving as a preliminary application to real biological data.
-In their experiments, the authors manipulated the introduction order of competing species (two species of bacterivorous ciliates in Hsu and Moeller \citep{hsu_metabolic_2021} and four species of bifidobacteria in Ojima \textit{et al.} \citep{ojima_priority_2022}) to quantify the strength of priority effects.
-A pair of species were introduced into an experimental medium with different introduction timings (simultaneous, species 1 first, or species 2 first), and temporal changes of species densities were measured at multiple time points (seven to 22 time points).
-Their results indicated that the strength of priority effects, as quantified by the method proposed by Vannette and Fukami \citep{vannette_historical_2014}, varied with light conditions \citep{hsu_metabolic_2021} or species combinations \citep{ojima_priority_2022}.
-Hence, these data are an ideal test case for our proposed method.
+\begin{wrapfigure}{r}{0.45\textwidth}
+    \includegraphics[scale=0.75]{output/figure_exp.pdf}
+    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
+    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
+    \label{fig:experiment}
+\end{wrapfigure}
 
 Our analysis proceeded as follows:
 
 \begin{enumerate}
     \item Select the appropriate ecological model.
-    We fitted Ricker and BH models to the empirical time series and estimated Akaike's Information Criterion (AIC) \citep{burnham_model_2002} for each model.
-    In the following analysis, we used the model with a lower AIC value (a Ricker model, in this case).
+    We fitted Ricker and BH models to the empirical time series and estimated the Widely Applicable Information Criterion (WAIC; a generalization of Akaike's Information Criterion to hierarchical Bayesian models) \citep{watanabe_widely_2013} for each model.
+    In the following analysis, we used the model with a lower WAIC value (a Ricker model, in this case).
     \item Perform the null model analysis to obtain competitive exceedance $\Psi$.
     We analyzed time series data after both species were introduced.
     Thus \textit{no information on arrival history was given to the analysis}.
@@ -382,13 +403,6 @@ Our analysis proceeded as follows:
     The greater values of $LRR$ indicate stronger priority effects (either inhibitory or facilitative), but \textit{this metric cannot be estimated unless we manipulate the order of species introduction}.
     We examined how well competitive exceedance $\Psi$ predicts $LRR$.
 \end{enumerate}
-
-\begin{wrapfigure}{r}{0.45\textwidth}
-    \includegraphics[scale=0.75]{output/figure_exp.pdf}
-    \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
-    Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
-    \label{fig:experiment}
-\end{wrapfigure}
 
 As expected from our preliminary simulation experiments, competitive exceedance $\Psi$ predicted the strength of priority effects $LRR$ reasonably well (Figure \ref{fig:experiment}).
 
@@ -402,7 +416,7 @@ Thus, we will quantify the extent of community dissimilarity for all pairs of in
 
 For this analysis, we will use two metrics of community similarity, the Morisita-Horn index and the Bray-Curtis index.
 The advantage of the Morisita-Horn index is that it quantifies community similarity based on the relative abundance \citep{magurran_biological_2011}, making it possible to compare among experimental systems that can vary greatly in absolute abundances.
-On the other hand, similarity based on relative abundance can be difficult when differences in absolute abundance are also of interest in comparing communities.
+On the other hand, similarity based on relative abundance can be difficult when differences in absolute abundance are also of interest when comparing communities.
 Unlike the Morisita-Horn index, the Bray-Curtis index is sensitive to differences in absolute abundances \citep{magurran_biological_2011}.
 
 Our proposed analysis will allow us to answer the following two questions, which will help better clarify the strengths and limitations of our proposed method.
@@ -484,13 +498,18 @@ The inclusion of covariates is necessary to yield less biased estimates of the p
 
 \subsection*{Outlook}
 While our focus in this proposal is the gut system, we expect our proposed method will create opportunities for understanding the assembly of microbial communities in or on other parts of the human body, such as the skin and the oral cavity.
-These microbial communities also mediate human health \citep{fierer_animalcules_2012}.
-The increasing attention to their health consequences stimulated researchers to study the underlying mechanisms of community assembly \citep{grice_topographical_2009, jakobsson_short-term_2010, costello_bacterial_2009, caporaso_moving_2011}.
+These microbial communities also mediate human health \citep{fierer_animalcules_2012}, and the increasing attention to their health consequences stimulated researchers to study the underlying mechanisms of community assembly \citep{grice_topographical_2009, jakobsson_short-term_2010, costello_bacterial_2009, caporaso_moving_2011}.
 They share some characteristics with gut microbial communities, despite substantial differences in the identity of constituent species \citep{costello_bacterial_2009}.
 At the same time, microbes inhabiting different parts of the human body show contrasting patterns in temporal compositional changes \citep{costello_bacterial_2009, caporaso_moving_2011, fierer_animalcules_2012, jakobsson_short-term_2010}.
 Oral cavity communities show greater stability in community structure over time with persistent core species, while the skin harbors more transient species with frequent changes in species dominance and composition \citep{costello_bacterial_2009}.
 These observations suggest that different assembly rules among body sites, likely with varied strengths of priority effects.
 Time-series data have continued to accumulate on these systems, to which our new method should be applicable.
+
+One foreseeable concern is that the completion of this project is strongly dependent on the successful performance of competitive exceedance $\Psi$.
+We have addressed this concern using simulations and laboratory experiments  (\textbf{Specific Aims 1 and 2}).
+The results were promising, and our proposed methodology will probably provide a much-needed resource to advance community assembly research in the human microbiota.
+Further, we have already identified sufficient data sources for experimental validation (\textbf{Specific Aim 2}), increasing the feasibility of the proposed work.
+Therefore, we are confident on the successful completion of the project.
 
 \begin{table}
     \centering
