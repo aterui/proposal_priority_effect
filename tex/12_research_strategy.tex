@@ -70,7 +70,7 @@ We lack such a novel statistical method, hindering progress in understanding the
 \textbf{Solution} --
 \ul{The goal of the proposed research is to develop and demonstrate the utility of a novel method that identifies biological communities sensitive to priority effects from observational data .}
 This research is motivated by our belief that existing time series data on the human gut microbiome provide untapped opportunities to quantify priority effects once an appropriate method grounded on a sound mathematical and statistical foundation is developed.
-To this end, our proposed research consists of three specific aims:
+To this end, our proposed research consists of three specific aims (Figure \ref{fig:overview}):
 
 \begin{itemize}
     \item \textbf{Specific Aim 1}:  Develop a theoretical foundation for the method with the performance validation through numerical simulation experiments of microbial community assembly
@@ -79,9 +79,9 @@ To this end, our proposed research consists of three specific aims:
 \end{itemize}
 
 \begin{figure}
-    \centering
-    \includegraphics[scale=0.7]{output/figure_overview.pdf}
-    \caption{Caption}
+    \flushleft
+    \includegraphics[scale=0.65]{output/figure_overview.pdf}
+    \caption{Overview of the proposed project. Specific Aims 1 and 2 aim to develop and demonstrate the utility of a new statistical method. Having confirmed the validity of the method, Specific Aim 3 aims to apply it to observational data to ask when priority effects are strong on the human gut microbiome.}
     \label{fig:overview}
 \end{figure}
 
@@ -232,13 +232,14 @@ We considered 1782 combinations of demographic parameters to yield a sufficient 
 We identified parameter combinations that generated insensitive and sensitive communities by calculating the leading eigenvalue for each parameter combination, after which 200 parameter sets were randomly subsampled to ensure that the relative frequencies of sensitive and insensitive communities were equal (100 sets have $|\lambda_{max}| < 1$ otherwise $|\lambda_{max}| > 1$).
 We crossed these parameter sets with the number of species $S$ ($S \in \{2, 5, 10\}$) and the time series length $T$ ($T \in \{10, 30\}$) with five replicates in each, resulting in $200 \times 3 \times 2 \times 5 = 6000$ simulation runs.
 
-\begin{SCfigure}
+\begin{figure}{\textwidth}
+    \centering
+    \includegraphics[scale=0.8]{output/figure_eigen_scatter.pdf}
     \caption{Competitive exceedance $\Psi$ ($y$-axis) captures the critical transition from insensitive to sensitive communities, which are determined by the leading eigenvalue $\lambda_{max}$ ($x$-axis) of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).
     The rows and columns distinguish the number of species and the time series length used to generate simulated data.
     Dots are individual simulation replicates with colors distinguishing the community's sensitivity to priority effects (orange: sensitive, blue: insensitive).}
-    \includegraphics[scale=0.65]{output/figure_eigen_scatter.pdf}
     \label{fig:box}
-\end{SCfigure}
+\end{figure}
 
 The results of the preliminary analysis are promising.
 \ul{The competitive exceedance $\Psi$ captured the critical transition from insensitive to sensitive communities} (Figure \ref{fig:box}).
@@ -246,18 +247,19 @@ The number of species did not have any noticeable effect on the performance of t
 Moreover, the performance was reasonable with a relatively short time series ($t = 10$).
 These results indicate that our method can be effective even with short time series data from species-rich communities. 
 
-
 \begin{table}
     \flushleft
-    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will repeat the analysis across Ricker and Beverton-Holt models to simulate community dynamics. Note that intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
-    The notation ``--'' means that we will use the same parameter setup in the proposed work.}
+    \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will expand the analysis to Ricker and Beverton-Holt models.
+    The notation ``--'' means that we will use the same parameter setup in the proposed work.
+    $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.}
+    % Intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
     \begin{tabular}{clll}
         Symbol & Interpretation & Value (preliminary) & Value (proposed)\\
         \hline
         $x^*$ & Average equilibrium density & $2, 8, 32$ & $1~\mbox{to}~100$\\
         $h_x$ & Half range in $x^*$ & $x^* \times 0.00~\mbox{to}~0.50$ & $x^* \times 0.00~\mbox{to}~1.00$\\
         $x_i^*$ & Equilibrium density for species $i$ & $\mbox{Unif}(x^* - h_x, x^* + h_x)$ & --\\
-        $\alpha_{i}$ & Intraspecific competition & $1 / x^*$ & -- \\
+        $\alpha_{i}$ & Intraspecific competition & $1 / x^*$ & $1 / x_i^*$ \\
         $\beta_{ij}$ & Interspecific competition & $\mbox{Unif(\mu_{\beta} - h_{\beta}, \mu_{\beta} + h_{\beta})}$ & -- \\
         $\mu_{\beta}$ & Average interspecific competition & $\alpha_i \times 0.00~\mbox{to}~2.00$ & --\\
         $h_{\beta}$ & Half range in $\beta_{ij}$ & $\mu_{\beta} \times 0.00~\mbox{to}~0.50$ & $\mu_{\beta} \times 0.00~\mbox{to}~1.00$ \\
@@ -381,8 +383,8 @@ Our analysis proceeded as follows:
     We examined how well competitive exceedance $\Psi$ predicts $LRR$.
 \end{enumerate}
 
-\begin{wrapfigure}{r}{0.35\textwidth}
-    \includegraphics[scale=0.6]{output/figure_exp.pdf}
+\begin{wrapfigure}{r}{0.45\textwidth}
+    \includegraphics[scale=0.75]{output/figure_exp.pdf}
     \caption{The competitive exceedance $\Psi$ predicts the strength of priority effects in experimental communities (data from Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima et al. \citep{ojima_priority_2022}).
     Each data point represents an individual time series, and symbol shapes distinguish data sources (circle = Hsu and Moeller, triangle = Ojima et al.)}
     \label{fig:experiment}
@@ -401,7 +403,7 @@ Thus, we will quantify the extent of community dissimilarity for all pairs of in
 For this analysis, we will use two metrics of community similarity, the Morisita-Horn index and the Bray-Curtis index.
 The advantage of the Morisita-Horn index is that it quantifies community similarity based on the relative abundance \citep{magurran_biological_2011}, making it possible to compare among experimental systems that can vary greatly in absolute abundances.
 On the other hand, similarity based on relative abundance can be difficult when differences in absolute abundance are also of interest in comparing communities.
-Unlike the Morisita-Horn index, the Bray-Curtis index is sensitive to differences in absolute abundances\citep{magurran_biological_2011}.
+Unlike the Morisita-Horn index, the Bray-Curtis index is sensitive to differences in absolute abundances \citep{magurran_biological_2011}.
 
 Our proposed analysis will allow us to answer the following two questions, which will help better clarify the strengths and limitations of our proposed method.
 (i) Does our method's performance vary by time series length and/or the number of species?
@@ -410,7 +412,7 @@ We expect our method to be robust in terms of (i) and (ii), in light of the resu
 Nevertheless, we will study the cases where the method's performance turns out to be relatively poor.
 We will use this analysis to explore how our method can be further refined.
 
-\subsection*{Specific Aim 3: Application to Unmanipulated Systems}
+\subsection*{Specific Aim 3: Application to Observational Data}
 
 \textbf{\textit{Goal}} -- 
 We aim to assess and identify factors that contribute to priority effects in human gut microbes.
