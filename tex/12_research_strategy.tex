@@ -61,7 +61,7 @@ If priority effects predominate, clinical treatments focusing only on the gut en
 If priority effects are strong, different arrival orders of species lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
 However, even though experiments are powerful in inferring causal relationships, they are often too simplified, focusing on a few species for the sake of experimental feasibility.
 This oversimplification limits our ability to understand the behavior and assembly processes of species-rich communities like the human gut microbiota \citep{fierer_animalcules_2012}. 
-In addition, experiments are ethically impractical in many cases, particularly when the focus is on human-associated microbes. 
+In addition, \textit{in vivo} experiments are ethically impractical in many cases, particularly when the focus is on human-associated microbes. 
 These challenges with experimental approaches create a need for the use of observational data to study priority effects, but knowing the arrival order of microbial species in non-experimental systems is virtually impossible  \citep{sprockett_role_2018}.
 % The inference of priority effects from observational data is difficult in the absence of appropriate statistical methods.
 \ul{Resolving this fundamental problem requires the development of a statistical method that can quantify the strength of priority effects \textit{without knowing the history of species arrival}}.
@@ -121,7 +121,7 @@ To develop a new modeling approach that identifies communities sensitive to prio
     $\alpha$ and $\gamma$ denote intraspecific competition effects, and $\beta$ and $\delta$ interspecific competition effects.
     In our framework, competition is defined and treated broadly, encompassing any net negative interaction between species.
     (A) A traditional approach models an entire network of species interactions.
-    The number of interspecific competition parameters (arrows in the figure) increases exponentially as the number of species increases.
+    The number of interspecific competition parameters (straight arrows) increases exponentially as the number of species increases.
     (B) In contrast, our new approach condenses species-level information into aggregate effects ($\delta$) of total community density (the circle at the center).
     This unique simplification greatly simplifies the statistical modeling with minimal loss of species-specific information.
     }
@@ -505,11 +505,15 @@ Oral cavity communities show greater stability in community structure over time 
 These observations suggest that different assembly rules among body sites, likely with varied strengths of priority effects.
 Time-series data have continued to accumulate on these systems, to which our new method should be applicable.
 
+We plan to distribute the developed method as an R package to increase accessibility given the potential applicability to various biological systems.
+PI Terui has extensive experience in developing R packages \citep{terui_emergent_2021, terui_intentional_2023}, along with the \texttt{packagedown} website that detailed the usage to assist potential users.
+Thus, the project team is uniquely qualified not only to perform the proposed work but also to design an effective distribution of the developed method.
+
 One foreseeable concern is that the completion of this project is strongly dependent on the successful performance of competitive exceedance $\Psi$.
-We have addressed this concern using simulations and laboratory experiments  (\textbf{Specific Aims 1 and 2}).
-The results were promising, and our proposed methodology will probably provide a much-needed resource to advance community assembly research in the human microbiota.
-Further, we have already identified sufficient data sources for experimental validation (\textbf{Specific Aim 2}), increasing the feasibility of the proposed work.
-Therefore, we are confident on the successful completion of the project.
+Our preliminary analysis has addressed this concern using simulations and laboratory experiments  (\textbf{Specific Aims 1 and 2}).
+The results were robust and promising, greatly increasing the feasibility of the proposed work.
+Further, we have already identified candidate data sources for experimental validation (\textbf{Specific Aim 2}) and observational time-series data (\textbf{Specific Aim 3}).
+As such, we anticipate smooth progress of the proposed project with successful completion within the reasonable timeline outlined below.
 
 \begin{table}
     \centering
