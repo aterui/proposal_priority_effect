@@ -52,7 +52,7 @@ If the gut environment is prominent in dictating the microbial community structu
 Ecological theory predicts, however, that the structure of the gut microbiota can be sensitive to the order of species arrival, leading to divergent states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
 \ul{This historical contingency in community assembly is referred to as priority effects,} which can occur when early-arriving species preempt available resources or modify the environment for later-arriving species \citep{fukami_historical_2015, ke_coexistence_2018}.
 The stochastic nature of priority effects presents a significant challenge in predicting and maintaining community structure \citep{fukami_historical_2015}.
-For example, the gut microbiome may shift to an alternative state of community structure after an antibiotic treatment, even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
+For example, the gut microbiome may shift to an alternative community structure after an antibiotic treatment, even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
 If priority effects predominate, clinical treatments focusing only on the gut environment may be inadequate, with limited or unintended consequences for human health \citep{fierer_animalcules_2012}.
 
 \textbf{Problem Statement} --
@@ -92,16 +92,16 @@ We believe this work is innovative both methodologically and conceptually for th
 First, \ul{\emph{it is methodologically innovative}} because the proposed method will be robust to the complexity of the microbiota.
 A major challenge in community assembly research is the ``\textit{curse of dimensionality}.''
 Namely, as the number of species increases, the non-linear system dynamics quickly become so complicated that traditional statistical approaches are no longer applicable.
-This problem is particularly serious in microbial systems because the taxonomic diversity is far beyond that of plants and animals.
+This problem is severe in microbial systems because the taxonomic diversity is far greater than that of plants and animals.
 To confront this challenge, the proposed method condenses community information into a manageable number of parameters, as detailed in Specific Aim 1 below. 
 This unique simplification allows us to use ordinary statistics to quantify priority effects.
 
 Second, \ul{\emph{our work is also conceptually innovative}} because our method will enable us to provide a novel answer to \textit{when priority effects are strong on the human microbiota.}
 Much of the research in priority effects has relied on experimental manipulations of species arrival order, with limited scope due to logistical and ethical challenges.
 Some hypotheses have been proposed regarding the potential role of priority effects in the human microbiome.
-For example, the gut microbial communities of obese, undernourished, and healthy people are hypothesized to represent alternative stable states resulting from priority effects \citep{fierer_animalcules_2012}.
+For example, the gut microbial communities of obese, undernourished, and healthy people are hypothesized to represent sustained changes in microbial community structure resulting from priority effects (i.e., alternative stable states) \citep{fierer_animalcules_2012}.
 Yet rigorous tests of these hypotheses have been difficult. 
-The new method we will develop will provide a way to infer priority effects using existing time series data, allowing for comparison across individuals of different states.
+The new method we will develop will provide a way to infer priority effects using existing time series data, allowing for comparison across individuals with different attributes.
 
 Hence, we suggest that this proposal has two innovative qualities meeting the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
 
@@ -115,7 +115,7 @@ To develop a new modeling approach that identifies communities sensitive to prio
 \subsubsection*{Activity 1a: Mathematical foundation}
 
 \begin{wrapfigure}{r}{0.45\textwidth}
-    \includegraphics[scale = 0.7]{output/figure_model.pdf}
+    \includegraphics[scale = 0.65]{output/figure_model.pdf}
     \caption{
     Graphical comparison of traditional and proposed approaches.
     $\alpha$ and $\gamma$ denote intraspecific competition effects, and $\beta$ and $\delta$ interspecific competition effects.
@@ -131,7 +131,7 @@ To develop a new modeling approach that identifies communities sensitive to prio
 \textbf{\textit{Goal}} -- 
 Our goal in this activity is to develop a mathematical foundation for a statistical method that identifies sensitive communities.
 In communities of interacting species, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time \citep{chesson_mechanisms_2000, barabas_chessons_2018, ke_coexistence_2018, terui_intentional_2023}.
-For example, in two-species communities, the community is sensitive to priority effects if interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
+For example, a community consisting of two competing species is sensitive to priority effects if interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
 Therefore, the first step is to obtain reliable estimates of competition from an empirical time series.
 However, in empirical settings, it is often infeasible to estimate those parameters because of the ``\textit{curse of dimensionality}.'' That is, as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
 Here, we propose a robust statistical method that bypasses the curse of dimensionality. Specifically, \ul{our proposed method estimates the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density} (Figure \ref{fig:model_concept}).
@@ -240,20 +240,24 @@ Otherwise ($|\lambda_{max}| > 1$), the community's equilibrium is locally unstab
 We acknowledge that the criterion of $|\lambda_{max}| > 1$ is a necessary, not sufficient, condition for a priority effect to emerge.
 Yet, it is reasonable to assume that such communities are sensitive to priority effects as the equilibrium condition is locally unstable  \citep{otto_biologists_2011}. 
 
+\ul{The leading eigenvalue $\lambda_{max}$ cannot be calculated in most empirical time-series data} because all the demographic parameters in Equation \ref{eq:ricker} ($r_i$, $\alpha_i$, and $\beta_{ij}$) must be known.
+In contrast, the competitive exceedance $\Psi$ can be estimated from observational time-series data as it bypasses the curse of dimensionality.
+Hence, a good concordance of these two metrics, if any, supports the utility of competitive exceedance $\Psi$ as a proxy for the sensitivity to priority effects in empirical data analysis.
+
 Using this sensitivity criterion, we performed a preliminary analysis of the method's performance.
 We used the model formula presented in Equation \ref{eq:ricker} (a Ricker model) to produce simulated time series data.
 We considered 1782 combinations of demographic parameters to yield a sufficient variation in the leading eigenvalue $|\lambda_{max}|$ (Table \ref{tab:param1}).
 We identified parameter combinations that generated insensitive and sensitive communities by calculating the leading eigenvalue for each parameter combination, after which 200 parameter sets were randomly subsampled to ensure that the relative frequencies of sensitive and insensitive communities were equal (100 sets have $|\lambda_{max}| < 1$ otherwise $|\lambda_{max}| > 1$).
 We crossed these parameter sets with the number of species $S$ ($S \in \{2, 5, 10\}$) and the time series length $T$ ($T \in \{10, 30\}$) with five replicates in each, resulting in $200 \times 3 \times 2 \times 5 = 6000$ simulation runs.
 
-\begin{figure}{\textwidth}
+\begin{SCfigure}%{\textwidth}
     \centering
-    \includegraphics[scale=0.8]{output/figure_eigen_scatter.pdf}
+    \includegraphics[scale=0.7]{output/figure_eigen_scatter.pdf}
     \caption{Competitive exceedance $\Psi$ ($y$-axis) captures the critical transition from insensitive to sensitive communities, which are determined by the leading eigenvalue $\lambda_{max}$ ($x$-axis) of the community matrix (i.e., sensitive if $|\lambda_{max}| > 1$).
     The rows and columns distinguish the number of species and the time series length used to generate simulated data.
     Dots are individual simulation replicates with colors distinguishing the community's sensitivity to priority effects (orange: sensitive, blue: insensitive).}
     \label{fig:box}
-\end{figure}
+\end{SCfigure}
 
 The results of the preliminary analysis are promising.
 \ul{The competitive exceedance $\Psi$ captured the critical transition from insensitive to sensitive communities} (Figure \ref{fig:box}).
@@ -265,8 +269,8 @@ These results indicate that our method can be effective even with short time ser
     \flushleft
     \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will expand the analysis to Ricker and Beverton-Holt models.
     The notation ``--'' means that we will use the same parameter setup in the proposed work.
-    $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.}
-    % Intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
+    $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
+    Intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.}
     \begin{tabular}{clll}
         Symbol & Interpretation & Value (preliminary) & Value (proposed)\\
         \hline
@@ -352,7 +356,7 @@ These data are ideal for our model validation for two reasons.
 First, the results indicate that several species combinations show a strong sign of priority effects while other combinations do not.
 Therefore, we can assess whether the competitive exceedance $\Psi$ predicts the strength of priority effects revealed in the experiments.
 Second, these experiments vary in time series length and the number of species, allowing us to evaluate the robustness of our method. 
-Most of the experiments listed in Table \ref{tab:expdata} involved free-living microbial systems consisting of freshwater bacteria, protists, and algae, but one of the experiments, Ojima et al. [21], used common species of \textit{Bifidobacterium} isolated from the human infant gut. 
+Most of the experiments listed in Table \ref{tab:expdata} involved free-living microbial systems consisting of freshwater bacteria, protists, and algae, but one of the experiments, Ojima \textit{et al}. \citep{ojima_priority_2022}, used common species of \textit{Bifidobacterium} isolated from the human infant gut. 
 
 We applied our method to the datasets in Hsu and Moeller \citep{hsu_metabolic_2021} and Ojima \textit{et al.} \citep{ojima_priority_2022}, serving as a preliminary application to real biological data.
 In their experiments, the authors manipulated the introduction order of competing species (two species of bacterivorous ciliates in Hsu and Moeller \citep{hsu_metabolic_2021} and four species of bifidobacteria in Ojima \textit{et al.} \citep{ojima_priority_2022}) to quantify the strength of priority effects.
@@ -416,7 +420,7 @@ Thus, we will quantify the extent of community dissimilarity for all pairs of in
 
 For this analysis, we will use two metrics of community similarity, the Morisita-Horn index and the Bray-Curtis index.
 The advantage of the Morisita-Horn index is that it quantifies community similarity based on the relative abundance \citep{magurran_biological_2011}, making it possible to compare among experimental systems that can vary greatly in absolute abundances.
-On the other hand, similarity based on relative abundance can be difficult when differences in absolute abundance are also of interest when comparing communities.
+On the other hand, similarity based on relative abundance can be difficult to interpret when differences in absolute abundance are also of interest when comparing communities.
 Unlike the Morisita-Horn index, the Bray-Curtis index is sensitive to differences in absolute abundances \citep{magurran_biological_2011}.
 
 Our proposed analysis will allow us to answer the following two questions, which will help better clarify the strengths and limitations of our proposed method.
@@ -435,7 +439,7 @@ Having confirmed the validity of our proposed methods through Specific Aims 1 an
 \textit{\textbf{Method details: data source}} --
 We will use published time series data of human gut microbiomes.
 The following keywords will be used to search the literature (title, abstract, or keywords fields) that may contain the time series data: ``\textit{human* gut* microb* `time series' OR `longitudinal'.}''
-Our preliminary search in SCOPUS identified 202 articles (as of 1/10/24), serveral of which contained promising data.
+Our preliminary search in SCOPUS identified 202 articles (as of 1/10/24), several of which contained promising data.
 For example, Vandeputte et al. 2021 \citep{vandeputte_temporal_2021} performed daily quantitative microbiome profiling on 713 fecal samples from 20 Belgian women over six weeks, combined with extensive anthropometric measurements, blood panels, dietary data, and stool characteristics. 
 We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four-time points; (ii) the entire community members are collected; (iii) absolute quantitative data are available; and (iv) the sampling method is consistent across the time series.
 For those that meet the inclusion criteria, we will apply the following time-series analysis to estimate competition parameter $\delta_{obs}$.
@@ -455,8 +459,8 @@ Hierarchical modeling allows us to estimate the mean competition parameter avera
 We will calculate competitive exceedance $\Psi$ as $\Pr(\hat{\delta}_{obs} > \delta_{null})$.
 
 \textit{\textbf{Method details: drivers of priority effects}} --
-We will analyze factors influencing competitive exceedance $\Psi$ in the human gut microbiome to gain insights into the prevalence of gut microbial communities sensitive to priority effects and individual attributes contributing to the sensitivity to priority effects.
-To this end, we will leverage the individual replicates of $\Psi$.
+We will analyze factors influencing competitive exceedance $\Psi$ in the human gut microbiome to gain insights into individual attributes contributing to the sensitivity to priority effects.
+We will leverage the individual replicates of $\Psi$.
 To properly model $\Psi_k$ for individual $k$, our basic model will take the number of posterior samples that satisfy $\hat{\delta}_{k,obs} > \delta_{null}$ for individual $k$ ($Y_k$) as a response variable: $Y_k &\sim \mbox{Binomial}(N_{post}, P_k)$, where $N_{post}$ is the total number of posterior samples.
 Thus, the success probability of the binomial distribution $P_k$ is identical to competitive exceedance $\Psi_k$, which we will relate to linear predictors: $\mbox{logit}(\Psi_k) &= \theta_0 + \sum_q \theta_q z_{q,k}$.
 The parameter $\theta_0$ is the intercept, and $\theta_q$ the $q$-th regression coefficient quantifying the influence of the predictor $z_{q,k}$.
@@ -487,7 +491,7 @@ We therefore hypothesize that priority effects are stronger at younger ages.
 We will yield the subject's age or age-class information from data sources and examine whether competitive exceedance $\Psi$ changes with age.
 
 \ul{[Hypothesis \textit{iv}] \textit{Are priority effects stronger in individuals with unhealthy states?}}
-Dysbiosis is often associated with unhealthy states \citep{petersen_defining_2014, fierer_animalcules_2012}, and it was hypothesized that these reflect alternative stable states resulting from priority effects \citep{fierer_animalcules_2012}.
+Dysbiosis is often associated with unhealthy states \citep{petersen_defining_2014, fierer_animalcules_2012}, and it was hypothesized that these reflect sustained state changes of microbial community structure due to priority effects \citep{fierer_animalcules_2012}.
 However, this hypothesis has not been tested because of the lack of proper statistical methods.
 Here, we will utilize competitive exceedance $\Psi$ as a proxy for priority effects and will compare this value between healthy and unhealthy people (IBD and/or obesity).
 If unhealthy people harbor microbial communities sensitive to priority effects, they should show higher values of $\Psi$.
@@ -502,14 +506,14 @@ These microbial communities also mediate human health \citep{fierer_animalcules_
 They share some characteristics with gut microbial communities, despite substantial differences in the identity of constituent species \citep{costello_bacterial_2009}.
 At the same time, microbes inhabiting different parts of the human body show contrasting patterns in temporal compositional changes \citep{costello_bacterial_2009, caporaso_moving_2011, fierer_animalcules_2012, jakobsson_short-term_2010}.
 Oral cavity communities show greater stability in community structure over time with persistent core species, while the skin harbors more transient species with frequent changes in species dominance and composition \citep{costello_bacterial_2009}.
-These observations suggest that different assembly rules among body sites, likely with varied strengths of priority effects.
+These observations suggest different assembly rules among body sites, likely with varied strengths of priority effects.
 Time-series data have continued to accumulate on these systems, to which our new method should be applicable.
 
 We plan to distribute the developed method as an R package to increase accessibility given the potential applicability to various biological systems.
 PI Terui has extensive experience in developing R packages \citep{terui_emergent_2021, terui_intentional_2023}, along with the \texttt{packagedown} website that detailed the usage to assist potential users.
-Thus, the project team is uniquely qualified not only to perform the proposed work but also to design an effective distribution of the developed method.
+The project team is uniquely qualified not only to perform the proposed work but also to design an effective distribution of the developed tool.
 
-One foreseeable concern is that the completion of this project is strongly dependent on the successful performance of competitive exceedance $\Psi$.
+One foreseeable concern is that the completion of this project is dependent on the successful performance of competitive exceedance $\Psi$.
 Our preliminary analysis has addressed this concern using simulations and laboratory experiments  (\textbf{Specific Aims 1 and 2}).
 The results were robust and promising, greatly increasing the feasibility of the proposed work.
 Further, we have already identified candidate data sources for experimental validation (\textbf{Specific Aim 2}) and observational time-series data (\textbf{Specific Aim 3}).
