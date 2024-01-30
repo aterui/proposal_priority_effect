@@ -59,7 +59,7 @@ If priority effects are strong, clinical treatments focusing only on the gut env
 \textbf{Problem Statement} --
 % Distinguishing the assembly processes of microbial species is crucial given the practical implications for clinical treatments.
 In ecology, experimental manipulation of species arrival order has been a common method to test for priority effects.
-If priority effects are strong, different orders of species arrival should lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
+With strong priority effects, different orders of species arrival should lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
 However, even though experiments are powerful in inferring causal relationships, they are often too simplified, focusing on a few species for the sake of experimental feasibility.
 This oversimplification limits our ability to understand the behavior and assembly processes of species-rich communities like the human gut microbiota \citep{fierer_animalcules_2012}. 
 In addition, \textit{in vivo} experiments are ethically impractical in many cases, particularly when the focus is on human-associated microbes. 
@@ -217,7 +217,7 @@ Our proposed method has three steps:
     
     \item Approximate the probability of $\delta_{obs} > \delta_{null}$.
     We will take a Bayesian approach to estimate a posterior distribution of $\delta_{obs}$.
-    The approximated probability will be calculated as the proportion of posterior samples satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{\textit{competitive exceedance}} $\Psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
+    The approximated probability will be calculated as the proportion of posterior samples satisfying $\delta_{obs} > \delta_{null}$, and we refer to it as the \textbf{competitive exceedance} $\Psi$ ($\approx \Pr(\delta_{obs} > \delta_{null})$).
 \end{enumerate}
 
 Our method can also be viewed as a variant of invasion analysis \citep{otto_biologists_2011}, with which ecologists study the coexistence of competing species \citep{chesson_mechanisms_2000, adler_niche_2007, barabas_chessons_2018}.
@@ -401,7 +401,7 @@ Our analysis proceeded as follows:
     In the following analysis, we used the model with a lower WAIC value (a Ricker model, in this case).
     \item Perform the null model analysis to obtain competitive exceedance $\Psi$.
     We analyzed time series data after both species were introduced.
-    Thus \textit{no information on arrival history was given to the analysis}.
+    \ul{No information on arrival history was given to the analysis}.
     \item Validate the relationship between the strength of priority effects (known as the experiment outcome) and competitive exceedance $\Psi$.
     We used Vannette and Fukami's method \citep{vannette_historical_2014} to quantify the experimentally estimated strength of priority effects.
     This method calculates priority effect strength as the absolute log-response ratio $LRR = |\ln (D_{1, max} / D_{2, max})|$, where $D_{1, max}$ and $D_{2, max}$ are the maximum species density when they were introduced first and second, respectively \citep{hsu_metabolic_2021}.
