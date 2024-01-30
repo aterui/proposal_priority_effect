@@ -38,72 +38,73 @@
 \usepackage[font={fontenc, small}, labelfont={bf, small}]{caption}
 
 \begin{document}
+\pagenumbering{gobble}
 
 \textbf{Research Strategy}
 
 \section{Significance}
 
 \textbf{Background} --
-Decades of research have shown that many microorganisms found in the human gut can play critical roles in the host's immune system and protection against pathogen invasion \citep{fierer_animalcules_2012, petersen_defining_2014, turroni_infant_2020}.
-For example, mounting evidence suggests that changes in microbial community structure -- termed ``dysbiosis'' -- occur in patients with inflammatory bowel diseases \citep{frank_molecular-phylogenetic_2007, karlsson_gut_2013, abrahamsson_low_2014, parracho_differences_2005} and obesity \citep{costello_application_2012, ley_obesity_2005, turnbaugh_diet-induced_2008}, for which annual U.S. medical costs exceed \$150 billion \citep{singh_trends_2022, cawley_medical_2012}.
-These studies often assume that dysbiosis is caused by different gut environments between healthy and unhealthy people \citep{fierer_animalcules_2012, petersen_defining_2014}.
-If the gut environment is prominent in dictating the microbial community structure, it should then only require environmental improvement (e.g., changing dietary habits) to restore the microbial structure characteristic of a healthy person \citep{chase_community_2003, leibold_metacommunity_2004, fukami_historical_2015, hooper_how_2002, reese_thinking_2019}.
+It is widely recognized that microorganisms found in the human gut play critical roles in the host's immune system and protection against pathogen invasion \citep{fierer_animalcules_2012, petersen_defining_2014, turroni_infant_2020}.
+For example, mounting evidence suggests that changes in microbial community structure, termed dysbiosis, occur in patients with inflammatory bowel diseases \citep{frank_molecular-phylogenetic_2007, karlsson_gut_2013, abrahamsson_low_2014, parracho_differences_2005} and obesity \citep{costello_application_2012, ley_obesity_2005, turnbaugh_diet-induced_2008}.
+A common assumption in these studies is that dysbiosis reflects different gut environments between healthy and unhealthy people \citep{fierer_animalcules_2012, petersen_defining_2014}.
+If the gut environment dictates the microbial community structure, it should only take environmental improvement (e.g., changing dietary habits) to restore the microbial structure characteristic of a healthy person \citep{chase_community_2003, leibold_metacommunity_2004, fukami_historical_2015, hooper_how_2002, reese_thinking_2019}.
 
-Ecological theory predicts, however, that the structure of the gut microbiota can be sensitive to the order of species arrival, leading to divergent states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
-\ul{This historical contingency in community assembly is referred to as priority effects,} which can occur when early-arriving species preempt available resources or modify the environment for later-arriving species \citep{fukami_historical_2015, ke_coexistence_2018}.
+However, ecological theory predicts that the structure of the gut microbiota can be highly sensitive to the order of species arrival, leading to divergent states of community structure even when the set of colonizing species and the environmental conditions are identical \citep{fierer_animalcules_2012, david_host_2014, akagawa_effect_2019, ojima_priority_2022, debray_priority_2022}.
+This historical contingency in community assembly is referred to as \textbf{priority effects}, which can occur when early-arriving species preempt available resources or modify the environment for later-arriving species \citep{fukami_historical_2015, ke_coexistence_2018, weidlich_priority_2021, sprockett_role_2018, debray_priority_2022}.
 The stochastic nature of priority effects presents a significant challenge in predicting and maintaining community structure \citep{fukami_historical_2015}.
-For example, the gut microbiome may shift to an alternative community structure after an antibiotic treatment, even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
-If priority effects predominate, clinical treatments focusing only on the gut environment may be inadequate, with limited or unintended consequences for human health \citep{fierer_animalcules_2012}.
+For example, antibiotic treatment may cause a sustained change to an alternative community structure (termed alternative stable states in ecology), even if the gut environment remains similar before and after the treatment \citep{dethlefsen_incomplete_2011, jakobsson_short-term_2010}.
+If priority effects are strong, clinical treatments focusing only on the gut environment may be inadequate, with limited or unintended consequences for human health \citep{fierer_animalcules_2012, sprockett_role_2018}.
 
 \textbf{Problem Statement} --
 % Distinguishing the assembly processes of microbial species is crucial given the practical implications for clinical treatments.
-\ul{In ecology, experimental manipulation of species arrival order has been a common method to test for priority effects.}
-If priority effects are strong, different arrival orders of species lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
+In ecology, experimental manipulation of species arrival order has been a common method to test for priority effects.
+If priority effects are strong, different orders of species arrival should lead to divergent community states at the end of the experiment \citep{fukami_historical_2015, sprockett_role_2018}.
 However, even though experiments are powerful in inferring causal relationships, they are often too simplified, focusing on a few species for the sake of experimental feasibility.
 This oversimplification limits our ability to understand the behavior and assembly processes of species-rich communities like the human gut microbiota \citep{fierer_animalcules_2012}. 
 In addition, \textit{in vivo} experiments are ethically impractical in many cases, particularly when the focus is on human-associated microbes. 
 These challenges with experimental approaches create a need for the use of observational data to study priority effects, but knowing the arrival order of microbial species in non-experimental systems is virtually impossible  \citep{sprockett_role_2018}.
 % The inference of priority effects from observational data is difficult in the absence of appropriate statistical methods.
-\ul{Resolving this fundamental problem requires the development of a statistical method that can quantify the strength of priority effects \textit{without knowing the history of species arrival}}.
+\ul{Resolving this fundamental problem requires development of a statistical method that can quantify the strength of priority effects \textbf{without knowing the history of species arrival}}.
 We lack such a novel statistical method, hindering progress in understanding the conditions under which priority effects strongly affect the human microbiome.
 
 \textbf{Solution} --
-\ul{The goal of the proposed research is to develop and demonstrate the utility of a novel method that identifies biological communities sensitive to priority effects from observational data .}
+The goal of the proposed research is to develop and demonstrate the utility of a novel method that identifies biological communities sensitive to priority effects from observational data.
 This research is motivated by our belief that existing time series data on the human gut microbiome provide untapped opportunities to quantify priority effects once an appropriate method grounded on a sound mathematical and statistical foundation is developed.
 To this end, our proposed research consists of three specific aims (Figure \ref{fig:overview}):
 
 \begin{itemize}
-    \item \textbf{Specific Aim 1}:  Develop a theoretical foundation for the method with the performance validation through numerical simulation experiments of microbial community assembly
-    \item \textbf{Specific Aim 2}: Evaluate the performance of the developed method using existing data from experimental communities in which the order of species arrival was manipulated
-    \item \textbf{Specific Aim 3}: Apply the developed method to existing time series data on the human gut microbiota to investigate \textit{when priority effects are strong on the human microbiota}
+    \item \textbf{Specific Aim 1}:  Develop a theoretical foundation for the method with the performance validation through numerical simulation experiments of microbial community assembly.
+    \item \textbf{Specific Aim 2}: Evaluate the performance of the developed method using existing data from experimental communities in which the order of species arrival was manipulated.
+    \item \textbf{Specific Aim 3}: Apply the developed method to existing time series data on the human gut microbiota to investigate when priority effects are strong on the human microbiota.
 \end{itemize}
 
 \begin{figure}
     \flushleft
     \includegraphics[scale=0.65]{output/figure_overview.pdf}
-    \caption{Overview of the proposed project. Specific Aims 1 and 2 aim to develop and demonstrate the utility of a new statistical method. Having confirmed the validity of the method, Specific Aim 3 aims to apply it to observational data to ask when priority effects are strong on the human gut microbiome.}
+    \caption{Overview of the proposed project. Specific Aims 1 and 2 are designed to develop and demonstrate the utility of a new statistical method. Having confirmed the validity of the method through Specific Aims 1 and 2, we will then work on Specific Aim 3, where we will apply the method to observational data to investigate the conditions under which priority effects are strong in the human gut microbiome}
     \label{fig:overview}
 \end{figure}
 
 \section{Innovation}
-Our proposed work will advance the fundamental understanding of the human microbiota and its relation to human health through a novel application of ecological theory to existing clinical data.
+Our proposed work will advance the understanding of the human gut microbiota and its relation to human health through a novel application of ecological theory to existing clinical data.
 We believe this work is innovative both methodologically and conceptually for the following reasons.
 
-First, \ul{\emph{it is methodologically innovative}} because the proposed method will be robust to the complexity of the microbiota.
-A major challenge in community assembly research is the ``\textit{curse of dimensionality}.''
+First, \ul{it is methodologically innovative} because the proposed method will be robust to the complexity of the microbiota.
+A major challenge in community assembly research is the curse of dimensionality.
 Namely, as the number of species increases, the non-linear system dynamics quickly become so complicated that traditional statistical approaches are no longer applicable.
 This problem is severe in microbial systems because the taxonomic diversity is far greater than that of plants and animals.
 To confront this challenge, the proposed method condenses community information into a manageable number of parameters, as detailed in Specific Aim 1 below. 
-This unique simplification allows us to use ordinary statistics to quantify priority effects.
+This simplification allows us to use ordinary statistics to quantify priority effects.
 
-Second, \ul{\emph{our work is also conceptually innovative}} because our method will enable us to provide a novel answer to \textit{when priority effects are strong on the human microbiota.}
+Second, \ul{our work is also conceptually innovative} because our method will enable us to provide novel answers to when priority effects are strong on the human microbiota.
 Much of the research in priority effects has relied on experimental manipulations of species arrival order, with limited scope due to logistical and ethical challenges.
 Some hypotheses have been proposed regarding the potential role of priority effects in the human microbiome.
 For example, the gut microbial communities of obese, undernourished, and healthy people are hypothesized to represent sustained changes in microbial community structure resulting from priority effects (i.e., alternative stable states) \citep{fierer_animalcules_2012}.
 Yet rigorous tests of these hypotheses have been difficult. 
 The new method we will develop will provide a way to infer priority effects using existing time series data, allowing for comparison across individuals with different attributes.
 
-Hence, we suggest that this proposal has two innovative qualities meeting the NIH review criterion "\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}"
+Hence, we suggest that this proposal has two innovative qualities meeting the NIH review criterion ``\emph{Does the application challenge and seek to shift current research or clinical practice paradigms by utilizing novel theoretical concepts?}''
 
 \section{Approach}
 
@@ -131,14 +132,14 @@ To develop a new modeling approach that identifies communities sensitive to prio
 \textbf{\textit{Goal}} -- 
 Our goal in this activity is to develop a mathematical foundation for a statistical method that identifies sensitive communities.
 In communities of interacting species, their sensitivity to priority effects is largely determined by the balance between intraspecific and interspecific competition, which are defined as the per-capita impact on population growth over time \citep{chesson_mechanisms_2000, barabas_chessons_2018, ke_coexistence_2018, terui_intentional_2023}.
-For example, a community consisting of two competing species is sensitive to priority effects if interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
+For example, a community consisting of two competing species is sensitive to priority effects if the strength of interspecific competition exceeds that of intraspecific competition \citep{ke_coexistence_2018}.
 Therefore, the first step is to obtain reliable estimates of competition from an empirical time series.
-However, in empirical settings, it is often infeasible to estimate those parameters because of the ``\textit{curse of dimensionality}.'' That is, as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
-Here, we propose a robust statistical method that bypasses the curse of dimensionality. Specifically, \ul{our proposed method estimates the balance of intra- and interspecific competition, \textbf{\textit{regardless of the number of species}}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density} (Figure \ref{fig:model_concept}).
+However, in empirical settings, it is often infeasible to estimate those parameters because of the curse of dimensionality. That is, as the number of species $S$ in the community increases, the length of the time series required for estimation increases exponentially \citep{ovaskainen_how_2017}.
+Here, we propose a robust statistical method that bypasses the curse of dimensionality. Specifically, \ul{our proposed method estimates the balance of intra- and interspecific competition, \textbf{regardless of the number of species}, by capitalizing on the fact that species-level competition can be condensed into an aggregate effect of the total community density} (Figure \ref{fig:model_concept}).
 
 Importantly, \ul{the application of this framework focusing on competitive interactions is not limited to communities where species interact only via resource competition.}
 In the following theoretical analysis, competition is defined and treated broadly, encompassing any net negative interaction between species.
-Negative interactions can come not just from resource competition as strictly defined, but also from other types of interactions that characterize human-associated microbial communities, such as competition for space, interference via toxin production, and interspecific quorum sensing.
+Negative interactions can come not just from resource competition as strictly defined, but also from other types of interactions that characterize human-associated microbial communities, such as cross feeding, competition for space, interference via toxin production, and interspecific quorum sensing.
 
 \textbf{\textit{Method detail: mathematical backbone}} -- 
 We consider a discrete recursion equation to describe community dynamics over time. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
@@ -186,7 +187,7 @@ Then, the log-transformed per-capita growth rate $\ln f(\overset{\rightarrow}{x}
     \ln f(\overset{\rightarrow}{x}_{t}) = g_i (1 - \gamma_i x_{t,i} - \delta_i X_t) + \varepsilon_{t,i},
 \end{equation}
 
-where $\varepsilon_{t,i}$ is random environmental noise plus $\xi_{t,i}$, which can be modeled as a stochastic term in statistical inference. This re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), \ul{regardless of the number of species in the community}.
+where $\varepsilon_{t,i}$ is random environmental noise plus $\xi_{t,i}$, which can be modeled as a stochastic term in statistical inference. This re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), regardless of the number of species in the community.
 
 \textbf{\textit{Method detail: null model analysis}} --
 The community's sensitivity to priority effects is affected by the balance between intra- and interspecific competition: when interspecific competition exceeds intraspecific competition, the community is sensitive to priority effects \citep{ke_coexistence_2018}.
@@ -235,7 +236,7 @@ In two species Lotka-Volterra systems, priority effects emerge when interspecifi
 However, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs \citep{carroll_niche_2011, barabas_chessons_2018}.
 
 To address this complexity, we will use the leading eigenvalue $\lambda_{max}$ of the community matrix (the Jacobian of Equation \ref{eq:m0}) to determine whether the simulated community is sensitive to priority effects \citep{otto_biologists_2011}.
-When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable and hence no priority effects.
+When the leading eigenvalue satisfies $|\lambda_{max}| < 1$, the community's equilibrium is locally stable, hence no priority effects.
 Otherwise ($|\lambda_{max}| > 1$), the community's equilibrium is locally unstable with the possibility of priority effects.
 We acknowledge that the criterion of $|\lambda_{max}| > 1$ is a necessary, not sufficient, condition for a priority effect to emerge.
 Yet, it is reasonable to assume that such communities are sensitive to priority effects as the equilibrium condition is locally unstable  \citep{otto_biologists_2011}. 
@@ -268,8 +269,7 @@ These results indicate that our method can be effective even with short time ser
 \begin{table}
     \flushleft
     \caption{Possible parameter values in the proposed and preliminary analysis. In the proposed analysis, we will expand the analysis to Ricker and Beverton-Holt models.
-    The notation ``--'' means that we will use the same parameter setup in the proposed work.
-    $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.
+    The notation ``--'' means we will use the same parameter setup in the proposed work.
     Intrinsic growth $r_i$ was/will be determined as $A \overset{\rightarrow}{x^*}$, where $\overset{\rightarrow}{x^*}$ is a vector of equilibrium densities and $A$ is an interaction matrix whose diagonal and off-diagonal elements are $\alpha_i$ and $\beta_{ij}$.}
     \begin{tabular}{clll}
         Symbol & Interpretation & Value (preliminary) & Value (proposed)\\
@@ -362,7 +362,8 @@ We applied our method to the datasets in Hsu and Moeller \citep{hsu_metabolic_20
 In their experiments, the authors manipulated the introduction order of competing species (two species of bacterivorous ciliates in Hsu and Moeller \citep{hsu_metabolic_2021} and four species of bifidobacteria in Ojima \textit{et al.} \citep{ojima_priority_2022}) to quantify the strength of priority effects.
 A pair of species were introduced into an experimental medium with different introduction timings (simultaneous, species 1 first, or species 2 first), and temporal changes of species densities were measured at multiple time points (seven to 22 time points).
 Their results indicated that the strength of priority effects, as quantified by the method proposed by Vannette and Fukami \citep{vannette_historical_2014}, varied with light conditions \citep{hsu_metabolic_2021} or species combinations \citep{ojima_priority_2022}.
-Hence, these data are an ideal test case for our proposed method.
+Hence, these data are an ideal test case for our proposed method.\newline
+\newline
 
 \begin{table}
     \flushleft
@@ -441,13 +442,13 @@ We will use published time series data of human gut microbiomes.
 The following keywords will be used to search the literature (title, abstract, or keywords fields) that may contain the time series data: ``\textit{human* gut* microb* `time series' OR `longitudinal'.}''
 Our preliminary search in SCOPUS identified 202 articles (as of 1/10/24), several of which contained promising data.
 For example, Vandeputte et al. 2021 \citep{vandeputte_temporal_2021} performed daily quantitative microbiome profiling on 713 fecal samples from 20 Belgian women over six weeks, combined with extensive anthropometric measurements, blood panels, dietary data, and stool characteristics. 
-We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four-time points; (ii) the entire community members are collected; (iii) absolute quantitative data are available; and (iv) the sampling method is consistent across the time series.
+We will verify the data quality of each time series with the following inclusion criteria: (i) the length of the consecutive time series exceeds four time points; (ii) the entire community members are collected; (iii) absolute quantitative data are available; and (iv) the sampling method is consistent across the time series.
 For those that meet the inclusion criteria, we will apply the following time-series analysis to estimate competition parameter $\delta_{obs}$.
 
 \textit{\textbf{Method details: time series analysis}} --
 Unlike simulated and experimental time series data, observational data may contain substantial observation errors.
 We will employ a Bayesian state-space model to account for observation errors \citep{kery_bayesian_2012, amano_hierarchical_2012, anderson_black-swan_2017, terui_metapopulation_2018, terui_intentional_2023}.
-The Bayesian state-space model is one of the time series models and has proven to provide less-biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}.
+The Bayesian state-space model is one of the time series models and has proven to provide less biased estimates of critical demographic parameters from noisy data \citep{kery_bayesian_2012}.
 
 The observed density of species $i$ at time $t$, $N_{t,i}$, will be modeled as random draws from a log-normal distribution: $\ln N_{t,i} \sim \mbox{Normal}(x_{t,i}, \sigma_{obs}^2).$
 The mean parameter $x_{t,i}$ is the latent variable that represents ``true'' species density (abundance per unit effort) and the standard deviation $\sigma_{obs}$ measures stochastic observation errors.
@@ -510,7 +511,7 @@ These observations suggest different assembly rules among body sites, likely wit
 Time-series data have continued to accumulate on these systems, to which our new method should be applicable.
 
 We plan to distribute the developed method as an R package to increase accessibility given the potential applicability to various biological systems.
-PI Terui has extensive experience in developing R packages \citep{terui_emergent_2021, terui_intentional_2023}, along with the \texttt{packagedown} website that detailed the usage to assist potential users.
+The PIs have extensive experience in developing R packages \citep{terui_emergent_2021, terui_intentional_2023}, along with the \texttt{packagedown} website that detailed the usage to assist potential users.
 The project team is uniquely qualified not only to perform the proposed work but also to design an effective distribution of the developed tool.
 
 One foreseeable concern is that the completion of this project is dependent on the successful performance of competitive exceedance $\Psi$.
@@ -534,6 +535,7 @@ As such, we anticipate smooth progress of the proposed project with successful c
 
 \newpage
 
+\renewcommand{\bibsection}{\section*{Bibliography \& References Cited}}
 \bibliography{references}
 
 \end{document}
