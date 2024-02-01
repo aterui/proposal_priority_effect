@@ -141,7 +141,7 @@ Importantly, \ul{the application of this framework focusing on competitive inter
 In the following theoretical analysis, competition is defined and treated broadly, encompassing any net negative interaction between species.
 Negative interactions can come not just from resource competition as strictly defined, but also from other types of interactions that characterize human-associated microbial communities, such as cross feeding, competition for space, interference via toxin production, and interspecific quorum sensing.
 
-\textbf{\textit{Method detail: mathematical backbone}} -- 
+\textbf{\textit{Method details: mathematical backbone}} -- 
 We consider a discrete recursion equation to describe community dynamics over time. The population density of species $i$ at time $t$, $x_{t,i}$ is modeled as:
 
 \begin{equation}
@@ -189,7 +189,7 @@ Then, the log-transformed per-capita growth rate $\ln f(\overset{\rightarrow}{x}
 
 where $\varepsilon_{t,i}$ is random environmental noise plus $\xi_{t,i}$, which can be modeled as a stochastic term in statistical inference. This re-parameterization greatly reduces the number of competition parameters ($S \rightarrow 2$), regardless of the number of species in the community.
 
-\textbf{\textit{Method detail: null model analysis}} --
+\textbf{\textit{Method details: null model analysis}} --
 The community's sensitivity to priority effects is affected by the balance between intra- and interspecific competition: when interspecific competition exceeds intraspecific competition, the community is sensitive to priority effects \citep{ke_coexistence_2018}.
 An intuitive statistical method would be to compare the effects of $x_{t,i}$ ($\gamma_i$) and $X_t$ ($\delta_i$) on $i$'s population growth (see Equation \ref{eq:rickerlog}).
 However, this comparison is inappropriate because we cannot statistically separate the effect of intra- and interspecific competition (see Equation \ref{eq:rickermod}).
@@ -230,7 +230,7 @@ Thus, priority effects should emerge (the invasion criterion $\delta_i > \delta_
 The goal of this activity is to validate the performance of this method using simulation experiments.
 We will use time series data simulated with known parameters so that we can validate the relationship between the true sensitivity to priority effects and competitive exceedance $\Psi$.
 
-\textbf{\textit{Method detail: preliminary analysis}} -- 
+\textbf{\textit{Method details: preliminary analysis}} -- 
 To validate the performance of the proposed null model analysis, we need to know whether the simulated data are generated from an insensitive or sensitive community (= the truth).
 In two species Lotka-Volterra systems, priority effects emerge when interspecific competition exceeds intraspecific competition \citep{ke_coexistence_2018}.
 However, for multi-species communities, the community dynamics are more complicated, especially when the strength of interspecific competition varies among species pairs \citep{carroll_niche_2011, barabas_chessons_2018}.
@@ -287,7 +287,7 @@ These results indicate that our method can be effective even with short time ser
     \label{tab:param1}
 \end{table}
 
-\textbf{\textit{Method detail: proposed analysis}} -- 
+\textbf{\textit{Method details: proposed analysis}} -- 
 Building on the preliminary analysis, we propose to expand the scope of simulation experiments to further evaluate the credibility of our method in a broader range of ecological situations.
 Specifically, we will extend our analysis in two ways.
 
